@@ -1,0 +1,63 @@
+{
+  "policy_schema": 1,
+  "groups": [
+    {
+      "paths": [
+        ".github/workflows/LICENSE-platform.txt",
+        ".github/workflows/deploy.yml",
+        ".github/workflows/validate.yml",
+        ".gitignore",
+        ".nojekyll",
+        ".quartoignore",
+        "AGENTS.md",
+        "LICENSING.md",
+        "MIGRATION.md",
+        "README.md",
+        "THIRD-PARTY-NOTICES.md",
+        "_quarto.yml",
+        "assets/interactive/example.js",
+        "course.yml",
+        "index.qmd",
+        "references.bib",
+        "styles/README.md",
+        "tests/LICENSE-platform.txt",
+        "tests/academic-integrity.json",
+        "tests/action-pins.json",
+        "tests/browser_client.mjs",
+        "tests/browser_course.py",
+        "tests/install_quarto.py",
+        "tests/legal_distribution.py",
+        "tests/platform_validate.py",
+        "tests/post_render.py",
+        "tests/render_clean.py",
+        "tests/route-baseline.json",
+        "tests/run_course.py",
+        "tests/safe_paths.py",
+        "unidades/ejemplo.qmd"
+      ],
+      "license": "MIT",
+      "copyright": "2026 ngulloa"
+    }
+  ],
+  "third_party": [],
+  "legacy_review": {
+    "LICENSE": {
+      "reason": "Existing source; see approved LICENSING.md and prior inventory. REUSE metadata pending, no new license inferred.",
+      "sha256": "86abf44f49e09c597fac4a1509d372d9796107e034567e61eba94af2116c18df"
+    },
+    "design-vendor.json": {
+      "reason": "Existing source; see approved LICENSING.md and prior inventory. REUSE metadata pending, no new license inferred.",
+      "sha256": "ff31b6f57df5b9db1126b1a985159a88a6698f87df1c4a67351425c72848bd96"
+    },
+    "platform-vendor.json": {
+      "reason": "Existing source; see approved LICENSING.md and prior inventory. REUSE metadata pending, no new license inferred.",
+      "sha256": "a4dad217cd7074e673ebabc35a0d494d4c66d1ac5eef41a09872ac6cd1e3263e"
+    }
+  },
+  "import_paths": [
+    "assets/vendor/**",
+    "vendor/**",
+    "third_party/**"
+  ],
+  "is_template": true
+}

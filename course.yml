@@ -1,0 +1,45 @@
+{
+  "course": {
+    "schema": 1,
+    "slug": "nombre-del-curso",
+    "name": "Asignatura de ejemplo",
+    "reference_code": null,
+    "independent": true,
+    "status": "en-desarrollo",
+    "authorship": "Completar con las identidades y atribuciones verificadas",
+    "license": "pendiente-de-aclaracion",
+    "first_page": "unidades/ejemplo.qmd",
+    "objectives": [
+      "Definir los objetivos verificables de la asignatura.",
+      "Relacionar explicaciones, ejemplos y actividades."
+    ],
+    "units": [
+      {
+        "section": "Unidad de ejemplo",
+        "contents": [
+          {
+            "href": "unidades/ejemplo.qmd",
+            "text": "Lección de ejemplo"
+          }
+        ]
+      }
+    ],
+    "pages": [
+      {
+        "path": "index.qmd",
+        "title": "Asignatura de ejemplo",
+        "required": true,
+        "status": "en-desarrollo",
+        "reviewed": false
+      },
+      {
+        "path": "unidades/ejemplo.qmd",
+        "title": "Lección de ejemplo",
+        "required": true,
+        "status": "en-desarrollo",
+        "reviewed": false
+      }
+    ],
+    "planned": []
+  }
+}

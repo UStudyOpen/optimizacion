@@ -1,0 +1,45 @@
+---
+title: "Asignatura de ejemplo"
+description: "Punto de partida para un curso universitario abierto de UStudyOpen."
+toc: false
+ustudy-status: en-desarrollo
+ustudy-reviewed: false
+---
+
+:::: {.uso-hero}
+[UStudyOpen · Recursos universitarios abiertos]{.uso-course-identity}
+
+## Aprender con explicaciones y actividades
+
+Esta portada muestra la composición compartida. Sustituye esta descripción por el alcance real del curso y sus requisitos previos verificados.
+
+::: {.uso-actions}
+[Comenzar a estudiar](unidades/ejemplo.qmd){.btn .btn-primary}
+[Explorar las unidades](#unidades){.btn .btn-outline-primary}
+:::
+::::
+
+## Objetivos generales
+
+- Definir los objetivos verificables de la asignatura.
+- Relacionar explicaciones, ejemplos y actividades.
+
+## Unidades
+
+:::: {.topic-grid}
+::: {.topic-card}
+[En desarrollo]{.uso-status .uso-status--en-desarrollo}
+
+### Unidad de ejemplo
+
+Una lección demuestra componentes sin incorporar material de otras asignaturas.
+
+[Explorar la lección](unidades/ejemplo.qmd)
+:::
+::::
+
+## Proyecto, autoría y licencia
+
+UStudyOpen es un proyecto educativo independiente, sin afiliación ni respaldo oficial de una universidad. Completa la autoría con datos verificados y determina la licencia del contenido antes de publicar. La extensión conserva sus avisos de procedencia y las condiciones de terceros.
+
+Esta plantilla y su contenido de ejemplo están **en desarrollo**, sin revisión académica declarada. No se ha verificado un código universitario de referencia.

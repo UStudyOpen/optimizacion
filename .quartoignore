@@ -1,0 +1,14 @@
+tests/
+artifacts/
+review/
+.github/
+README.md
+AGENTS.md
+MIGRATION.md
+course.yml
+design-vendor.json
+platform-vendor.json
+.env
+.env.*
+node_modules/
+__pycache__/

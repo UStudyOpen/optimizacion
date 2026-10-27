@@ -1,0 +1,58 @@
+project:
+  type: website
+  output-dir: _site
+  render:
+  - index.qmd
+  - unidades/ejemplo.qmd
+  resources:
+  # Exclude the historical published tree from resource discovery.
+  - '!docs/**'
+  - assets/interactive/example.js
+  - .nojekyll
+  post-render:
+  - python3 tests/post_render.py
+metadata-files:
+- course.yml
+quarto-required: =1.10.18
+lang: es
+bibliography: references.bib
+brand:
+  light: _extensions/ustudyopen-design/brand/_brand.yml
+  dark: _extensions/ustudyopen-design/brand/_brand-dark.yml
+website:
+  title: Asignatura de ejemplo
+  favicon: _extensions/ustudyopen-design/assets/favicon.svg
+  search:
+    location: navbar
+    type: overlay
+  navbar:
+    title: UStudyOpen
+    pinned: true
+    background: light
+    collapse-below: lg
+    left:
+    - text: Asignatura de ejemplo
+      href: index.qmd
+    - text: Inicio
+      href: index.qmd
+  sidebar:
+    title: Asignatura de ejemplo
+    style: docked
+    collapse-level: 1
+    contents:
+    - text: Inicio
+      href: index.qmd
+    - section: Unidad de ejemplo
+      contents:
+      - href: unidades/ejemplo.qmd
+        text: Lección de ejemplo
+  page-navigation: true
+  back-to-top-navigation: true
+  page-footer:
+    left: UStudyOpen · Proyecto educativo independiente
+    right: 'Autoría y licencia: completar antes de publicar'
+format:
+  ustudyopen-design-html:
+    number-sections: false
+    code-overflow: wrap
+    link-external-newwindow: true
