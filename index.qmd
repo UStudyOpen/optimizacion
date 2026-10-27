@@ -11,17 +11,17 @@ ustudy-reviewed: false
 
 ## Fundamentos de optimización matemática y programación lineal
 
-Referencia académica: **ICS1113**. Curso en desarrollo, organizado en cinco unidades y ocho lecciones. Los contenidos están pendientes de redacción por el propietario y de revisión académica.
+Referencia académica: **ICS1113**. Curso en desarrollo, organizado en cinco unidades y ocho lecciones. La Sección 05 — Fundamentos algebraicos del Simplex está disponible en desarrollo, pendiente de revisión académica. Las otras siete lecciones están pendientes de redacción.
 
 ::: {.uso-actions}
 [Explorar las unidades](#unidades){.btn .btn-primary}
-[Ver la estructura de la primera lección](lecciones/01-problemas-optimizacion.qmd){.btn .btn-outline-primary}
+[Estudiar los fundamentos del Simplex](lecciones/05-fundamentos-simplex.qmd){.btn .btn-outline-primary}
 :::
 ::::
 
 ## Unidades
 
-Las ocho lecciones están **próximamente**: sus páginas contienen únicamente el índice y los indicadores de estado.
+La **Sección 05 — Fundamentos algebraicos del Simplex** está **en desarrollo**, con exposición, ejemplos, ejercicios y un explorador de bases. Las otras siete lecciones están **próximamente** y contienen únicamente el índice y los indicadores de estado. Ninguna lección tiene revisión académica declarada.
 
 :::: {.topic-grid}
 ::: {.topic-card}
@@ -48,7 +48,7 @@ Las ocho lecciones están **próximamente**: sus páginas contienen únicamente 
 [Lección 4: Poliedros, vértices y soluciones óptimas](lecciones/04-poliedros.qmd)
 :::
 ::: {.topic-card}
-[Próximamente · contenido pendiente]{.uso-status .uso-status--proximamente}
+[En desarrollo · Sección 05 disponible; lecciones 6 y 7 próximamente]{.uso-status .uso-status--en-desarrollo}
 
 ### Unidad IV — Método Simplex
 

@@ -31,6 +31,12 @@ try {
     for(const page of course.pages) {
       const route=page.path.replace(/\.qmd$/,'.html');
       await go(route);
+      if(page.path==='lecciones/05-fundamentos-simplex.qmd') {
+        await b.waitFor("!!window.MathJax?.startup?.promise");
+        await b.evaluate('MathJax.startup.promise');
+        check(`Section 05 equations ${width}`,await b.evaluate('document.querySelectorAll("mjx-container").length>100 && !document.querySelector("mjx-merror, [data-mjx-error]")'));
+        check(`Section 05 bibliography ${width}`,await b.evaluate('[...document.querySelectorAll("a[role=doc-biblioref]")].length>10 && document.querySelectorAll("#refs .csl-entry").length===3'));
+      }
       for(const mode of ['light','dark']) {
         await b.theme(mode);
         await b.evaluate('Promise.all(document.getAnimations().map(a=>a.finished.catch(()=>{})))');
@@ -48,6 +54,17 @@ try {
     }
   }
   await b.cdp('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
+  await go('lecciones/05-fundamentos-simplex.html');
+  for(const mode of ['light','dark']) {
+    await b.theme(mode);
+    for(const [value,point,feasible] of [['5','(0, 0)',true],['1','(3, 0)',true],['0','(2, 2)',true],['4','(0, 4)',true],['2','(4, 0)',false],['3','(0, 6)',false]]) {
+      await b.evaluate(`(()=>{const el=document.querySelector('#s05-base');el.value=${JSON.stringify(value)};el.dispatchEvent(new Event('change',{bubbles:true}));})()`);
+      check(`Section 05 explorer ${mode} base ${value}`,await b.evaluate(`document.querySelector('#s05-point-label').textContent===${JSON.stringify(point)} && document.querySelector('#s05-point').dataset.feasible===${JSON.stringify(String(feasible))}`));
+    }
+    await b.click('details.uso-solution summary');
+    check(`Section 05 solution opens ${mode}`,await b.evaluate('document.querySelector("details.uso-solution").open'));
+    await b.click('details.uso-solution summary');
+  }
   await go('index.html');
   check('theme persists between pages',await b.evaluate("document.body.classList.contains('quarto-dark')"));
   await b.theme('light');

@@ -39,4 +39,12 @@ home = (ROOT / '_site/index.html').read_text()
 assert 'ICS1113' in home and 'sin afiliación ni respaldo oficial' in home
 assert all(Path(p).with_suffix('.html').name in home for p in expected)
 assert all(p['reviewed'] is False for p in course['pages'])
-print('PASS: 5 units, 8 lesson titles, 49 subsections, pending states, TOC and sequential navigation')
+lesson = (ROOT / '_site/lecciones/05-fundamentos-simplex.html').read_text()
+assert course['pages'][5]['status'] == 'en-desarrollo'
+assert all(p['status'] == 'proximamente' for p in course['pages'][1:] if p['path'] != 'lecciones/05-fundamentos-simplex.qmd')
+for key in ['ferrer2006', 'vanderbei2020', 'nemirovski2012']:
+    assert f'id="ref-{key}"' in lesson and f'href="#ref-{key}"' in lesson, key
+assert 'citation-not-found' not in lesson
+assert 's05-base' in lesson and 'mathjax@' in lesson
+assert 'Sección 05' in home and 'Las ocho lecciones están' not in home
+print('PASS: 5 units, 8 lessons, 49 subsections, navigation, Section 05 citations and academic states')

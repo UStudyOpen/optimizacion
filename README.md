@@ -2,9 +2,9 @@
 
 Fundamentos de optimización matemática y programación lineal. Referencia académica: **ICS1113**. Proyecto educativo independiente, sin afiliación ni respaldo oficial de una universidad.
 
-Estado: **en desarrollo**. Cinco unidades y ocho lecciones; todas las lecciones están **próximamente**, pendientes de redacción por el propietario. Ninguna página tiene revisión académica declarada. Este repositorio contiene estructura editorial, sin teoría, demostraciones, ejercicios ni simuladores.
+Estado: **en desarrollo**. Cinco unidades y ocho lecciones. La **Sección 05 — Fundamentos algebraicos del Simplex** está disponible **en desarrollo**, con exposición, ejemplos, ejercicios y un explorador de bases. Las otras siete lecciones están **próximamente**, pendientes de redacción por el propietario. Ninguna página tiene revisión académica declarada.
 
-Repositorio: https://github.com/UStudyOpen/optimizacion. URL prevista, aún sin publicar: `https://ustudyopen.github.io/optimizacion/`.
+Repositorio: https://github.com/UStudyOpen/optimizacion. URL pública: `https://ustudyopen.github.io/optimizacion/`.
 
 ## Comenzar a escribir
 
@@ -47,4 +47,4 @@ No editar `_extensions/`, archivos administrados en `platform-vendor.json` ni `R
 
 Atribución pública: **ngulloa**. Contenido académico original en `lecciones/`: **CC BY-NC 4.0**. Plataforma, presentación y software compartido: **MIT**, con excepciones de terceros. Véanse `LICENSE`, `LICENSING.md`, `THIRD-PARTY-NOTICES.md`, `licensing.json` y `REUSE.toml`.
 
-La salida `_site/` no se versiona; no se utiliza `docs/`. Pages permanece sin habilitar y `USO_PAGES_ENABLED=false` bloquea la publicación. La automatización futura sobre `main` está preparada, pero su activación y cualquier merge requieren autorización del propietario. Véase [PREPARACION.md](PREPARACION.md) para la entrega y la incorporación posterior al portal.
+La salida `_site/` no se versiona; no se utiliza `docs/`. La publicación autorizada usa GitHub Actions, el artefacto `_site/` y el entorno `github-pages` restringido a `main`. Con `USO_PAGES_ENABLED=true` y `pages_automation_approved: true`, los merges aprobados en `main` publican automáticamente después de validar; se conserva el despliegue manual con `confirm=PUBLICAR`. Véase [PREPARACION.md](PREPARACION.md) para la entrega y la incorporación posterior al portal.

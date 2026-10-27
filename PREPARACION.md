@@ -1,5 +1,13 @@
 # Preparación técnica de Optimización
 
+## Publicación autorizada — 27 de octubre de 2026
+
+El propietario autorizó commits, PR, merge y publicación del curso y, tras verificarlo públicamente, su incorporación al catálogo. La Sección 05 contiene el primer desarrollo académico y mantiene `en-desarrollo`, revisión `false`; las otras siete lecciones siguen `proximamente`. La portada y README reflejan esta situación. No se cambian algoritmos, demostraciones ni licencias.
+
+Pages usa origen GitHub Actions y `_site/`, con `main` protegido y el entorno `github-pages` limitado explícitamente a `main`, conservando su revisor requerido y sin bypass administrativo. El workflow ya preparado comprueba el SHA, autorización, licencias, render, regresiones y recursos antes de publicar. La variable `USO_PAGES_ENABLED=true` se activa antes del merge aprobado para permitir el primer despliegue por push; sigue disponible `workflow_dispatch` con `PUBLICAR`. No se usa `docs/` ni `gh-pages`.
+
+Las secciones siguientes conservan el registro histórico de la preparación inicial; sus estados pendientes describen aquel momento.
+
 ## Alcance
 
 Cinco unidades, ocho QMD y 49 encabezados de subsecciones tomados exclusivamente del índice autorizado. La portada presenta el curso y su estado; las lecciones solo contienen metadatos, aviso pendiente y encabezados. No se ha redactado material académico. Todas las páginas tienen revisión académica `false`.
