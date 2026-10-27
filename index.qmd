@@ -1,6 +1,6 @@
 ---
-title: "Asignatura de ejemplo"
-description: "Punto de partida para un curso universitario abierto de UStudyOpen."
+title: "Optimización"
+description: "Fundamentos de optimización matemática y programación lineal. Referencia académica: ICS1113."
 toc: false
 ustudy-status: en-desarrollo
 ustudy-reviewed: false
@@ -9,37 +9,66 @@ ustudy-reviewed: false
 :::: {.uso-hero}
 [UStudyOpen · Recursos universitarios abiertos]{.uso-course-identity}
 
-## Aprender con explicaciones y actividades
+## Fundamentos de optimización matemática y programación lineal
 
-Esta portada muestra la composición compartida. Sustituye esta descripción por el alcance real del curso y sus requisitos previos verificados.
+Referencia académica: **ICS1113**. Curso en desarrollo, organizado en cinco unidades y ocho lecciones. Los contenidos están pendientes de redacción por el propietario y de revisión académica.
 
 ::: {.uso-actions}
-[Comenzar a estudiar](unidades/ejemplo.qmd){.btn .btn-primary}
-[Explorar las unidades](#unidades){.btn .btn-outline-primary}
+[Explorar las unidades](#unidades){.btn .btn-primary}
+[Ver la estructura de la primera lección](lecciones/01-problemas-optimizacion.qmd){.btn .btn-outline-primary}
 :::
 ::::
 
-## Objetivos generales
-
-- Definir los objetivos verificables de la asignatura.
-- Relacionar explicaciones, ejemplos y actividades.
-
 ## Unidades
+
+Las ocho lecciones están **próximamente**: sus páginas contienen únicamente el índice y los indicadores de estado.
 
 :::: {.topic-grid}
 ::: {.topic-card}
-[En desarrollo]{.uso-status .uso-status--en-desarrollo}
+[Próximamente · contenido pendiente]{.uso-status .uso-status--proximamente}
 
-### Unidad de ejemplo
+### Unidad I — Fundamentos de optimización
 
-Una lección demuestra componentes sin incorporar material de otras asignaturas.
+[Lección 1: Problemas de optimización y existencia de soluciones](lecciones/01-problemas-optimizacion.qmd)
 
-[Explorar la lección](unidades/ejemplo.qmd)
+[Lección 2: Convexidad, optimalidad global y unicidad](lecciones/02-convexidad.qmd)
+:::
+::: {.topic-card}
+[Próximamente · contenido pendiente]{.uso-status .uso-status--proximamente}
+
+### Unidad II — Reformulación de modelos
+
+[Lección 3: Modelos equivalentes y variables auxiliares](lecciones/03-modelos-equivalentes.qmd)
+:::
+::: {.topic-card}
+[Próximamente · contenido pendiente]{.uso-status .uso-status--proximamente}
+
+### Unidad III — Geometría de la programación lineal
+
+[Lección 4: Poliedros, vértices y soluciones óptimas](lecciones/04-poliedros.qmd)
+:::
+::: {.topic-card}
+[Próximamente · contenido pendiente]{.uso-status .uso-status--proximamente}
+
+### Unidad IV — Método Simplex
+
+[Lección 5: Fundamentos algebraicos del Simplex](lecciones/05-fundamentos-simplex.qmd)
+
+[Lección 6: Simplex — Fase I](lecciones/06-simplex-fase-i.qmd)
+
+[Lección 7: Simplex — Fase II](lecciones/07-simplex-fase-ii.qmd)
+:::
+::: {.topic-card}
+[Próximamente · contenido pendiente]{.uso-status .uso-status--proximamente}
+
+### Unidad V — Casos especiales del Simplex
+
+[Lección 8: Soluciones múltiples, degeneración y ciclos](lecciones/08-casos-especiales.qmd)
 :::
 ::::
 
 ## Proyecto, autoría y licencia
 
-UStudyOpen es un proyecto educativo independiente, sin afiliación ni respaldo oficial de una universidad. Completa la autoría con datos verificados y determina la licencia del contenido antes de publicar. La extensión conserva sus avisos de procedencia y las condiciones de terceros.
+UStudyOpen es un proyecto educativo independiente, sin afiliación ni respaldo oficial de una universidad. ICS1113 se utiliza únicamente como referencia académica; este recurso no es un sitio institucional oficial.
 
-Esta plantilla y su contenido de ejemplo están **en desarrollo**, sin revisión académica declarada. No se ha verificado un código universitario de referencia.
+Atribución pública: **ngulloa**. Contenido académico original: [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). Software y plataforma compartidos: **MIT**, con las excepciones y avisos de terceros correspondientes en la información legal del sitio. Ninguna página se declara académicamente revisada.

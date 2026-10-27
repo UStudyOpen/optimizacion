@@ -12,3 +12,4 @@ platform-vendor.json
 .env.*
 node_modules/
 __pycache__/
+PREPARACION.md

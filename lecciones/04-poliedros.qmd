@@ -1,0 +1,23 @@
+---
+title: "Lección 4: Poliedros, vértices y soluciones óptimas"
+ustudy-status: proximamente
+ustudy-reviewed: false
+toc: true
+---
+
+::: {.callout-note title="Contenido pendiente"}
+
+Esta lección está pendiente de redacción por el propietario y de revisión académica.
+:::
+
+## Programación lineal y representación geométrica.
+
+## Semiespacios y poliedros.
+
+## Vértices y restricciones activas.
+
+## Independencia lineal y puntos extremos.
+
+## Direcciones y conos de recesión.
+
+## Existencia y geometría del conjunto óptimo.

@@ -1,0 +1,25 @@
+---
+title: "Lección 8: Soluciones múltiples, degeneración y ciclos"
+ustudy-status: proximamente
+ustudy-reviewed: false
+toc: true
+---
+
+::: {.callout-note title="Contenido pendiente"}
+
+Esta lección está pendiente de redacción por el propietario y de revisión académica.
+:::
+
+## Soluciones óptimas múltiples.
+
+## Costos reducidos nulos.
+
+## Degeneración geométrica y algebraica.
+
+## Pivotes degenerados.
+
+## Posibilidad de ciclos.
+
+## Reglas anticiclaje y regla de Bland.
+
+## Diagnóstico de casos especiales.

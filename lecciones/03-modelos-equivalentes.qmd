@@ -1,0 +1,23 @@
+---
+title: "Lección 3: Modelos equivalentes y variables auxiliares"
+ustudy-status: proximamente
+ustudy-reviewed: false
+toc: true
+---
+
+::: {.callout-note title="Contenido pendiente"}
+
+Esta lección está pendiente de redacción por el propietario y de revisión académica.
+:::
+
+## Definición de equivalencia.
+
+## Preservación de valores y soluciones óptimas.
+
+## Reformulaciones mediante epígrafos.
+
+## Valores absolutos y máximos de funciones.
+
+## Variables auxiliares.
+
+## Demostración y verificación de equivalencias.

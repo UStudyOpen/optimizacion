@@ -1,0 +1,23 @@
+---
+title: "Lección 5: Fundamentos algebraicos del Simplex"
+ustudy-status: proximamente
+ustudy-reviewed: false
+toc: true
+---
+
+::: {.callout-note title="Contenido pendiente"}
+
+Esta lección está pendiente de redacción por el propietario y de revisión académica.
+:::
+
+## Forma estándar.
+
+## Variables de holgura y exceso.
+
+## Bases, variables básicas y no básicas.
+
+## Soluciones básicas factibles.
+
+## Diccionario, matrices y costos reducidos.
+
+## Pivoteo y funcionamiento general del método.
