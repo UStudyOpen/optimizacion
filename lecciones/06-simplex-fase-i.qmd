@@ -1,0 +1,25 @@
+---
+title: "Lección 6: Simplex — Fase I"
+ustudy-status: proximamente
+ustudy-reviewed: false
+toc: true
+---
+
+::: {.callout-note title="Contenido pendiente"}
+
+Esta lección está pendiente de redacción por el propietario y de revisión académica.
+:::
+
+## Necesidad de una base inicial factible.
+
+## Variables artificiales.
+
+## Construcción del problema auxiliar.
+
+## Iteraciones de Fase I.
+
+## Criterio de infactibilidad.
+
+## Eliminación de variables artificiales.
+
+## Transición a Fase II.

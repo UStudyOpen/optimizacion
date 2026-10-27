@@ -1,0 +1,25 @@
+---
+title: "Lección 7: Simplex — Fase II"
+ustudy-status: proximamente
+ustudy-reviewed: false
+toc: true
+---
+
+::: {.callout-note title="Contenido pendiente"}
+
+Esta lección está pendiente de redacción por el propietario y de revisión académica.
+:::
+
+## Recuperación del problema original.
+
+## Costos reducidos y optimalidad.
+
+## Selección de variable entrante.
+
+## Variable saliente y prueba de razón mínima.
+
+## Actualización de la base.
+
+## Terminación y detección de no acotamiento.
+
+## Ejecución completa del algoritmo.

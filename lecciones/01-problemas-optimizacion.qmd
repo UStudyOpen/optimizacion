@@ -1,0 +1,21 @@
+---
+title: "Lección 1: Problemas de optimización y existencia de soluciones"
+ustudy-status: proximamente
+ustudy-reviewed: false
+toc: true
+---
+
+::: {.callout-note title="Contenido pendiente"}
+
+Esta lección está pendiente de redacción por el propietario y de revisión académica.
+:::
+
+## Formulación general: variables, función objetivo y restricciones.
+
+## Factibilidad, valor óptimo y conjunto de soluciones.
+
+## Óptimos locales y globales.
+
+## Existencia: continuidad, compacidad y coercividad.
+
+## Infactibilidad, no acotamiento e ínfimos no alcanzados.

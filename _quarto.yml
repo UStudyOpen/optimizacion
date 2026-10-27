@@ -3,24 +3,30 @@ project:
   output-dir: _site
   render:
   - index.qmd
-  - unidades/ejemplo.qmd
+  - lecciones/01-problemas-optimizacion.qmd
+  - lecciones/02-convexidad.qmd
+  - lecciones/03-modelos-equivalentes.qmd
+  - lecciones/04-poliedros.qmd
+  - lecciones/05-fundamentos-simplex.qmd
+  - lecciones/06-simplex-fase-i.qmd
+  - lecciones/07-simplex-fase-ii.qmd
+  - lecciones/08-casos-especiales.qmd
   resources:
-  # Exclude the historical published tree from resource discovery.
-  - '!docs/**'
-  - assets/interactive/example.js
   - .nojekyll
   post-render:
   - python3 tests/post_render.py
+  - python3 tests/accessibility_output.py
 metadata-files:
 - course.yml
 quarto-required: =1.10.18
 lang: es
-bibliography: references.bib
 brand:
   light: _extensions/ustudyopen-design/brand/_brand.yml
   dark: _extensions/ustudyopen-design/brand/_brand-dark.yml
 website:
-  title: Asignatura de ejemplo
+  title: Optimización
+  description: Fundamentos de optimización matemática y programación lineal.
+  site-url: https://ustudyopen.github.io/optimizacion/
   favicon: _extensions/ustudyopen-design/assets/favicon.svg
   search:
     location: navbar
@@ -31,28 +37,51 @@ website:
     background: light
     collapse-below: lg
     left:
-    - text: Asignatura de ejemplo
+    - text: Optimización
       href: index.qmd
     - text: Inicio
       href: index.qmd
   sidebar:
-    title: Asignatura de ejemplo
+    title: Optimización · ICS1113
     style: docked
     collapse-level: 1
     contents:
     - text: Inicio
       href: index.qmd
-    - section: Unidad de ejemplo
+    - section: Unidad I — Fundamentos de optimización
       contents:
-      - href: unidades/ejemplo.qmd
-        text: Lección de ejemplo
+      - href: lecciones/01-problemas-optimizacion.qmd
+        text: "Lección 1: Problemas de optimización y existencia de soluciones"
+      - href: lecciones/02-convexidad.qmd
+        text: "Lección 2: Convexidad, optimalidad global y unicidad"
+    - section: Unidad II — Reformulación de modelos
+      contents:
+      - href: lecciones/03-modelos-equivalentes.qmd
+        text: "Lección 3: Modelos equivalentes y variables auxiliares"
+    - section: Unidad III — Geometría de la programación lineal
+      contents:
+      - href: lecciones/04-poliedros.qmd
+        text: "Lección 4: Poliedros, vértices y soluciones óptimas"
+    - section: Unidad IV — Método Simplex
+      contents:
+      - href: lecciones/05-fundamentos-simplex.qmd
+        text: "Lección 5: Fundamentos algebraicos del Simplex"
+      - href: lecciones/06-simplex-fase-i.qmd
+        text: "Lección 6: Simplex — Fase I"
+      - href: lecciones/07-simplex-fase-ii.qmd
+        text: "Lección 7: Simplex — Fase II"
+    - section: Unidad V — Casos especiales del Simplex
+      contents:
+      - href: lecciones/08-casos-especiales.qmd
+        text: "Lección 8: Soluciones múltiples, degeneración y ciclos"
   page-navigation: true
   back-to-top-navigation: true
   page-footer:
     left: UStudyOpen · Proyecto educativo independiente
-    right: 'Autoría y licencia: completar antes de publicar'
+    right: 'ngulloa · Contenido académico [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) · Software compartido MIT y excepciones de terceros'
 format:
   ustudyopen-design-html:
+    toc: true
     number-sections: false
     code-overflow: wrap
     link-external-newwindow: true

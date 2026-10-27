@@ -1,57 +1,50 @@
-# Plantilla UStudyOpen
+# Optimización · UStudyOpen
 
-Arquitectura local lista para iniciar una asignatura: Quarto 1.10.18, UStudyOpen Design 0.3.0 identificado por SHA-256, temas nativos, estados y workflows preparados sin activación. Python 3.14.8 y Node 24.21.0 en CI; no se necesitan paquetes npm; la validación legal usa el entorno Python fijado en `tests/requirements-licensing.txt`. La portada, la unidad y la pequeña actividad son ejemplos originales de estructura, sin copiar material académico ni simuladores de los cursos.
+Fundamentos de optimización matemática y programación lineal. Referencia académica: **ICS1113**. Proyecto educativo independiente, sin afiliación ni respaldo oficial de una universidad.
 
-## Crear una asignatura desde GitHub
+Estado: **en desarrollo**. Cinco unidades y ocho lecciones. La **Sección 05 — Fundamentos algebraicos del Simplex** está disponible **en desarrollo**, con exposición, ejemplos, ejercicios y un explorador de bases. Las otras siete lecciones están **próximamente**, pendientes de redacción por el propietario. Ninguna página tiene revisión académica declarada.
 
-1. Abrir https://github.com/UStudyOpen/ustudyopen-template y seleccionar **Use this template → Create a new repository**. Elegir organización, nombre y visibilidad; copiar solo la rama predeterminada. GitHub creará un repositorio independiente.
-2. Clonar el nuevo repositorio y completar la personalización descrita abajo. No copiar ni reutilizar el historial Git de los cursos.
-3. Ejecutar validación en un Pull Request. Configurar protección de `main` con el check `validate`, conversaciones resueltas y PR obligatorio, con cero aprobaciones requeridas para un único mantenedor. No activar Pages hasta revisar y autorizar la publicación de la nueva asignatura.
+Repositorio: https://github.com/UStudyOpen/optimizacion. URL pública: `https://ustudyopen.github.io/optimizacion/`.
 
-Esta plantilla no tiene GitHub Pages habilitado. Su workflow de despliegue permanece bloqueado mediante `USO_PAGES_ENABLED`; activar la plantilla no publica sus ejemplos.
+## Comenzar a escribir
 
-## Personalizar una asignatura
+1. Abrir `lecciones/01-problemas-optimizacion.qmd` y redactar debajo de los cinco encabezados existentes, conservando títulos y rutas.
+2. Al iniciar la redacción, cambiar `ustudy-status: proximamente` por `ustudy-status: en-desarrollo` y actualizar el mismo estado de esa página en `course.yml`. Mantener `ustudy-reviewed: false` y `reviewed: false`.
+3. Sustituir el aviso de contenido pendiente por un aviso de redacción en desarrollo. Actualizar los indicadores de portada cuando haya contenido disponible; el estado general sigue en desarrollo.
+4. Usar contenido original autorizado; las importaciones requieren registro legal y revisión de procedencia. La revisión técnica nunca implica revisión académica.
+5. Validar y proponer los cambios mediante un PR a `main`.
 
-1. Copiar este directorio a una carpeta nueva **sin** `.git`, `.quarto`, `_site` ni `artifacts`, manteniendo cada repositorio independiente. No inicializar Git en la carpeta principal del workspace.
-2. Editar el objeto `course` en `course.yml` (JSON válido como YAML): nombre, slug, autoría, licencia verificada, objetivos, unidades y páginas. Un código de referencia solo se añade tras verificarlo.
-3. Ajustar nombre, navegación y lista render en `_quarto.yml`; editar `index.qmd`, sustituir la lección de ejemplo y agregar contenido/bibliografía propios. Los estilos de portada ya pertenecen a la extensión. Registrar cada recurso local en `project.resources` para evitar publicar carpetas internas accidentalmente.
-4. Declarar estados de páginas y registro de manera concordante. `lista` exige revisión académica y funcional humana. Los temas aún sin página se registran en `course.planned` con estado `proximamente` y obligatoriedad explícita.
-5. Elegir la licencia académica y atribuciones del nuevo curso en `course.yml`, LICENSE y LICENSING.md. El scaffolding autorizado y la extensión usan MIT; los contenidos futuros conservan la licencia que declaren sus autores y los terceros sus propios términos. Conservar `_extensions/ustudyopen-design/PROVENANCE.md`.
-6. Ejecutar los checks siguientes y revisar ambos temas, teclado y móvil. Agregar pruebas académicas propias en tests y conservarlas separadas del sistema compartido. Los nuevos cursos deben establecer sus registros de integridad y rutas cuando exista una referencia académica revisada.
+## Herramientas
+
+Quarto **1.10.18**, Python **3.14.8**, Node **24.21.0**. No hay dependencias npm para construir el curso.
 
 ```sh
 python3 -m venv .venv
 . .venv/bin/activate
 python3 -m pip install -r tests/requirements-licensing.txt
+python3 tests/licensing.py --reuse
 python3 tests/render_clean.py
 python3 tests/run_course.py
-python3 tests/platform_validate.py
+python3 tests/platform_validate.py --release
 quarto preview --host 127.0.0.1
 ```
 
-Para servir el artefacto exacto: `python3 -m http.server 8764 --bind 127.0.0.1 --directory _site`, abrir `http://127.0.0.1:8764/`. La salida no se versiona. No crear un sitio global de UStudyOpen desde esta plantilla.
+`tests/outline.json` conserva el índice solicitado y `tests/check_site.py` comprueba estructura, estados y navegación; no valida matemáticas. `tests/browser-course.mjs` revisa ambas apariencias, búsqueda, teclado y navegación en 1440, 768, 390 y 320 px. Descarga axe-core 4.14.0 con SHA-256 fijado exclusivamente en memoria para auditar WCAG A/AA y buenas prácticas; su código MPL-2.0 no se incorpora al repositorio ni al sitio. Las comprobaciones automáticas no equivalen a una auditoría humana completa. Los manifiestos académicos y de rutas heredados están vacíos porque todavía no existe una referencia académica revisada. Los manifiestos vendor sí acreditan la integridad del sistema compartido.
 
-## Actualización y publicación
+## Sincronización
 
-Desde el repositorio central: `python3 tooling/sync_course.py ../nombre-del-curso`. Revisar manifiestos, cambios, compatibilidad y capturas y repetir pruebas. Las copias gestionadas no se editan a mano; los cambios locales se detectan y bloquean antes de sobrescribir. Para revertir, restaurar únicamente el paquete y los manifiestos anteriores desde una copia revisada, sin sobrescribir contenido.
+Desde un checkout limpio de la versión central revisada (preparación inicial: `UStudyOpen/ustudyopen-design@107202007aa37a19814ce20992724157e45914fe`):
 
-`validate.yml` valida PR sin permisos de publicación. `deploy.yml` solo admite ejecución manual desde main, variable USO_PAGES_ENABLED y confirmación PUBLICAR, y requiere configurar revisión humana del entorno antes de activarlo. Ver [MIGRATION.md](MIGRATION.md). El repositorio público conserva el historial local original; los ejemplos no se publican como sitio.
+```sh
+python3 tooling/sync_course.py /ruta/a/optimizacion --dry-run
+python3 tooling/sync_course.py /ruta/a/optimizacion
+python3 tooling/sync_course.py /ruta/a/optimizacion --check
+```
 
-## Licencias
+No editar `_extensions/`, archivos administrados en `platform-vendor.json` ni `REUSE.toml`. Los workflows son administrados por el sincronizador. `tests/accessibility_output.py` añade nombres de navegación y una región legal al HTML generado; es una adaptación local, sin cambios de estilos ni del paquete compartido. La inicialización utilizó GitHub Template y `tooling/create_course.py`, sin reutilizar el historial de la plantilla.
 
-Véanse [alcance](LICENSING.md) y [avisos de terceros](THIRD-PARTY-NOTICES.md).
+## Licencias y publicación
 
-## Crear otra asignatura con licencias reproducibles
+Atribución pública: **ngulloa**. Contenido académico original en `lecciones/`: **CC BY-NC 4.0**. Plataforma, presentación y software compartido: **MIT**, con excepciones de terceros. Véanse `LICENSE`, `LICENSING.md`, `THIRD-PARTY-NOTICES.md`, `licensing.json` y `REUSE.toml`.
 
-Usar `tooling/create_course.py` desde UStudyOpen Design con `--author`, `--name`
-y `--authorize-original-content`. La autorización explícita habilita CC-BY-NC-4.0
-para lecciones originales nuevas; `--license` permite otra elección revisada.
-Los ejemplos heredados conservan MIT de ngulloa. El generador configura el curso
-localmente, valida sus avisos y no crea repositorios ni publica.
-
-Las nuevas lecciones originales de la asignatura pueden agregarse en `lecciones/`
-sin editar LICENSE. Los recursos externos requieren registrar origen, versión,
-SPDX, texto y revisión de NOTICE en `licensing.json`. Ejecutar
-`python3 tests/licensing.py --reuse` en el entorno fijado por
-`tests/requirements-licensing.txt`. El workflow de validación ya instala ese entorno.
-La guía completa está en `ustudyopen-design/docs/AUTOMATIZACION-LICENCIAS.md`.
+La salida `_site/` no se versiona; no se utiliza `docs/`. La publicación autorizada usa GitHub Actions, el artefacto `_site/` y el entorno `github-pages` restringido a `main`. Con `USO_PAGES_ENABLED=true` y `pages_automation_approved: true`, los merges aprobados en `main` publican automáticamente después de validar; se conserva el despliegue manual con `confirm=PUBLICAR`. Véase [PREPARACION.md](PREPARACION.md) para la entrega y la incorporación posterior al portal.

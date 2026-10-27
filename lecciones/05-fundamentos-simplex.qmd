@@ -1,0 +1,509 @@
+---
+title: "Lección 5: Fundamentos algebraicos del Simplex"
+ustudy-status: en-desarrollo
+ustudy-reviewed: false
+toc: true
+---
+
+El Simplex comienza eligiendo qué variables se dejan en cero y cuáles se calculan a partir de las ecuaciones. Las primeras se llaman **no básicas**; las segundas, **básicas**. Después examina si conviene aumentar alguna no básica, cuánto puede aumentar y qué básica debe reemplazar. El procedimiento se entiende mediante despejes y sustituciones; las matrices permitirán organizar esas mismas operaciones cuando haya muchas variables.
+
+Primero recorreremos un ejemplo completo con ecuaciones escalares. Después lo reconstruiremos matricialmente, identificando el significado de cada bloque. La conexión con los vértices se estudia en la [lección anterior](04-poliedros.qmd).
+
+::: {.callout-tip title="Objetivos de aprendizaje"}
+
+- Distinguir variables básicas y no básicas, solución básica y solución básica factible.
+- Ejecutar cambios de base mediante despejes, costos reducidos y razón mínima.
+- Deducir la formulación matricial y reconocer en ella las mismas operaciones del ejemplo algebraico.
+:::
+
+## Forma estándar.
+
+Usaremos programas de **minimización**, con igualdades y variables no negativas:
+
+$$
+\begin{aligned}
+\min\quad &z=c_1x_1+\cdots+c_nx_n,\\
+\text{sujeto a}\quad
+&a_{i1}x_1+\cdots+a_{in}x_n=b_i,\quad i=1,\ldots,m,\\
+&x_j\ge0,\quad j=1,\ldots,n.
+\end{aligned}
+$$
+
+Supondremos que las $m$ ecuaciones son linealmente independientes y $m\le n$. Si hay ecuaciones dependientes, primero se comprueba su compatibilidad: una contradicción implica infactibilidad; una ecuación redundante puede eliminarse. La independencia de las ecuaciones no garantiza por sí sola que exista un punto factible.
+
+Esta es la convención de Ferrer y Muñoz, §3.2.3. Vanderbei usa maximización en su desarrollo; $\max p^\top x$ equivale a $\min(-p)^\top x$: conserva los optimizadores e invierte el signo del objetivo y de los costos reducidos. Mantendremos una única regla: **en minimización, un costo reducido negativo favorece aumentar la variable correspondiente**, siempre que exista un paso factible positivo [@ferrer2006, sec. 3.2.3, pp. 126–128; @vanderbei2020, cap. 6, secs. 1–2, pp. 89–94].
+
+## Variables de holgura y exceso.
+
+Una restricción $a_1x_1+\cdots+a_nx_n\le\beta$ se transforma en
+
+$$a_1x_1+\cdots+a_nx_n+s=\beta,\qquad s\ge0.$$
+
+La **holgura** $s$ mide el margen disponible. La igualdad y $s\ge0$ son equivalentes a la desigualdad original [@vanderbei2020, cap. 1, sec. 2, p. 6]. Para una restricción con $\ge$, se resta un **exceso**:
+
+$$a_1x_1+\cdots+a_nx_n-e=\beta,\qquad e\ge0.$$
+
+En este caso $e$ mide cuánto supera el lado izquierdo a $\beta$. Ambas variables auxiliares tienen costo cero si solo representan la restricción. Una igualdad existente no requiere holgura. Una variable libre se representa mediante $u=u^+-u^-$, con $u^+,u^-\ge0$; una cota $u\ge\ell$ admite la sustitución $u=\ell+v$, $v\ge0$. Si aparece una constante en el objetivo, se conserva para recuperar su valor original.
+
+::: {.uso-academic .uso-example}
+### Ejemplo 1: transformar y reconstruir
+
+Considera $\min 2u+v$, con $u+v\le5$, $2u-v\ge1$, $u$ libre y $v\ge0$. El modelo transformado es
+
+$$
+\begin{aligned}
+\min\quad &2u^+-2u^-+v,\\
+u^+-u^-+v+s&=5,\\
+2u^+-2u^--v-e&=1,\\
+u^+,u^-,v,s,e&\ge0.
+\end{aligned}
+$$
+
+Por ejemplo, $(u,v)=(1,1)$ corresponde a $(u^+,u^-,v,s,e)=(1,0,1,3,0)$ y conserva el costo $3$. Recíprocamente, cualquier solución transformada devuelve $u=u^+-u^-$ y $v$ que satisfacen las desigualdades originales. La representación de $u$ no es única, pero el objetivo sí se preserva. Agregar un exceso no asegura una solución inicial factible: al fijar las variables originales en cero podría obtenerse un exceso negativo.
+:::
+
+## Bases, variables básicas y no básicas.
+
+Con $m$ ecuaciones independientes, elegimos $m$ variables cuyos coeficientes permitan despejarlas de manera única en función de las restantes. Esas son las **básicas**; las otras $n-m$ son las **no básicas**. La elección se llama **base**. Su condición de independencia se formalizará al introducir la matriz básica.
+
+Considera las ecuaciones
+
+$$x_1+x_2+x_3=4,\qquad 2x_1+x_2+x_4=6.$$
+
+Elegir $x_3,x_4$ como básicas permite escribir
+
+$$x_3=4-x_1-x_2,\qquad x_4=6-2x_1-x_2.$$
+
+Aquí $x_1,x_2$ son no básicas: fijar sus valores determina los de $x_3,x_4$. Si, en cambio, elegimos $x_1,x_3$, también podemos despejar:
+
+$$x_1=3-\tfrac12x_2-\tfrac12x_4,\qquad
+x_3=1-\tfrac12x_2+\tfrac12x_4.$$
+
+El sistema es el mismo; cambió qué variables expresamos en función de cuáles. **Ser básica es un papel dentro de esta representación**: una holgura puede dejar de ser básica y una variable original puede entrar. Ni siquiera se exige que una básica sea positiva.
+
+## Soluciones básicas factibles.
+
+La **solución básica** asociada a una base se obtiene fijando todas las no básicas en cero y calculando las básicas. Es **factible** si todos los valores obtenidos son no negativos [@ferrer2006, sec. 3.2.3, p. 127].
+
+En el sistema anterior, con básicas $x_3,x_4$, resulta $(x_1,x_2,x_3,x_4)=(0,0,4,6)$: una solución básica factible (SBF). Con básicas $x_1,x_4$ y no básicas $x_2=x_3=0$, las igualdades dan $(4,0,0,-2)$: una solución básica que **no** es factible. Elegir una base válida no basta para satisfacer las restricciones de signo.
+
+Si todas las básicas son positivas, la SBF es **no degenerada**; si alguna es cero, es **degenerada**. Un cero puede corresponder a una variable básica o no básica. Además, con degeneración distintas bases pueden representar el mismo punto. Las SBF son exactamente los puntos extremos del conjunto factible en forma estándar; el vínculo conecta los despejes con la geometría [@nemirovski2012, sec. 4.2.2, pp. 146–147].
+
+## Diccionario, matrices y costos reducidos.
+
+### El diccionario algebraico y el costo neto de una variable
+
+El **diccionario** reúne las básicas despejadas en función de las no básicas y la expresión del objetivo después de esas sustituciones. No describe solamente un punto: describe todos los valores que satisfacen las igualdades. Al fijar las no básicas en cero obtenemos la solución básica actual [@vanderbei2020, cap. 2, secs. 1.1–2, pp. 14–16].
+
+::: {.uso-academic .uso-example}
+### Ejemplo 2: ejecutar Simplex mediante sustituciones
+
+Minimicemos
+
+$$z=-3x_1-2x_2,\qquad x_1+x_2\le4,\quad 2x_1+x_2\le6,\quad x_1,x_2\ge0.$$
+
+Con holguras $x_3,x_4\ge0$, el diccionario inicial es
+
+$$
+\begin{aligned}
+x_3&=4-x_1-x_2,\\
+x_4&=6-2x_1-x_2,\\
+z&=0-3x_1-2x_2.
+\end{aligned}
+$$
+
+Las no básicas son $x_1,x_2$. En el punto $(0,0,4,6)$, el objetivo vale $0$. Sus coeficientes en la expresión **actual** del objetivo son los costos reducidos: $-3$ y $-2$. Por ejemplo, aumentar $x_1$ en una unidad, reajustando las básicas y dejando $x_2=0$, cambia el objetivo en $-3$.
+
+**Primer pivote.** Elegimos aumentar $x_1=\theta$ y mantener $x_2=0$. Entonces
+
+$$x_3=4-\theta\ge0,\qquad x_4=6-2\theta\ge0.$$
+
+La primera condición permite $\theta\le4$; la segunda, $\theta\le3$. La cota que se alcanza primero es $3$: allí $x_4=0$. Decimos que **entra $x_1$ y sale $x_4$**. Despejamos $x_1$ en la ecuación de $x_4$:
+
+$$x_4=6-2x_1-x_2\quad\Longrightarrow\quad
+x_1=3-\tfrac12x_2-\tfrac12x_4.$$
+
+Sustituyendo en la ecuación de $x_3$ y en el objetivo:
+
+$$
+\begin{aligned}
+x_3&=4-(3-\tfrac12x_2-\tfrac12x_4)-x_2
+=1-\tfrac12x_2+\tfrac12x_4,\\
+z&=-3(3-\tfrac12x_2-\tfrac12x_4)-2x_2
+=-9-\tfrac12x_2+\tfrac32x_4.
+\end{aligned}
+$$
+
+Las nuevas no básicas son $x_2,x_4$. Fijarlas en cero da $(3,0,1,0)$ y $z=-9$. Ahora el costo reducido de $x_2$ es $-1/2$, aunque su coeficiente original siga siendo $-2$. ¿Por qué? Al aumentar $x_2$, $x_1$ debe disminuir en $1/2$ por unidad: el efecto neto es
+
+$$\underbrace{-2}_{\text{efecto directo de }x_2}
++\underbrace{(-3)(-1/2)}_{\text{reajuste de }x_1}=-\tfrac12.$$
+
+El costo reducido incorpora los reajustes necesarios para seguir satisfaciendo las ecuaciones.
+
+**Segundo pivote.** Aumentamos $x_2=\theta$, manteniendo $x_4=0$:
+
+$$x_3=1-\tfrac12\theta\ge0,\qquad x_1=3-\tfrac12\theta\ge0.$$
+
+Las razones son $1/(1/2)=2$ y $3/(1/2)=6$. El paso máximo es $2$; sale $x_3$. Despejamos la entrante:
+
+$$x_3=1-\tfrac12x_2+\tfrac12x_4
+\quad\Longrightarrow\quad x_2=2-2x_3+x_4.$$
+
+Al sustituir en las otras expresiones obtenemos
+
+$$
+\begin{aligned}
+x_1&=3-\tfrac12(2-2x_3+x_4)-\tfrac12x_4
+=2+x_3-x_4,\\
+z&=-9-\tfrac12(2-2x_3+x_4)+\tfrac32x_4
+=-10+x_3+x_4.
+\end{aligned}
+$$
+
+**Certificación.** Las no básicas son $x_3,x_4$, con costos reducidos $1,1$. Como son no negativas, todo punto factible tiene $z=-10+x_3+x_4\ge-10$. El punto $(2,2,0,0)$ alcanza esa cota: es óptimo global. Alcanzar $-10$ exige $x_3=x_4=0$, lo que determina $x_1=x_2=2$; el óptimo es único.
+
+Comprobación en el modelo original: $2+2=4$, $2\cdot2+2=6$ y $-3\cdot2-2\cdot2=-10$. El recorrido fue $(0,0)\to(3,0)\to(2,2)$, con valores $0,-9,-10$.
+:::
+
+### Del despeje a la representación matricial
+
+Ahora agrupamos las ecuaciones como $Ax=b$, con $A\in\mathbb R^{m\times n}$, $b\in\mathbb R^m$, $x,c\in\mathbb R^n$ y $z=c^\top x$. Suponemos $\operatorname{rango}(A)=m$. Una base es una lista ordenada $B=(\beta_1,\ldots,\beta_m)$ cuyos índices seleccionan $m$ columnas independientes. La matriz cuadrada $A_B$ formada por ellas es invertible; $N$ contiene los índices restantes.
+
+Los vectores $x_B,c_B$ siguen el orden de $B$, y $x_N,c_N$ el de $N$. La matriz $A_N$ reúne las columnas no básicas. Separamos los términos de las igualdades:
+
+$$Ax=A_Bx_B+A_Nx_N=b.$$
+
+Escribir $A=[A_B\ A_N]$ supone reordenar también las coordenadas de $x$ y $c$; no significa que las columnas originales estuvieran ya en ese orden [@vanderbei2020, cap. 6, sec. 1, pp. 90–91].
+
+```{=html}
+<figure id="s05-color-matrices">
+  <p><strong>Primer cambio de base: B = (3, 1), N = (2, 4).</strong> El color y las etiquetas siguen a cada variable cuando se reordenan las columnas.</p>
+  <div class="s05-color-panels">
+    <svg viewBox="0 0 340 170" role="img" aria-labelledby="s05-original-title s05-original-desc">
+      <title id="s05-original-title">Matriz A en el orden original</title>
+      <desc id="s05-original-desc">Columnas 1 y 3 básicas, columnas 2 y 4 no básicas. Primera fila 1, 1, 1, 0. Segunda fila 2, 1, 0, 1. El orden original es x1, x2, x3, x4.</desc>
+      <text x="170" y="22" text-anchor="middle" class="s05-matrix-heading">A: orden original</text>
+      <path d="M66 62H58V130H66 M274 62H282V130H274" class="s05-bracket"/>
+      <g class="s05-basic-block"><text x="90" y="51">x₁</text><text x="90" y="88">1</text><text x="90" y="119">2</text><text x="194" y="51">x₃</text><text x="194" y="88">1</text><text x="194" y="119">0</text></g>
+      <g class="s05-nonbasic-block"><text x="142" y="51">x₂</text><text x="142" y="88">1</text><text x="142" y="119">1</text><text x="246" y="51">x₄</text><text x="246" y="88">0</text><text x="246" y="119">1</text></g>
+      <text x="170" y="157" text-anchor="middle" class="s05-small-label">Básicas: x₃, x₁ · No básicas: x₂, x₄</text>
+    </svg>
+    <svg viewBox="0 0 340 170" role="img" aria-labelledby="s05-grouped-title s05-grouped-desc">
+      <title id="s05-grouped-title">Matriz reordenada como A B seguido de A N</title>
+      <desc id="s05-grouped-desc">Bloque básico A B: columnas x3 y x1, filas 1, 1 y 0, 2. Bloque no básico A N: columnas x2 y x4, filas 1, 0 y 1, 1. Se reordenan columnas, no ecuaciones.</desc>
+      <text x="110" y="22" text-anchor="middle" class="s05-basic-block">A_B: básicas</text>
+      <text x="240" y="22" text-anchor="middle" class="s05-nonbasic-block">A_N: no básicas</text>
+      <path d="M66 62H58V130H66 M274 62H282V130H274 M170 65V127" class="s05-bracket"/>
+      <g class="s05-basic-block"><text x="90" y="51">x₃</text><text x="90" y="88">1</text><text x="90" y="119">0</text><text x="142" y="51">x₁</text><text x="142" y="88">1</text><text x="142" y="119">2</text></g>
+      <g class="s05-nonbasic-block"><text x="194" y="51">x₂</text><text x="194" y="88">1</text><text x="194" y="119">1</text><text x="246" y="51">x₄</text><text x="246" y="88">0</text><text x="246" y="119">1</text></g>
+      <text x="170" y="157" text-anchor="middle" class="s05-small-label">[ A_B  A_N ]: columnas 3, 1, 2, 4</text>
+    </svg>
+  </div>
+  <figcaption>La partición también ordena los vectores: <span class="s05-basic-block">x_B = (x₃, x₁)ᵀ, c_B = (0, −3)ᵀ</span>; <span class="s05-nonbasic-block">x_N = (x₂, x₄)ᵀ, c_N = (−2, 0)ᵀ</span>. Los coeficientes y las variables deben moverse juntos.</figcaption>
+</figure>
+<style>
+#quarto-document-content .citation a[role="doc-biblioref"]{text-decoration:underline}
+#s05-color-matrices{border:1px solid var(--uso-border);border-radius:var(--uso-radius-panel);padding:1rem;margin-block:1.5rem;background:var(--uso-surface);color:var(--uso-text)}
+#s05-color-matrices .s05-color-panels{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:1rem}
+#s05-color-matrices svg{width:100%;height:auto;max-width:420px;margin-inline:auto;background:var(--uso-surface-alt)}
+#s05-color-matrices svg text{fill:var(--uso-text);font:20px var(--uso-font-body);text-anchor:middle}
+#s05-color-matrices svg .s05-small-label{font-size:16px}
+#s05-color-matrices .s05-basic-block{color:var(--uso-link)}
+#s05-color-matrices .s05-nonbasic-block{color:var(--uso-emphasis-ink)}
+#s05-color-matrices svg .s05-basic-block,#s05-color-matrices svg .s05-basic-block text{fill:var(--uso-link)}
+#s05-color-matrices svg .s05-nonbasic-block,#s05-color-matrices svg .s05-nonbasic-block text{fill:var(--uso-emphasis-ink)}
+#s05-color-matrices .s05-bracket{stroke:var(--uso-text);stroke-width:1.5;fill:none}
+#s05-color-matrices figcaption{font-size:1rem;margin-top:.7rem}
+</style>
+```
+
+
+Despejar las básicas simultáneamente da
+
+$$
+\begin{aligned}
+A_Bx_B&=b-A_Nx_N,\\
+x_B&=\underbrace{A_B^{-1}b}_{\bar b}
+-\underbrace{A_B^{-1}A_N}_{\bar A_N}x_N.
+\end{aligned}
+$$
+
+La inversa cumple la función de resolver el sistema para las básicas. $\bar b$ es su valor cuando $x_N=0$; la columna $A_B^{-1}A_j$ indica cuánto deben **disminuir** las básicas por cada unidad que aumenta $x_j$. Una componente negativa indica aumento, debido al signo menos del diccionario [@ferrer2006, sec. 3.2.3, ec. (3.1), p. 127].
+
+| Objeto | Dimensión | Interpretación |
+|---|---|---|
+| $A_B$ | $m\times m$ | Coeficientes de las variables que se despejan |
+| $A_N$ | $m\times(n-m)$ | Coeficientes de las variables que quedan libres en el despeje |
+| $\bar b=A_B^{-1}b$ | $m\times1$ | Valores de las básicas en la solución básica |
+| $\bar A_N=A_B^{-1}A_N$ | $m\times(n-m)$ | Reajustes de las básicas al cambiar las no básicas |
+| $c_B,c_N$ | $m\times1$, $(n-m)\times1$ | Costos originales, ordenados según la partición |
+
+Así se precisa la distinción anterior: una solución básica tiene $x_B=\bar b$, $x_N=0$; es factible si y solo si $\bar b\ge0$. La forma estándar no exige por definición $b\ge0$, aunque las ecuaciones puedan normalizarse multiplicándolas por $-1$. Incluso con $b\ge0$, una base particular puede producir $\bar b$ negativo.
+
+### Deducir los costos reducidos con matrices
+
+Sustituimos el mismo despeje en el objetivo:
+
+$$
+\begin{aligned}
+z&=c_B^\top x_B+c_N^\top x_N\\
+ &=c_B^\top(\bar b-\bar A_Nx_N)+c_N^\top x_N\\
+ &=\underbrace{c_B^\top\bar b}_{\bar z}
+ +\underbrace{(c_N^\top-c_B^\top\bar A_N)}_{\bar c_N^\top}x_N.
+\end{aligned}
+$$
+
+Por tanto,
+
+$$\boxed{\bar c_j=c_j-c_B^\top A_B^{-1}A_j,\quad j\in N.}$$
+
+Es la misma resta que realizamos al sustituir ecuaciones: costo directo menos el costo de las básicas desplazadas [@ferrer2006, sec. 3.2.3, ec. (3.2), pp. 127–128; @vanderbei2020, cap. 6, sec. 2, p. 91].
+
+::: {.callout-warning title="Coeficientes, valores y objetivo no son lo mismo"}
+
+$c_B$ contiene **coeficientes originales**; $\bar b$ contiene **valores actuales de las básicas**; $\bar z=c_B^\top\bar b$ es **un número**. En la SBF, las no básicas valen cero: basta sumar costo por valor de las básicas. Sus costos originales no desaparecen. Lo que vale cero es su costo **reducido**, porque $c_B^\top-c_B^\top A_B^{-1}A_B=0$.
+:::
+
+### Reconstruir matricialmente el ejemplo 2
+
+Los datos originales, con el orden fijo $x=(x_1,x_2,x_3,x_4)^\top$, son
+
+$$
+A=\begin{pmatrix}1&1&1&0\\2&1&0&1\end{pmatrix},\quad
+b=\begin{pmatrix}4\\6\end{pmatrix},\quad
+c=\begin{pmatrix}-3\\-2\\0\\0\end{pmatrix}.
+$$
+
+**Inicio: $B=(3,4)$, $N=(1,2)$.** Como $A_B=I$ y $c_B=(0,0)^\top$,
+
+$$\bar b=(4,6)^\top,\quad
+\bar A_N=\begin{pmatrix}1&1\\2&1\end{pmatrix},\quad
+\bar c_N^\top=(-3,-2),\quad \bar z=0.$$
+
+Para aumentar $x_1$, calculamos $u=A_B^{-1}A_1=(1,2)^\top$. La razón mínima es $\min\{4/1,6/2\}=3$: sale $x_4$, que ocupa la segunda posición de $B$.
+
+**Después del primer pivote: $B=(3,1)$, $N=(2,4)$.**
+
+$$
+A_B=\begin{pmatrix}1&1\\0&2\end{pmatrix},\quad
+A_B^{-1}=\begin{pmatrix}1&-1/2\\0&1/2\end{pmatrix},\quad
+A_N=\begin{pmatrix}1&0\\1&1\end{pmatrix}.
+$$
+
+$$
+\bar b=\begin{pmatrix}4-6/2\\6/2\end{pmatrix}
+=\begin{pmatrix}1\\3\end{pmatrix},\qquad
+\bar A_N=\begin{pmatrix}1/2&-1/2\\1/2&1/2\end{pmatrix}.
+$$
+
+El orden importa: $x_B=(x_3,x_1)^\top=(1,3)^\top$ y $c_B=(0,-3)^\top$. Entonces
+
+$$
+\bar z=0\cdot1-3\cdot3=-9,\qquad
+\bar c_N^\top=(-2,0)-(0,-3)\bar A_N=(-1/2,3/2).
+$$
+
+La primera fila del diccionario $x_B=\bar b-\bar A_Nx_N$ es exactamente $x_3=1-\tfrac12x_2+\tfrac12x_4$; la segunda es la expresión de $x_1$ que obtuvimos despejando. Para la entrante $x_2$, $u=(1/2,1/2)^\top$; las razones $2$ y $6$ hacen salir a $x_3$, primera posición de $B$.
+
+**Después del segundo pivote: $B=(2,1)$, $N=(3,4)$.**
+
+$$
+A_B=\begin{pmatrix}1&1\\1&2\end{pmatrix},\quad
+A_B^{-1}=\begin{pmatrix}2&-1\\-1&1\end{pmatrix},\quad A_N=I.
+$$
+
+$$
+\bar b=(2,2)^\top,\quad c_B=(-2,-3)^\top,\quad \bar z=-10,
+$$
+
+$$
+\bar c_N^\top=(0,0)-(-2,-3)
+\begin{pmatrix}2&-1\\-1&1\end{pmatrix}=(1,1).
+$$
+
+Por tanto, $z=-10+x_3+x_4$, la misma certificación que obtuvimos escalarmente. Las matrices reúnen los despejes y las sustituciones; el criterio matemático es idéntico.
+
+### Explorar las bases del ejemplo
+
+El orden de una base puede cambiar sin cambiar el punto asociado. En este explorador los índices se ordenan de menor a mayor: la base $(1,3)$ representa el mismo estado que $(3,1)$ en el cálculo anterior, pero reordena $x_B$ y $c_B$. Cambia la base seleccionada y comprueba por qué satisfacer las igualdades no basta para ser factible. Observa especialmente las bases $(1,4)$ y $(2,3)$: su costo parece mejor, pero tienen una holgura negativa.
+
+```{=html}
+<section id="s05-bases" class="s05-explorer" aria-label="Explorador de bases del ejemplo 2">
+  <label for="s05-base">Base B (índices en orden creciente)</label>
+  <select id="s05-base">
+    <option value="5">(3, 4): inicio</option>
+    <option value="1">(1, 3): primer cambio</option>
+    <option value="0">(1, 2): segundo cambio</option>
+    <option value="4">(2, 4)</option>
+    <option value="2">(1, 4)</option>
+    <option value="3">(2, 3)</option>
+  </select>
+  <div id="s05-data" aria-live="polite" aria-atomic="true"></div>
+  <svg viewBox="0 0 360 290" role="img" aria-labelledby="s05-title s05-desc">
+    <title id="s05-title">Punto básico proyectado al plano x1, x2</title>
+    <desc id="s05-desc">La región factible tiene vértices (0,0), (3,0), (2,2) y (0,4). El punto marcado corresponde a la base seleccionada.</desc>
+    <polygon points="44,246 170,246 128,180 44,114" class="s05-region"/>
+    <path d="M44 20V246H333" class="s05-axis"/>
+    <path d="M44 114L212 246 M44 48L170 246" class="s05-boundary"/>
+    <g class="s05-labels"><text x="325" y="270">x₁</text><text x="15" y="24">x₂</text><text x="28" y="263">0</text><text x="161" y="266">3</text><text x="205" y="266">4</text><text x="23" y="118">4</text><text x="23" y="52">6</text></g>
+    <circle id="s05-point" cx="44" cy="246" r="6"/>
+    <text id="s05-point-label" x="55" y="234" class="s05-point-label">(0, 0)</text>
+  </svg>
+  <noscript>Sin JavaScript: las bases (3,4), (1,3), (1,2) y (2,4) dan puntos factibles; (1,4) y (2,3) dan soluciones básicas con una componente negativa. El ejemplo desarrollado contiene los cálculos del recorrido.</noscript>
+</section>
+<style>
+#s05-bases{border:1px solid var(--uso-border);border-radius:var(--uso-radius-panel);padding:1rem;margin-block:1.5rem;background:var(--uso-surface);color:var(--uso-text)}
+#s05-bases label{display:block;font-weight:600;margin-bottom:.4rem}
+#s05-bases select{min-height:44px;width:100%;max-width:30rem;font:inherit;padding:.4rem;background:var(--uso-surface);color:var(--uso-text);border:1px solid var(--uso-control-border);border-radius:var(--uso-radius-control)}
+#s05-bases select:focus-visible{outline:3px solid var(--uso-primary);outline-offset:3px}
+#s05-bases #s05-data{margin-block:1rem;overflow-wrap:anywhere}
+#s05-bases #s05-data p{margin:.45rem 0}
+#s05-bases svg{display:block;width:100%;max-width:420px;height:auto;margin-inline:auto;background:var(--uso-surface-alt)}
+#s05-bases .s05-region{fill:var(--uso-primary-soft);stroke:var(--uso-primary);stroke-width:2}
+#s05-bases .s05-axis{fill:none;stroke:var(--uso-chart-axis);stroke-width:1.5}
+#s05-bases .s05-boundary{fill:none;stroke:var(--uso-series-2);stroke-width:1.5;stroke-dasharray:5 4}
+#s05-bases text{fill:var(--uso-text);font:14px var(--uso-font-body)}
+#s05-bases #s05-point{fill:var(--uso-series-1);stroke:var(--uso-surface);stroke-width:2}
+#s05-bases #s05-point[data-feasible="false"]{fill:var(--uso-danger)}
+</style>
+<script>
+(() => {
+  const root = document.getElementById('s05-bases');
+  if (!root) return;
+  const states = [{"B": [1, 2], "N": [3, 4], "AB": [["1", "1"], ["2", "1"]], "inverse": [["-1", "1"], ["2", "-1"]], "x": ["2", "2", "0", "0"], "xb": ["2", "2"], "cB": ["-3", "-2"], "rc": ["1", "1"], "z": "-10", "feasible": true}, {"B": [1, 3], "N": [2, 4], "AB": [["1", "1"], ["2", "0"]], "inverse": [["0", "1/2"], ["1", "-1/2"]], "x": ["3", "0", "1", "0"], "xb": ["3", "1"], "cB": ["-3", "0"], "rc": ["-1/2", "3/2"], "z": "-9", "feasible": true}, {"B": [1, 4], "N": [2, 3], "AB": [["1", "0"], ["2", "1"]], "inverse": [["1", "0"], ["-2", "1"]], "x": ["4", "0", "0", "-2"], "xb": ["4", "-2"], "cB": ["-3", "0"], "rc": ["1", "3"], "z": "-12", "feasible": false}, {"B": [2, 3], "N": [1, 4], "AB": [["1", "1"], ["1", "0"]], "inverse": [["0", "1"], ["1", "-1"]], "x": ["0", "6", "-2", "0"], "xb": ["6", "-2"], "cB": ["-2", "0"], "rc": ["1", "2"], "z": "-12", "feasible": false}, {"B": [2, 4], "N": [1, 3], "AB": [["1", "0"], ["1", "1"]], "inverse": [["1", "0"], ["-1", "1"]], "x": ["0", "4", "0", "2"], "xb": ["4", "2"], "cB": ["-2", "0"], "rc": ["-1", "2"], "z": "-8", "feasible": true}, {"B": [3, 4], "N": [1, 2], "AB": [["1", "0"], ["0", "1"]], "inverse": [["1", "0"], ["0", "1"]], "x": ["0", "0", "4", "6"], "xb": ["4", "6"], "cB": ["0", "0"], "rc": ["-3", "-2"], "z": "0", "feasible": true}];
+  const select = root.querySelector('#s05-base');
+  const data = root.querySelector('#s05-data');
+  const point = root.querySelector('#s05-point');
+  const label = root.querySelector('#s05-point-label');
+  const desc = root.querySelector('#s05-desc');
+  const tuple = a => '(' + a.join(', ') + ')';
+  const matrix = a => '[' + a.map(row => '[' + row.join(', ') + ']').join('; ') + ']';
+  const render = () => {
+    const index = Number(select.value);
+    const s = Number.isInteger(index) ? states[index] : null;
+    data.replaceChildren();
+    const line = text => { const p = document.createElement('p'); p.textContent = text; data.append(p); };
+    if (!s) { line('Selecciona una base válida.'); return; }
+    line('B = ' + tuple(s.B) + '; N = ' + tuple(s.N) + '.');
+    line('A_B = ' + matrix(s.AB) + '; A_B⁻¹ = ' + matrix(s.inverse) + '. Las filas se separan con punto y coma.');
+    line('x_B = ' + tuple(s.xb) + '; c_B = ' + tuple(s.cB) + '; x_N = (0, 0). Vectores escritos como listas de componentes.');
+    line('x = ' + tuple(s.x) + '; z = c_Bᵀ x_B = ' + s.z + '; costos reducidos en orden N: ' + tuple(s.rc) + '.');
+    line(s.feasible ? 'Solución básica factible: todas sus componentes son no negativas.' : 'Solución básica no factible: satisface Ax = b, pero tiene una componente negativa. No se puede certificar optimalidad desde esta base.');
+    if (s.feasible && s.rc.every(v => Number(v) > 0)) line('Costos reducidos estrictamente positivos: el punto es el óptimo único.');
+    const x1 = Number(s.x[0]), x2 = Number(s.x[1]);
+    point.setAttribute('cx', String(44 + 42 * x1));
+    point.setAttribute('cy', String(246 - 33 * x2));
+    point.dataset.feasible = String(s.feasible);
+    label.setAttribute('x', String(55 + 42 * x1));
+    label.setAttribute('y', String(234 - 33 * x2));
+    label.textContent = tuple([x1, x2]);
+    desc.textContent = 'Región factible con vértices (0,0), (3,0), (2,2) y (0,4). Punto seleccionado ' + tuple([x1, x2]) + (s.feasible ? ', factible.' : ', fuera de la región factible.');
+  };
+  select.addEventListener('change', render);
+  render();
+})();
+</script>
+```
+
+
+
+## Pivoteo y funcionamiento general del método.
+
+### La regla general que explica los dos pivotes
+
+Desde una SBF, elegimos una no básica $x_j$ con $\bar c_j<0$ y fijamos $x_j=\theta\ge0$, manteniendo las otras no básicas en cero. Si $u=A_B^{-1}A_j$, entonces
+
+$$x_B(\theta)=\bar b-u\theta,\qquad z(\theta)=\bar z+\bar c_j\theta.$$
+
+Estas son las mismas ecuaciones escalares del ejemplo, escritas juntas. Si $u_i>0$, la básica de la posición $i$ disminuye y exige $\theta\le\bar b_i/u_i$; si $u_i=0$, no cambia; si $u_i<0$, aumenta y no impone cota superior. Por eso solo se comparan razones con **denominador positivo**:
+
+$$\theta^*=\min_{i:u_i>0}\frac{\bar b_i}{u_i}.$$
+
+Elegimos una posición $r$ que alcance el mínimo: sale $x_{\beta_r}$ y entra $x_j$. No se debe confundir la posición $r$ con el índice original $\beta_r$ de la variable [@vanderbei2020, cap. 6, sec. 2, pp. 93–94; @nemirovski2012, sec. 4.3.1, pp. 149–151].
+
+**Justificación del cambio de base.** Como $A_j=A_Bu$, reemplazar la columna $r$ de $A_B$ por $A_j$ produce $A_BE$, donde $E$ es la identidad con la columna $r$ reemplazada por $u$. Su determinante es $u_r>0$, así que la nueva matriz es invertible. La razón mínima asegura no negatividad y deja en cero a la saliente: el nuevo punto es otra SBF.
+
+Si $u\le0$, ninguna básica limita el aumento: el punto sigue siendo factible para todo $\theta\ge0$ y $z(\theta)\to-\infty$. Esto certifica **no acotamiento inferior**. Si $\theta^*=0$, hay un pivote degenerado: cambia la base, pero no el punto ni el objetivo.
+
+### Certificación y garantías
+
+**Optimalidad.** Si la base es factible y $\bar c_N\ge0$, todo punto factible satisface
+
+$$z=\bar z+\bar c_N^\top x_N\ge\bar z,$$
+
+y la SBF alcanza la cota al tener $x_N=0$. Esto demuestra optimalidad global. Si además $\bar c_N>0$, todo óptimo tiene $x_N=0$ y las ecuaciones determinan un único $x_B$: el óptimo es único. Esta condición estricta es suficiente, no necesaria. Un costo reducido nulo por sí solo no demuestra otro óptimo distinto: se necesita un desplazamiento factible de longitud positiva y costo cero.
+
+**Funcionamiento.** Con una base factible disponible: calcular el diccionario, comprobar costos reducidos, elegir una entrante de costo negativo, aplicar razón mínima y actualizar la base. Se mantienen igualdades, no negatividad e independencia; el objetivo no aumenta. Si todas las SBF son no degeneradas, cada pivote mejora estrictamente y ninguna base puede repetirse. Como hay finitas bases, el método termina. Con degeneración esa prueba no basta; las reglas anticiclaje se estudian en la [lección 8](08-casos-especiales.qmd) [@nemirovski2012, sec. 4.3.1, pp. 151–152].
+
+Una base que produzca valores negativos no certifica infactibilidad del problema. La [Fase I](06-simplex-fase-i.qmd) busca una base factible o demuestra infactibilidad; la [Fase II](07-simplex-fase-ii.qmd) profundiza el recorrido con el objetivo original.
+
+Para implementar el enfoque matricial basta resolver sistemas:
+
+$$A_B\bar b=b,\qquad A_Bu=A_j,\qquad A_B^\top y=c_B,\qquad \bar c_j=c_j-y^\top A_j.$$
+
+No hace falta formar explícitamente la inversa. En el ejemplo se muestra para reconocer sus entradas; computacionalmente puede reutilizarse una factorización [@vanderbei2020, cap. 8, sec. 1, pp. 124–126].
+
+### Ejercicios de comprobación
+
+::: {.uso-academic .uso-exercise}
+**1. Orden y valor objetivo.** En el primer cambio del ejemplo 2, reordena la base como $B=(1,3)$ y $N=(2,4)$. Calcula $A_B^{-1}$, $\bar b$, $c_B$, $\bar z$ y $\bar c_N$. Explica qué cambia y qué permanece.
+
+<details class="uso-solution">
+<summary>Ver solución</summary>
+
+$$
+A_B^{-1}=\begin{pmatrix}0&1/2\\1&-1/2\end{pmatrix},\quad
+\bar b=(3,1)^\top,\quad c_B=(-3,0)^\top.
+$$
+
+Se obtiene $\bar z=-9$ y $\bar c_N^\top=(-1/2,3/2)$. Cambia el orden de las coordenadas básicas; el punto completo, su valor objetivo y los costos reducidos en el orden fijo $N$ permanecen iguales.
+
+</details>
+
+**2. Certificar sin iterar.** Sean
+
+$$
+A=\begin{pmatrix}1&2&1&0\\1&1&0&1\end{pmatrix},\quad
+b=(3,1)^\top,\quad c=(-2,-1,0,0)^\top.
+$$
+
+Para $B=(1,3)$, $N=(2,4)$, comprueba factibilidad y decide si el punto es óptimo. No supongas que un coeficiente original negativo exige introducir su variable.
+
+<details class="uso-solution">
+<summary>Ver solución</summary>
+
+$$
+A_B^{-1}=\begin{pmatrix}0&1\\1&-1\end{pmatrix},\quad
+\bar b=(1,2)^\top,\quad
+\bar A_N=\begin{pmatrix}1&1\\1&-1\end{pmatrix}.
+$$
+
+Así, $x=(1,0,2,0)^\top$ es factible, $\bar z=-2$ y $\bar c_N^\top=(-1,0)-(-2,0)\bar A_N=(1,2)$. Es el óptimo único. Aunque $c_2=-1$, aumentar $x_2$ obliga a reajustar las básicas y tiene costo neto $\bar c_2=1$.
+
+</details>
+
+**3. El signo de la dirección.** Desde una base factible, se tiene $\bar b=(2,5)^\top$, $\bar c_j=-2$ y $u=(-1,2)^\top$. Determina el paso, la posición saliente y el cambio objetivo. ¿Qué ocurriría si $u=(-1,0)^\top$?
+
+<details class="uso-solution">
+<summary>Ver solución</summary>
+
+La primera básica aumenta: no limita el paso. La segunda exige $\theta\le5/2$. Sale la variable de la segunda posición, $\theta^*=5/2$, las básicas antiguas pasan a $(9/2,0)^\top$ y el objetivo cambia en $-2(5/2)=-5$. Con $u=(-1,0)^\top$, ninguna básica disminuye; $x_j=\theta$ puede crecer indefinidamente y $z=\bar z-2\theta\to-\infty$.
+
+</details>
+:::
+
+
+
+::: {.uso-summary}
+### Síntesis
+
+Simplex comienza con variables no básicas en cero y básicas calculadas mediante las ecuaciones. El diccionario muestra cómo cambiarían las básicas al aumentar una no básica; sus costos reducidos indican el cambio neto del objetivo. La razón mínima determina hasta dónde se puede avanzar y qué variable sale. Después se vuelve a despejar y sustituir. Las matrices $A_B$, $A_N$, $\bar b$ y $\bar A_N$ organizan simultáneamente esas operaciones, y $\bar c_N^\top=c_N^\top-c_B^\top\bar A_N$ reúne los coeficientes del objetivo actualizado.
+:::
+
+### Referencias y localizaciones
+
+Las citas indican **páginas impresas**, no posiciones del PDF. La exposición, los ejemplos y los ejercicios son originales. El desarrollo algebraico se contrasta con Vanderbei, capítulo 2, §2; el matricial con Ferrer y Muñoz, §3.2.3, y Vanderbei, capítulo 6, §§1–2. Nemirovski, §§4.2.2 y 4.3.1, respalda la conexión con puntos extremos y las garantías del algoritmo. Las convenciones de maximización de las fuentes se adaptan a minimización como se indicó al comienzo.
+
+::: {#refs}
+:::

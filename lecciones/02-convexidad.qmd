@@ -1,0 +1,21 @@
+---
+title: "Lección 2: Convexidad, optimalidad global y unicidad"
+ustudy-status: proximamente
+ustudy-reviewed: false
+toc: true
+---
+
+::: {.callout-note title="Contenido pendiente"}
+
+Esta lección está pendiente de redacción por el propietario y de revisión académica.
+:::
+
+## Conjuntos convexos y combinaciones convexas.
+
+## Funciones convexas y estrictamente convexas.
+
+## Criterios de convexidad: definición, gradiente y Hessiano.
+
+## Óptimos locales y globales.
+
+## Condiciones de unicidad y contraejemplos.

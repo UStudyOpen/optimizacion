@@ -39,3 +39,9 @@ corresponde. Los CSS compilados tienen alcance mixto: contenido/presentación
 propia según este mapa y componentes de terceros según sus propios permisos.
 El post-render copia estos avisos al nuevo `_site/legal/`; `docs/` permanece
 intacto y su actualización pública requiere una operación posterior autorizada.
+
+## Configuración de esta asignatura
+
+Optimización: contenido académico original nuevo en `lecciones/` por ngulloa, bajo CC-BY-NC-4.0.
+Los ejemplos heredados conservan MIT de ngulloa. Las importaciones se registran separadamente.
+En este curso, el texto MIT citado por la plantilla se conserva en `LICENSES/MIT.txt`; el `LICENSE` raíz documenta CC-BY-NC-4.0 para las lecciones nuevas autorizadas.
