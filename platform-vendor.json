@@ -7,7 +7,7 @@
     "tests/post_render.py": "e1081778d6ad73798e172831f5f273e0c749530f0fd577ec6e9c57dc48580195",
     "tests/install_quarto.py": "65fb636e9f3c34940c1aefb9b494dff7c9b55b1fc7e30bfbc9660e475f6b9286",
     "tests/browser_course.py": "8e3b477587b79f4498d96e6d6491705053dfef68f3546c438392566e4ed6e88b",
-    "tests/browser_client.mjs": "8619ef35bb592bb5957289db084a52ac352ff3008777d64b0c63103f918de89e",
+    "tests/browser_client.mjs": "6c9098eb7528c446c1dfa522c879fcaa41a184769df4d3611c4e13728ad7f0d5",
     "tests/safe_paths.py": "9aaaf08f7767180c55d0c97df5976274e2b0c9963b2c90a44518b3caaa08d2aa",
     "tests/legal_distribution.py": "14e2df9d31fdb52a345723f76408ab9476b8ecb409c156beadb9e1b151602391",
     "tests/licensing.py": "4885c7df1b7a93c261e47cb52edcb361d05ba0cdb51521d4e4d2135503bd2ad9",

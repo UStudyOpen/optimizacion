@@ -28,6 +28,22 @@ async function go(route){
   await b.evaluate('document.fonts.ready');
 }
 try {
+  // Reproduce the recorded 61px shift between a coordinate read and mouse input.
+  await b.cdp('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
+  await b.evaluate(`(()=>{
+    document.body.innerHTML='<div style="position:fixed;inset:0;background:white"><a id="uso-moving-link" href="#uso-moving-target" style="position:absolute;left:40px;top:200px;display:block;padding:10px">Moving link</a><div id="uso-moving-target">Target</div></div>';
+    const link=document.getElementById('uso-moving-link');
+    window.__usoMovingHits=0;
+    link.addEventListener('click',()=>window.__usoMovingHits++);
+    let shifted=false;
+    link.getBoundingClientRect=function(){
+      const rect=Element.prototype.getBoundingClientRect.call(this);
+      if(!shifted){shifted=true;queueMicrotask(()=>{this.style.top='261px'})}
+      return rect;
+    };
+  })()`);
+  await b.click('#uso-moving-link');
+  check('mouse click follows a delayed layout shift',await b.evaluate("window.__usoMovingHits===1 && location.hash==='#uso-moving-target'"));
   for(const width of [1440,768,390,320]) {
     await b.cdp('Emulation.setDeviceMetricsOverride',{width,height:1000,deviceScaleFactor:1,mobile:false});
     for(const page of course.pages) {
