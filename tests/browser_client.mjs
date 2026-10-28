@@ -10,6 +10,7 @@ export async function connect(debug = 'http://127.0.0.1:9228') {
   let seq = 0;
   const pending = new Map();
   const errors = [];
+  const citationClicks = [];
   socket.onmessage = e => {
     const msg = JSON.parse(e.data);
     if (msg.id) {
@@ -45,9 +46,28 @@ export async function connect(debug = 'http://127.0.0.1:9228') {
     throw Error(`Timed out: ${expression}`);
   }
   async function click(selector) {
-    const p = await evaluate(`(()=>{const el=document.querySelector(${JSON.stringify(selector)});el.scrollIntoView({block:'center'});const r=el.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2}})()`);
+    const trace = selector === 'a[role=doc-biblioref]';
+    const p = await evaluate(`(()=>{
+      const el=document.querySelector(${JSON.stringify(selector)});
+      el.scrollIntoView({block:'center'});
+      const r=el.getBoundingClientRect();
+      const p={x:r.x+r.width/2,y:r.y+r.height/2};
+      if (${trace}) {
+        const describe=node=>node?{tag:node.tagName,id:node.id,href:node.getAttribute('href')}:null;
+        const math=()=>({total:document.querySelectorAll('.math').length,rendered:document.querySelectorAll('.math mjx-container').length});
+        const info={point:p,rect:r.toJSON(),rects:[...el.getClientRects()].map(r=>r.toJSON()),
+          hit:describe(document.elementFromPoint(p.x,p.y)),math:math(),events:[]};
+        window.__usoCitationClick=info;
+        for(const type of ['mousedown','mouseup','click']) document.addEventListener(type,event=>{
+          info.events.push({type,target:describe(event.target),hitsLink:el.contains(event.target),
+            rect:el.getBoundingClientRect().toJSON(),math:math()});
+        },{once:true,capture:true});
+      }
+      return p;
+    })()`);
     await cdp('Input.dispatchMouseEvent',{type:'mousePressed',...p,button:'left',clickCount:1});
     await cdp('Input.dispatchMouseEvent',{type:'mouseReleased',...p,button:'left',clickCount:1});
+    if (trace) citationClicks.push(await evaluate('({...window.__usoCitationClick,hash:location.hash})'));
   }
   async function key(key) {
     await cdp('Input.dispatchKeyEvent',{type:'keyDown',key,code:key===' '?'Space':key,text:key==='Enter'?'\r':undefined,windowsVirtualKeyCode:key==='Enter'?13:key===' '?32:undefined});
@@ -59,5 +79,5 @@ export async function connect(debug = 'http://127.0.0.1:9228') {
     await evaluate('new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))');
   }
   await cdp('Page.enable'); await cdp('Runtime.enable'); await cdp('Network.enable');
-  return {cdp,evaluate,waitFor,click,key,theme,errors,close:()=>socket.close()};
+  return {cdp,evaluate,waitFor,click,key,theme,errors,citationClicks,close:()=>socket.close()};
 }
