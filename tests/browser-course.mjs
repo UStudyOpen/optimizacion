@@ -42,6 +42,9 @@ try {
       for(const mode of ['light','dark']) {
         await b.theme(mode);
         await b.evaluate('Promise.all(document.getAnimations().map(a=>a.finished.catch(()=>{})))');
+        if(page.path==='lecciones/05-fundamentos-simplex.qmd') {
+          check(`Section 05 citation affordance ${width} ${mode}`,await b.evaluate('[...document.querySelectorAll("a[role=doc-biblioref]")].every(a=>getComputedStyle(a).textDecorationLine.includes("underline") && (!a.target || a.target==="_self"))'));
+        }
         check(`no horizontal overflow ${width} ${route} ${mode}`,await b.evaluate('document.documentElement.scrollWidth<=innerWidth+1'));
         check(`one main and title ${width} ${route} ${mode}`,await b.evaluate('document.querySelectorAll("main").length===1 && document.querySelectorAll("h1").length===1'));
         await b.evaluate(axe);

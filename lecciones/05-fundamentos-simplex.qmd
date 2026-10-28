@@ -3,6 +3,11 @@ title: "Simplex: Fundamentos"
 ustudy-status: en-desarrollo
 ustudy-reviewed: false
 toc: true
+link-external-newwindow: false
+header-includes: |
+  <style>
+  main a[role="doc-biblioref"] { text-decoration: underline; }
+  </style>
 ---
 
 El método simplex consiste en un **algoritmo iterativo** de optimización que permite resolver problemas de programación lineal mediante una sucesión de *soluciones básicas factibles* (SBF), realizando cambios de base que mejoren o mantengan el valor de la función objetivo hasta alcanzar una solución óptima o detectar que el problema es no acotado.
