@@ -47,15 +47,31 @@ export async function connect(debug = 'http://127.0.0.1:9228') {
   }
   async function click(selector) {
     const trace = selector === 'a[role=doc-biblioref]';
-    const p = await evaluate(`(()=>{
+    const p = await evaluate(`(async()=>{
       const el=document.querySelector(${JSON.stringify(selector)});
-      el.scrollIntoView({block:'center'});
-      const r=el.getBoundingClientRect();
-      const p={x:r.x+r.width/2,y:r.y+r.height/2};
+      if (!el) throw Error('Click target missing: '+${JSON.stringify(selector)});
+      el.scrollIntoView({block:'center',behavior:'instant'});
+      // Hash navigation can queue Quarto's header scroll adjustment. Wait for
+      // consecutive stable frames before measuring the actual mouse target.
+      const started=performance.now();
+      let last,hit,r,p,stable=0;
+      while(performance.now()-started<2000) {
+        await new Promise(requestAnimationFrame);
+        r=el.getBoundingClientRect();
+        const point={x:r.x+r.width/2,y:r.y+r.height/2};
+        hit=document.elementFromPoint(point.x,point.y);
+        const unchanged=last&&['x','y','width','height'].every(key=>Math.abs(r[key]-last[key])<.25);
+        stable=unchanged&&r.width>0&&r.height>0&&el.contains(hit)?stable+1:0;
+        last=r.toJSON();
+        if(stable>=2) {p=point;break;}
+      }
+      if(!p) throw Error('Click target did not settle or is obscured: '+${JSON.stringify(selector)}+
+        ' '+JSON.stringify({rect:last,hit:hit?{tag:hit.tagName,id:hit.id}:null}));
       if (${trace}) {
         const describe=node=>node?{tag:node.tagName,id:node.id,href:node.getAttribute('href')}:null;
         const math=()=>({total:document.querySelectorAll('.math').length,rendered:document.querySelectorAll('.math mjx-container').length});
         const info={point:p,rect:r.toJSON(),rects:[...el.getClientRects()].map(r=>r.toJSON()),
+          stableFrames:stable,settledAfterMs:Math.round(performance.now()-started),
           hit:describe(document.elementFromPoint(p.x,p.y)),math:math(),events:[]};
         window.__usoCitationClick=info;
         for(const type of ['mousedown','mouseup','click']) document.addEventListener(type,event=>{
