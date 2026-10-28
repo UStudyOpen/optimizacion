@@ -20,7 +20,7 @@ const outline=JSON.parse(readFileSync('tests/outline.json','utf8'));
 const lessonSpec=outline.find(p=>p.path==='lecciones/05-fundamentos-simplex.qmd');
 const base=process.env.COURSE_TEST_BASE;
 const b=await connect(process.env.COURSE_DEBUG_URL);
-const report={axe:{url:axeURL,sha256:axeHash,version:'4.14.0'},checks:[],audits:[],errors:[]};
+const report={axe:{url:axeURL,sha256:axeHash,version:'4.14.0'},checks:[],audits:[],errors:[],citationClicks:b.citationClicks};
 function check(name,pass,details){report.checks.push({name,pass:!!pass,details});if(!pass)throw Error(name+': '+JSON.stringify(details));}
 async function go(route){
   await b.cdp('Page.navigate',{url:new URL(route,base).href});
