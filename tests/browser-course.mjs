@@ -16,6 +16,8 @@ const axe = process.env.AXE_PATH ? readFileSync(process.env.AXE_PATH,'utf8') : a
 })();
 if(createHash('sha256').update(axe).digest('hex')!==axeHash) throw Error('axe-core integrity mismatch');
 const course=JSON.parse(readFileSync('course.yml','utf8')).course;
+const outline=JSON.parse(readFileSync('tests/outline.json','utf8'));
+const lessonSpec=outline.find(p=>p.path==='lecciones/05-fundamentos-simplex.qmd');
 const base=process.env.COURSE_TEST_BASE;
 const b=await connect(process.env.COURSE_DEBUG_URL);
 const report={axe:{url:axeURL,sha256:axeHash,version:'4.14.0'},checks:[],audits:[],errors:[]};
@@ -34,12 +36,15 @@ try {
       if(page.path==='lecciones/05-fundamentos-simplex.qmd') {
         await b.waitFor("!!window.MathJax?.startup?.promise");
         await b.evaluate('MathJax.startup.promise');
-        check(`Section 05 equations ${width}`,await b.evaluate('document.querySelectorAll("mjx-container").length>100 && !document.querySelector("mjx-merror, [data-mjx-error]")'));
-        check(`Section 05 bibliography ${width}`,await b.evaluate('[...document.querySelectorAll("a[role=doc-biblioref]")].length>10 && document.querySelectorAll("#refs .csl-entry").length===3'));
+        check(`Section 05 equations ${width}`,await b.evaluate('document.querySelectorAll(".math.display").length===8 && [...document.querySelectorAll(".math")].every(el=>el.querySelector("mjx-container")) && !document.querySelector("mjx-merror, [data-mjx-error]")'));
+        check(`Section 05 bibliography ${width}`,await b.evaluate('[...document.querySelectorAll("a[role=doc-biblioref]")].length===3 && document.querySelectorAll("#refs .csl-entry").length===2 && ["ferrer2006","vanderbei2020"].every(id=>document.getElementById("ref-"+id))'));
       }
       for(const mode of ['light','dark']) {
         await b.theme(mode);
         await b.evaluate('Promise.all(document.getAnimations().map(a=>a.finished.catch(()=>{})))');
+        if(page.path==='lecciones/05-fundamentos-simplex.qmd') {
+          check(`Section 05 citation affordance ${width} ${mode}`,await b.evaluate('[...document.querySelectorAll("a[role=doc-biblioref]")].every(a=>getComputedStyle(a).textDecorationLine.includes("underline") && (!a.target || a.target==="_self"))'));
+        }
         check(`no horizontal overflow ${width} ${route} ${mode}`,await b.evaluate('document.documentElement.scrollWidth<=innerWidth+1'));
         check(`one main and title ${width} ${route} ${mode}`,await b.evaluate('document.querySelectorAll("main").length===1 && document.querySelectorAll("h1").length===1'));
         await b.evaluate(axe);
@@ -57,13 +62,14 @@ try {
   await go('lecciones/05-fundamentos-simplex.html');
   for(const mode of ['light','dark']) {
     await b.theme(mode);
-    for(const [value,point,feasible] of [['5','(0, 0)',true],['1','(3, 0)',true],['0','(2, 2)',true],['4','(0, 4)',true],['2','(4, 0)',false],['3','(0, 6)',false]]) {
-      await b.evaluate(`(()=>{const el=document.querySelector('#s05-base');el.value=${JSON.stringify(value)};el.dispatchEvent(new Event('change',{bubbles:true}));})()`);
-      check(`Section 05 explorer ${mode} base ${value}`,await b.evaluate(`document.querySelector('#s05-point-label').textContent===${JSON.stringify(point)} && document.querySelector('#s05-point').dataset.feasible===${JSON.stringify(String(feasible))}`));
-    }
-    await b.click('details.uso-solution summary');
-    check(`Section 05 solution opens ${mode}`,await b.evaluate('document.querySelector("details.uso-solution").open'));
-    await b.click('details.uso-solution summary');
+    check(`Section 05 headings ${mode}`,await b.evaluate(`JSON.stringify([...document.querySelectorAll('main h2.anchored')].map(el=>el.textContent.trim()))===${JSON.stringify(JSON.stringify(lessonSpec.subsections))}`));
+    check(`Section 05 subsection links ${mode}`,await b.evaluate("[...document.querySelectorAll('#TOC a[data-scroll-target]')].length>0 && [...document.querySelectorAll('#TOC a[data-scroll-target]')].every(a=>document.getElementById(a.getAttribute('data-scroll-target').slice(1)))"));
+    await b.click('#TOC a[data-scroll-target]');
+    await b.waitFor("decodeURIComponent(location.hash)===document.querySelector('#TOC a[data-scroll-target]').getAttribute('data-scroll-target')");
+    check(`Section 05 subsection navigation ${mode}`,true);
+    await b.click('a[role=doc-biblioref]');
+    await b.waitFor("!!document.getElementById(decodeURIComponent(location.hash.slice(1)))?.classList.contains('csl-entry')");
+    check(`Section 05 citation navigation ${mode}`,true);
   }
   await go('index.html');
   check('theme persists between pages',await b.evaluate("document.body.classList.contains('quarto-dark')"));

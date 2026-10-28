@@ -56,11 +56,13 @@
     "subsections": [
       "Forma estándar.",
       "Variables de holgura y exceso.",
+      "Variables libres.",
       "Bases, variables básicas y no básicas.",
       "Soluciones básicas factibles.",
-      "Diccionario, matrices y costos reducidos.",
-      "Pivoteo y funcionamiento general del método."
-    ]
+      "Diccionario.",
+      "Método Simplex."
+    ],
+    "page_title": "Simplex: Fundamentos"
   },
   {
     "unit": "Unidad IV — Método Simplex",
