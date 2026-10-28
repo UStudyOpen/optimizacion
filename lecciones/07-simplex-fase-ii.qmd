@@ -1,5 +1,5 @@
 ---
-title: "Lección 7: Simplex — Fase II"
+title: "Simplex — Fase II"
 ustudy-status: proximamente
 ustudy-reviewed: false
 toc: true
@@ -7,7 +7,7 @@ toc: true
 
 ::: {.callout-note title="Contenido pendiente"}
 
-Esta lección está pendiente de redacción por el propietario y de revisión académica.
+Esta página está pendiente de redacción por el propietario y de revisión académica.
 :::
 
 ## Recuperación del problema original.

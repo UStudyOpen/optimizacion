@@ -1,50 +1,125 @@
 # Optimización · UStudyOpen
 
-Fundamentos de optimización matemática y programación lineal. Referencia académica: **ICS1113**. Proyecto educativo independiente, sin afiliación ni respaldo oficial de una universidad.
+Fundamentos de optimización matemática y programación lineal. Referencia académica:
+**ICS1113**. Proyecto educativo independiente, sin afiliación ni respaldo universitario.
 
-Estado: **en desarrollo**. Cinco unidades y ocho lecciones. La **Sección 05 — Fundamentos algebraicos del Simplex** está disponible **en desarrollo**, con exposición, ejemplos, ejercicios y un explorador de bases. Las otras siete lecciones están **próximamente**, pendientes de redacción por el propietario. Ninguna página tiene revisión académica declarada.
+Ocho temas en cuatro áreas: **fundamentos de optimización**, **modelación y reformulación**,
+**geometría de la programación lineal** y **algoritmo Simplex**. Fundamentos algebraicos del
+Simplex tiene exposición, fórmulas y ejemplos **en desarrollo**. Los otros siete temas
+están **próximamente** y conservan sus índices. Ninguna página declara revisión académica.
+El checkout actual no contiene actividades interactivas; las descripciones antiguas de
+un explorador de bases no correspondían a sus archivos.
 
-Repositorio: https://github.com/UStudyOpen/optimizacion. URL pública: `https://ustudyopen.github.io/optimizacion/`.
+Repositorio: https://github.com/UStudyOpen/optimizacion.
+Sitio: https://ustudyopen.github.io/optimizacion/.
 
 ## Comenzar a escribir
 
-1. Abrir `lecciones/01-problemas-optimizacion.qmd` y redactar debajo de los cinco encabezados existentes, conservando títulos y rutas.
-2. Al iniciar la redacción, cambiar `ustudy-status: proximamente` por `ustudy-status: en-desarrollo` y actualizar el mismo estado de esa página en `course.yml`. Mantener `ustudy-reviewed: false` y `reviewed: false`.
-3. Sustituir el aviso de contenido pendiente por un aviso de redacción en desarrollo. Actualizar los indicadores de portada cuando haya contenido disponible; el estado general sigue en desarrollo.
-4. Usar contenido original autorizado; las importaciones requieren registro legal y revisión de procedencia. La revisión técnica nunca implica revisión académica.
-5. Validar y proponer los cambios mediante un PR a `main`.
+Para desarrollar convexidad, editar `lecciones/02-convexidad.qmd` bajo sus encabezados.
+Cambiar su estado a `en-desarrollo` tanto en el QMD como en `course.yml`, sustituir el
+aviso pendiente y actualizar los indicadores y el resumen de `index.qmd`. Mantener la
+revisión en `false`. No hace falta cambiar rutas, crear páginas auxiliares ni tocar CI.
+Actualizar `tests/outline.json` únicamente si cambia la estructura de subtítulos.
 
-## Herramientas
+`AGENTS.md` define las convenciones de páginas, fuentes, figuras, actividades y licencias.
+`MIGRATION.md` explica el inventario y la conservación de URL. La clave `course.units`
+se mantiene por compatibilidad de plataforma y ahora contiene áreas conceptuales.
 
-Quarto **1.10.18**, Python **3.14.8**, Node **24.21.0**. No hay dependencias npm para construir el curso.
+## Entorno y validación
+
+Quarto **1.10.18**, Python **3.14.8**, Node **24.21.0**; sin dependencias npm.
+Chromium/Chrome/Brave con sandbox activo para pruebas visuales.
 
 ```sh
 python3 -m venv .venv
 . .venv/bin/activate
 python3 -m pip install -r tests/requirements-licensing.txt
+# Si Quarto no está instalado: python3 tests/install_quarto.py
+# Añadir el bin de Node 24.21.0 al PATH si no está disponible.
+# BROWSER_EXECUTABLE=/ruta/a/chromium si no se detecta automáticamente.
 python3 tests/licensing.py --reuse
 python3 tests/render_clean.py
 python3 tests/run_course.py
 python3 tests/platform_validate.py --release
+git diff --check
 quarto preview --host 127.0.0.1
 ```
 
-`tests/outline.json` conserva el índice solicitado y `tests/check_site.py` comprueba estructura, estados y navegación; no valida matemáticas. `tests/browser-course.mjs` revisa ambas apariencias, búsqueda, teclado y navegación en 1440, 768, 390 y 320 px. Descarga axe-core 4.14.0 con SHA-256 fijado exclusivamente en memoria para auditar WCAG A/AA y buenas prácticas; su código MPL-2.0 no se incorpora al repositorio ni al sitio. Las comprobaciones automáticas no equivalen a una auditoría humana completa. Los manifiestos académicos y de rutas heredados están vacíos porque todavía no existe una referencia académica revisada. Los manifiestos vendor sí acreditan la integridad del sistema compartido.
+El render aislado preserva `docs/` si existe y reemplaza solo `_site/` después de validar.
+`tests/check_site.py` comprueba títulos, áreas, subtítulos, estados, navegación, fórmulas y
+citas existentes. La referencia de integridad protege el cuerpo desarrollado del Simplex;
+no afirma revisión académica. La referencia de rutas comprueba también anclas históricas.
 
-## Sincronización
+`tests/browser-course.mjs` revisa las nueve páginas en 1440, 768, 390 y 320 px, en claro y
+oscuro: tema, teclado, búsqueda, menú temático, página activa y anterior/siguiente. Audita
+WCAG A/AA y buenas prácticas con axe-core 4.14.0 fijado por SHA-256, solo para pruebas,
+sin incorporar su código MPL-2.0 al sitio. Sus resultados `incomplete` requieren revisión;
+cero infracciones automáticas no acredita accesibilidad completa. Capturas y resultados:
+`artifacts/platform/`. El workflow existente conserva evidencias durante siete días.
 
-Desde un checkout limpio de la versión central revisada (preparación inicial: `UStudyOpen/ustudyopen-design@107202007aa37a19814ce20992724157e45914fe`):
+## Preparar un pull request
 
-```sh
-python3 tooling/sync_course.py /ruta/a/optimizacion --dry-run
-python3 tooling/sync_course.py /ruta/a/optimizacion
-python3 tooling/sync_course.py /ruta/a/optimizacion --check
+1. Revisar `git status --short` e identificar cambios previos. Crear una rama de trabajo:
+   `git switch -c contenido/convexidad` (si no se está ya en la rama de la tarea).
+2. Editar el contenido y sincronizar los registros indicados arriba.
+3. Ejecutar las cuatro validaciones; revisar el diff y las capturas en ambos temas.
+4. Preparar el texto con la plantilla siguiente en `artifacts/pr.md`.
+5. **Solo tras autorización expresa**, seleccionar archivos propios con `git add <rutas>`,
+   revisar `git diff --cached`, crear el commit, subir la rama y abrir el PR hacia `main`.
+   Evitar `git add .` cuando haya cambios locales ajenos. No integrar ni desplegar sin
+   autorización; no habilitar auto-merge.
+
+Plantilla para `artifacts/pr.md` (el directorio ya está ignorado):
+
+```markdown
+## Cambio
+
+Problema o contenido desarrollado y comportamiento resultante.
+
+## Verificación
+
+- Licencias, render aislado, suite del curso y validación release: resultados reales.
+- Revisión visual: tamaños, ambos temas y evidencias; limitaciones pendientes.
+- Integridad académica: fórmulas, ejemplos, fuentes, rutas y estados comprobados.
+
+## Revisión pendiente
+
+Estado académico y decisiones que requieren revisión humana. Cambios intencionales
+al contrato o a referencias de integridad, con su justificación, si corresponde.
 ```
 
-No editar `_extensions/`, archivos administrados en `platform-vendor.json` ni `REUSE.toml`. Los workflows son administrados por el sincronizador. `tests/accessibility_output.py` añade nombres de navegación y una región legal al HTML generado; es una adaptación local, sin cambios de estilos ni del paquete compartido. La inicialización utilizó GitHub Template y `tooling/create_course.py`, sin reutilizar el historial de la plantilla.
+Comandos posteriores a la autorización (sustituir título y mensaje):
 
-## Licencias y publicación
+```sh
+gh auth status
+# Si falta autenticación: gh auth login --hostname github.com --git-protocol https --web
+git diff --cached --check
+git commit -m 'docs: desarrollar convexidad'
+git push -u origin HEAD
+gh pr create --repo UStudyOpen/optimizacion --base main \
+  --title 'Desarrollar convexidad' --body-file artifacts/pr.md
+```
 
-Atribución pública: **ngulloa**. Contenido académico original en `lecciones/`: **CC BY-NC 4.0**. Plataforma, presentación y software compartido: **MIT**, con excepciones de terceros. Véanse `LICENSE`, `LICENSING.md`, `THIRD-PARTY-NOTICES.md`, `licensing.json` y `REUSE.toml`.
+El propietario debe autenticar `gh` y disponer de acceso de escritura al repositorio para
+subir la rama y abrir el PR. Si GitHub deniega el acceso, debe resolver ese permiso; no
+crear tokens nuevos, cambiar protecciones ni omitir checks como solución alternativa.
+La autenticación remota no se ha comprobado en esta refactorización local.
 
-La salida `_site/` no se versiona; no se utiliza `docs/`. La publicación autorizada usa GitHub Actions, el artefacto `_site/` y el entorno `github-pages` restringido a `main`. Con `USO_PAGES_ENABLED=true` y `pages_automation_approved: true`, los merges aprobados en `main` publican automáticamente después de validar; se conserva el despliegue manual con `confirm=PUBLICAR`. Véase [PREPARACION.md](PREPARACION.md) para la entrega y la incorporación posterior al portal.
+## Diseño, licencias y publicación
+
+No editar `_extensions/`, `REUSE.toml` ni archivos de `platform-vendor.json`. El diseño y
+los workflows se distribuyen mediante la herramienta de sincronización de UStudyOpen
+Design desde una versión revisada, fuera de los cambios editoriales rutinarios.
+`tests/accessibility_output.py` completa nombres de regiones del HTML generado sin
+modificar el diseño. `styles/README.md` documenta la reserva para actividades futuras.
+
+Autoría pública **ngulloa**. Contenido académico en `lecciones/`: **CC BY-NC 4.0**;
+plataforma y software compartido: **MIT**, con excepciones de terceros. Véanse `LICENSE`,
+`LICENSING.md`, `THIRD-PARTY-NOTICES.md`, `licensing.json` y `REUSE.toml`.
+
+La salida `_site/` no se versiona. La configuración existente publica mediante GitHub
+Actions tras integrar cambios autorizados en `main`, condicionada por
+`USO_PAGES_ENABLED`, la aprobación de automatización ya registrada y el entorno
+`github-pages`; conserva ejecución manual con `PUBLICAR`. No se modifican esas reglas.
+Una preparación local o una autorización histórica no autoriza nuevos commits, push, PR,
+merges ni despliegues. Véase `PREPARACION.md` para resultados y límites de esta ejecución.

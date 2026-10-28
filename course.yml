@@ -12,59 +12,54 @@
     "objectives": [],
     "units": [
       {
-        "section": "Unidad I — Fundamentos de optimización",
+        "section": "Fundamentos de optimización",
         "contents": [
           {
             "href": "lecciones/01-problemas-optimizacion.qmd",
-            "text": "Lección 1: Problemas de optimización y existencia de soluciones"
+            "text": "Problemas de optimización y existencia de soluciones"
           },
           {
             "href": "lecciones/02-convexidad.qmd",
-            "text": "Lección 2: Convexidad, optimalidad global y unicidad"
+            "text": "Convexidad, optimalidad global y unicidad"
           }
         ]
       },
       {
-        "section": "Unidad II — Reformulación de modelos",
+        "section": "Modelación y reformulación",
         "contents": [
           {
             "href": "lecciones/03-modelos-equivalentes.qmd",
-            "text": "Lección 3: Modelos equivalentes y variables auxiliares"
+            "text": "Modelos equivalentes y variables auxiliares"
           }
         ]
       },
       {
-        "section": "Unidad III — Geometría de la programación lineal",
+        "section": "Geometría de la programación lineal",
         "contents": [
           {
             "href": "lecciones/04-poliedros.qmd",
-            "text": "Lección 4: Poliedros, vértices y soluciones óptimas"
+            "text": "Poliedros, vértices y soluciones óptimas"
           }
         ]
       },
       {
-        "section": "Unidad IV — Método Simplex",
+        "section": "Algoritmo Simplex",
         "contents": [
           {
             "href": "lecciones/05-fundamentos-simplex.qmd",
-            "text": "Lección 5: Fundamentos algebraicos del Simplex"
+            "text": "Fundamentos algebraicos del Simplex"
           },
           {
             "href": "lecciones/06-simplex-fase-i.qmd",
-            "text": "Lección 6: Simplex — Fase I"
+            "text": "Simplex — Fase I"
           },
           {
             "href": "lecciones/07-simplex-fase-ii.qmd",
-            "text": "Lección 7: Simplex — Fase II"
-          }
-        ]
-      },
-      {
-        "section": "Unidad V — Casos especiales del Simplex",
-        "contents": [
+            "text": "Simplex — Fase II"
+          },
           {
             "href": "lecciones/08-casos-especiales.qmd",
-            "text": "Lección 8: Soluciones múltiples, degeneración y ciclos"
+            "text": "Soluciones múltiples, degeneración y ciclos"
           }
         ]
       }
@@ -79,56 +74,56 @@
       },
       {
         "path": "lecciones/01-problemas-optimizacion.qmd",
-        "title": "Lección 1: Problemas de optimización y existencia de soluciones",
+        "title": "Problemas de optimización y existencia de soluciones",
         "required": true,
         "status": "proximamente",
         "reviewed": false
       },
       {
         "path": "lecciones/02-convexidad.qmd",
-        "title": "Lección 2: Convexidad, optimalidad global y unicidad",
+        "title": "Convexidad, optimalidad global y unicidad",
         "required": true,
         "status": "proximamente",
         "reviewed": false
       },
       {
         "path": "lecciones/03-modelos-equivalentes.qmd",
-        "title": "Lección 3: Modelos equivalentes y variables auxiliares",
+        "title": "Modelos equivalentes y variables auxiliares",
         "required": true,
         "status": "proximamente",
         "reviewed": false
       },
       {
         "path": "lecciones/04-poliedros.qmd",
-        "title": "Lección 4: Poliedros, vértices y soluciones óptimas",
+        "title": "Poliedros, vértices y soluciones óptimas",
         "required": true,
         "status": "proximamente",
         "reviewed": false
       },
       {
         "path": "lecciones/05-fundamentos-simplex.qmd",
-        "title": "Lección 5: Fundamentos algebraicos del Simplex",
+        "title": "Fundamentos algebraicos del Simplex",
         "required": true,
         "status": "en-desarrollo",
         "reviewed": false
       },
       {
         "path": "lecciones/06-simplex-fase-i.qmd",
-        "title": "Lección 6: Simplex — Fase I",
+        "title": "Simplex — Fase I",
         "required": true,
         "status": "proximamente",
         "reviewed": false
       },
       {
         "path": "lecciones/07-simplex-fase-ii.qmd",
-        "title": "Lección 7: Simplex — Fase II",
+        "title": "Simplex — Fase II",
         "required": true,
         "status": "proximamente",
         "reviewed": false
       },
       {
         "path": "lecciones/08-casos-especiales.qmd",
-        "title": "Lección 8: Soluciones múltiples, degeneración y ciclos",
+        "title": "Soluciones múltiples, degeneración y ciclos",
         "required": true,
         "status": "proximamente",
         "reviewed": false

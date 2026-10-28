@@ -1,5 +1,5 @@
 ---
-title: "Lección 3: Modelos equivalentes y variables auxiliares"
+title: "Modelos equivalentes y variables auxiliares"
 ustudy-status: proximamente
 ustudy-reviewed: false
 toc: true
@@ -7,7 +7,7 @@ toc: true
 
 ::: {.callout-note title="Contenido pendiente"}
 
-Esta lección está pendiente de redacción por el propietario y de revisión académica.
+Esta página está pendiente de redacción por el propietario y de revisión académica.
 :::
 
 ## Definición de equivalencia.

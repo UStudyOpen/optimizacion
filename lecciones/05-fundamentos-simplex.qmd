@@ -1,5 +1,5 @@
 ---
-title: "Simplex: Fundamentos"
+title: "Fundamentos algebraicos del Simplex"
 ustudy-status: en-desarrollo
 ustudy-reviewed: false
 toc: true

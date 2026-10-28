@@ -1,1 +1,87 @@
-{}
+{
+  "index.html": [
+    "fundamentos-de-optimización-matemática-y-programación-lineal",
+    "proyecto-autoría-y-licencia",
+    "unidad-i-fundamentos-de-optimización",
+    "unidad-ii-reformulación-de-modelos",
+    "unidad-iii-geometría-de-la-programación-lineal",
+    "unidad-iv-método-simplex",
+    "unidad-v-casos-especiales-del-simplex",
+    "unidades"
+  ],
+  "lecciones/07-simplex-fase-ii.html": [
+    "actualización-de-la-base.",
+    "costos-reducidos-y-optimalidad.",
+    "ejecución-completa-del-algoritmo.",
+    "recuperación-del-problema-original.",
+    "selección-de-variable-entrante.",
+    "terminación-y-detección-de-no-acotamiento.",
+    "variable-saliente-y-prueba-de-razón-mínima."
+  ],
+  "lecciones/05-fundamentos-simplex.html": [
+    "algoritmo-introductorio",
+    "bases-variables-básicas-y-no-básicas.",
+    "diccionario.",
+    "ejemplo-1-transformar-un-problema-a-su-forma-estándar",
+    "ejemplo-2-despejar-variables-básicas",
+    "el-diccionario-algebraico-y-el-costo-neto-de-una-variable",
+    "forma-estándar.",
+    "método-simplex.",
+    "ref-ferrer2006",
+    "ref-vanderbei2020",
+    "referencias-y-localizaciones",
+    "refs",
+    "soluciones-básicas-factibles.",
+    "síntesis",
+    "variables-de-holgura-y-exceso.",
+    "variables-libres."
+  ],
+  "lecciones/03-modelos-equivalentes.html": [
+    "definición-de-equivalencia.",
+    "demostración-y-verificación-de-equivalencias.",
+    "preservación-de-valores-y-soluciones-óptimas.",
+    "reformulaciones-mediante-epígrafos.",
+    "valores-absolutos-y-máximos-de-funciones.",
+    "variables-auxiliares."
+  ],
+  "lecciones/01-problemas-optimizacion.html": [
+    "existencia-continuidad-compacidad-y-coercividad.",
+    "factibilidad-valor-óptimo-y-conjunto-de-soluciones.",
+    "formulación-general-variables-función-objetivo-y-restricciones.",
+    "infactibilidad-no-acotamiento-e-ínfimos-no-alcanzados.",
+    "óptimos-locales-y-globales."
+  ],
+  "lecciones/02-convexidad.html": [
+    "condiciones-de-unicidad-y-contraejemplos.",
+    "conjuntos-convexos-y-combinaciones-convexas.",
+    "criterios-de-convexidad-definición-gradiente-y-hessiano.",
+    "funciones-convexas-y-estrictamente-convexas.",
+    "óptimos-locales-y-globales."
+  ],
+  "lecciones/04-poliedros.html": [
+    "direcciones-y-conos-de-recesión.",
+    "existencia-y-geometría-del-conjunto-óptimo.",
+    "independencia-lineal-y-puntos-extremos.",
+    "programación-lineal-y-representación-geométrica.",
+    "semiespacios-y-poliedros.",
+    "vértices-y-restricciones-activas."
+  ],
+  "lecciones/06-simplex-fase-i.html": [
+    "construcción-del-problema-auxiliar.",
+    "criterio-de-infactibilidad.",
+    "eliminación-de-variables-artificiales.",
+    "iteraciones-de-fase-i.",
+    "necesidad-de-una-base-inicial-factible.",
+    "transición-a-fase-ii.",
+    "variables-artificiales."
+  ],
+  "lecciones/08-casos-especiales.html": [
+    "costos-reducidos-nulos.",
+    "degeneración-geométrica-y-algebraica.",
+    "diagnóstico-de-casos-especiales.",
+    "pivotes-degenerados.",
+    "posibilidad-de-ciclos.",
+    "reglas-anticiclaje-y-regla-de-bland.",
+    "soluciones-óptimas-múltiples."
+  ]
+}
