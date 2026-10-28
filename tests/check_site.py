@@ -25,7 +25,8 @@ for spec, page in zip(outline, course['pages'][1:]):
     source = (ROOT / spec['path']).read_text()
     front, body = source.split('---', 2)[1:]
     title = json.loads(re.search(r'^title: (.+)$', front, re.M)[1])
-    assert title == spec['title'] == page['title'], spec['path']
+    assert title == spec.get('page_title', spec['title']), spec['path']
+    assert spec['title'] == page['title'], spec['path']
     assert re.findall(r'^## (.+)$', body, re.M) == spec['subsections'], spec['path']
     assert page['status'] in {'proximamente', 'en-desarrollo'} and page['reviewed'] is False
     if page['status'] == 'proximamente':
@@ -42,9 +43,20 @@ assert all(p['reviewed'] is False for p in course['pages'])
 lesson = (ROOT / '_site/lecciones/05-fundamentos-simplex.html').read_text()
 assert course['pages'][5]['status'] == 'en-desarrollo'
 assert all(p['status'] == 'proximamente' for p in course['pages'][1:] if p['path'] != 'lecciones/05-fundamentos-simplex.qmd')
-for key in ['ferrer2006', 'vanderbei2020', 'nemirovski2012']:
+source = (ROOT / 'lecciones/05-fundamentos-simplex.qmd').read_text()
+cited = set(re.findall(r'@([A-Za-z][A-Za-z0-9_-]*)', source))
+assert cited == {'ferrer2006', 'vanderbei2020'}
+assert cited <= {ref['id'] for ref in json.loads((ROOT / 'course.yml').read_text())['references']}
+assert set(re.findall(r'id="ref-([^"]+)"', lesson)) == cited
+for key in cited:
     assert f'id="ref-{key}"' in lesson and f'href="#ref-{key}"' in lesson, key
 assert 'citation-not-found' not in lesson
-assert 's05-base' in lesson and 'mathjax@' in lesson
+assert 'mathjax@' in lesson
+assert lesson.count('class="math display"') == 8
+assert lesson.count(r'\begin{aligned}') == 3
+assert r'\textbf{no básicas}' not in lesson
+for route in ['06-simplex-fase-i.html', '07-simplex-fase-ii.html']:
+    assert f'href="../lecciones/{route}"' in lesson
+assert 'uso-example' in lesson and 'uso-summary' in lesson
 assert 'Sección 05' in home and 'Las ocho lecciones están' not in home
-print('PASS: 5 units, 8 lessons, 49 subsections, navigation, Section 05 citations and academic states')
+print(f"PASS: 5 units, 8 lessons, {sum(len(p['subsections']) for p in outline)} subsections, navigation, Section 05 mathematics, citations and academic states")
