@@ -49,6 +49,8 @@ try {
     for(const page of course.pages) {
       const route=page.path.replace(/\.qmd$/,'.html');
       await go(route);
+      check(`thematic sidebar ${width} ${route}`,await b.evaluate(`JSON.stringify([...document.querySelectorAll('#quarto-sidebar .sidebar-item-section > .sidebar-item-container > a.sidebar-item-text')].map(a=>a.textContent.trim()))===${JSON.stringify(JSON.stringify(course.units.map(a=>a.section)))}`));
+      check(`current page ${width} ${route}`,await b.evaluate(`(()=>{const active=document.querySelectorAll('#quarto-sidebar a.active');const normalize=p=>p.replace(/index\\.html$/,'');return active.length===1 && normalize(new URL(active[0].href).pathname)===normalize(location.pathname)})()`));
       if(page.path==='lecciones/05-fundamentos-simplex.qmd') {
         await b.waitFor("!!window.MathJax?.startup?.promise");
         await b.evaluate('MathJax.startup.promise');
@@ -67,11 +69,23 @@ try {
         const audit=await b.evaluate(`axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21a','wcag21aa','best-practice']}}).then(r=>({violations:r.violations.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.map(n=>({target:n.target,summary:n.failureSummary}))})),incomplete:r.incomplete.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)})),passes:r.passes.length}))`);
         report.audits.push({width,route,mode,...audit});
         check(`axe ${width} ${route} ${mode}`,audit.violations.length===0,audit.violations);
-        if(page.path==='index.qmd' && [1440,390].includes(width)) {
+        if(page.path==='index.qmd' || page.path===lessonSpec.path) {
           const screenshot=await b.cdp('Page.captureScreenshot',{format:'png',captureBeyondViewport:true});
-          writeFileSync(`${artifact}/portada-${mode}-${width}.png`,Buffer.from(screenshot.data,'base64'));
+          const name=page.path==='index.qmd'?'portada':'simplex';
+          writeFileSync(`${artifact}/${name}-${mode}-${width}.png`,Buffer.from(screenshot.data,'base64'));
         }
       }
+    }
+    if(width<=768) {
+      await go('index.html');
+      await b.evaluate("document.querySelector('.quarto-secondary-nav button').focus()");
+      await b.key('Enter');
+      await b.waitFor("document.querySelector('.quarto-secondary-nav button').getAttribute('aria-expanded')==='true' && document.querySelector('#quarto-sidebar').classList.contains('show')");
+      await b.click('[data-bs-target="#quarto-sidebar-section-4"]');
+      await b.waitFor("document.querySelector('#quarto-sidebar-section-4').classList.contains('show')");
+      await b.click('#quarto-sidebar a[href$="08-casos-especiales.html"]');
+      await b.waitFor("location.pathname.endsWith('08-casos-especiales.html') && !!document.querySelector('#quarto-sidebar a.active[href$=\"08-casos-especiales.html\"]')");
+      check(`mobile thematic navigation by keyboard and click ${width}`,true);
     }
   }
   await b.cdp('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
@@ -105,6 +119,13 @@ try {
   await b.click('.nav-page-next');
   await b.waitFor("location.pathname.endsWith('02-convexidad.html')");
   check('next lesson navigation',true);
+  await b.click('.nav-page-previous');
+  await b.waitFor("location.pathname.endsWith('01-problemas-optimizacion.html')");
+  check('previous content navigation',true);
+  await go('index.html#unidad-v-casos-especiales-del-simplex');
+  check('historical home anchor',await b.evaluate("!!document.getElementById(decodeURIComponent(location.hash.slice(1)))"));
+  await go('index.html#areas');
+  check('home conceptual map',await b.evaluate(`document.querySelectorAll('.topic-card').length===${course.units.length} && !/Unidad [IVX]+|Lección [0-9]+/.test(document.querySelector('main').textContent)`));
   check('no browser/resource errors',b.errors.length===0,b.errors);
 } catch(error) {
   report.errors.push(error.stack||String(error));

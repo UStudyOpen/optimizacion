@@ -9,8 +9,8 @@ root = Path(__file__).resolve().parents[1]
 labels = {
     'navbar': 'Navegación principal',
     'quarto-secondary-nav': 'Navegación móvil',
-    'sidebar-navigation': 'Unidades y lecciones',
-    'page-navigation': 'Lecciones anterior y siguiente',
+    'sidebar-navigation': 'Áreas temáticas y contenidos',
+    'page-navigation': 'Contenidos anterior y siguiente',
 }
 
 def name_navigation(match):

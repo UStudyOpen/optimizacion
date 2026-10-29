@@ -11,59 +11,65 @@ ustudy-reviewed: false
 
 ## Fundamentos de optimización matemática y programación lineal
 
-Referencia académica: **ICS1113**. Curso en desarrollo, organizado en cinco unidades y ocho lecciones. La Sección 05 — Fundamentos algebraicos del Simplex está disponible en desarrollo, pendiente de revisión académica. Las otras siete lecciones están pendientes de redacción.
+Referencia académica: **ICS1113**. Consulta los ocho temas por su relación conceptual: fundamentos, modelación, geometría y algoritmo Simplex. El curso está en desarrollo y ninguna página tiene revisión académica declarada.
 
 ::: {.uso-actions}
-[Explorar las unidades](#unidades){.btn .btn-primary}
-[Estudiar los fundamentos del Simplex](lecciones/05-fundamentos-simplex.qmd){.btn .btn-outline-primary}
+[Explorar las áreas temáticas](#areas){.btn .btn-primary}
+[Estudiar los fundamentos algebraicos del Simplex](lecciones/05-fundamentos-simplex.qmd){.btn .btn-outline-primary}
 :::
 ::::
 
-## Unidades
+[]{#unidades}
 
-La **Sección 05 — Fundamentos algebraicos del Simplex** está **en desarrollo**, con exposición, ejemplos, ejercicios y un explorador de bases. Las otras siete lecciones están **próximamente** y contienen únicamente el índice y los indicadores de estado. Ninguna lección tiene revisión académica declarada.
+## Áreas temáticas {#areas}
+
+**Fundamentos algebraicos del Simplex** contiene exposición, fórmulas y ejemplos, con estado **en desarrollo**. Los otros siete temas están **próximamente**: sus páginas conservan el índice previsto y el aviso de contenido pendiente. Puedes consultarlos desde el menú o desde este mapa.
 
 :::: {.topic-grid}
 ::: {.topic-card}
 [Próximamente · contenido pendiente]{.uso-status .uso-status--proximamente}
 
-### Unidad I — Fundamentos de optimización
+[]{#unidad-i-fundamentos-de-optimización}
 
-[Lección 1: Problemas de optimización y existencia de soluciones](lecciones/01-problemas-optimizacion.qmd)
+### Fundamentos de optimización {#fundamentos}
 
-[Lección 2: Convexidad, optimalidad global y unicidad](lecciones/02-convexidad.qmd)
+[Problemas de optimización y existencia de soluciones](lecciones/01-problemas-optimizacion.qmd) — Próximamente
+
+[Convexidad, optimalidad global y unicidad](lecciones/02-convexidad.qmd) — Próximamente
 :::
 ::: {.topic-card}
 [Próximamente · contenido pendiente]{.uso-status .uso-status--proximamente}
 
-### Unidad II — Reformulación de modelos
+[]{#unidad-ii-reformulación-de-modelos}
 
-[Lección 3: Modelos equivalentes y variables auxiliares](lecciones/03-modelos-equivalentes.qmd)
+### Modelación y reformulación {#modelacion}
+
+[Modelos equivalentes y variables auxiliares](lecciones/03-modelos-equivalentes.qmd) — Próximamente
 :::
 ::: {.topic-card}
 [Próximamente · contenido pendiente]{.uso-status .uso-status--proximamente}
 
-### Unidad III — Geometría de la programación lineal
+[]{#unidad-iii-geometría-de-la-programación-lineal}
 
-[Lección 4: Poliedros, vértices y soluciones óptimas](lecciones/04-poliedros.qmd)
+### Geometría de la programación lineal {#geometria}
+
+[Poliedros, vértices y soluciones óptimas](lecciones/04-poliedros.qmd) — Próximamente
 :::
 ::: {.topic-card}
-[En desarrollo · Sección 05 disponible; lecciones 6 y 7 próximamente]{.uso-status .uso-status--en-desarrollo}
+[En desarrollo · un tema; tres próximamente]{.uso-status .uso-status--en-desarrollo}
 
-### Unidad IV — Método Simplex
+[]{#unidad-iv-método-simplex}
+[]{#unidad-v-casos-especiales-del-simplex}
 
-[Lección 5: Fundamentos algebraicos del Simplex](lecciones/05-fundamentos-simplex.qmd)
+### Algoritmo Simplex {#simplex}
 
-[Lección 6: Simplex — Fase I](lecciones/06-simplex-fase-i.qmd)
+[Fundamentos algebraicos del Simplex](lecciones/05-fundamentos-simplex.qmd) — En desarrollo
 
-[Lección 7: Simplex — Fase II](lecciones/07-simplex-fase-ii.qmd)
-:::
-::: {.topic-card}
-[Próximamente · contenido pendiente]{.uso-status .uso-status--proximamente}
+[Simplex — Fase I](lecciones/06-simplex-fase-i.qmd) — Próximamente
 
-### Unidad V — Casos especiales del Simplex
+[Simplex — Fase II](lecciones/07-simplex-fase-ii.qmd) — Próximamente
 
-[Lección 8: Soluciones múltiples, degeneración y ciclos](lecciones/08-casos-especiales.qmd)
+[Soluciones múltiples, degeneración y ciclos](lecciones/08-casos-especiales.qmd) — Próximamente
 :::
 ::::
 

@@ -1,32 +1,31 @@
 [
   {
-    "unit": "Unidad I — Fundamentos de optimización",
     "path": "lecciones/01-problemas-optimizacion.qmd",
-    "title": "Lección 1: Problemas de optimización y existencia de soluciones",
+    "title": "Problemas de optimización y existencia de soluciones",
     "subsections": [
       "Formulación general: variables, función objetivo y restricciones.",
       "Factibilidad, valor óptimo y conjunto de soluciones.",
       "Óptimos locales y globales.",
       "Existencia: continuidad, compacidad y coercividad.",
       "Infactibilidad, no acotamiento e ínfimos no alcanzados."
-    ]
+    ],
+    "area": "Fundamentos de optimización"
   },
   {
-    "unit": "Unidad I — Fundamentos de optimización",
     "path": "lecciones/02-convexidad.qmd",
-    "title": "Lección 2: Convexidad, optimalidad global y unicidad",
+    "title": "Convexidad, optimalidad global y unicidad",
     "subsections": [
       "Conjuntos convexos y combinaciones convexas.",
       "Funciones convexas y estrictamente convexas.",
       "Criterios de convexidad: definición, gradiente y Hessiano.",
       "Óptimos locales y globales.",
       "Condiciones de unicidad y contraejemplos."
-    ]
+    ],
+    "area": "Fundamentos de optimización"
   },
   {
-    "unit": "Unidad II — Reformulación de modelos",
     "path": "lecciones/03-modelos-equivalentes.qmd",
-    "title": "Lección 3: Modelos equivalentes y variables auxiliares",
+    "title": "Modelos equivalentes y variables auxiliares",
     "subsections": [
       "Definición de equivalencia.",
       "Preservación de valores y soluciones óptimas.",
@@ -34,12 +33,12 @@
       "Valores absolutos y máximos de funciones.",
       "Variables auxiliares.",
       "Demostración y verificación de equivalencias."
-    ]
+    ],
+    "area": "Modelación y reformulación"
   },
   {
-    "unit": "Unidad III — Geometría de la programación lineal",
     "path": "lecciones/04-poliedros.qmd",
-    "title": "Lección 4: Poliedros, vértices y soluciones óptimas",
+    "title": "Poliedros, vértices y soluciones óptimas",
     "subsections": [
       "Programación lineal y representación geométrica.",
       "Semiespacios y poliedros.",
@@ -47,12 +46,12 @@
       "Independencia lineal y puntos extremos.",
       "Direcciones y conos de recesión.",
       "Existencia y geometría del conjunto óptimo."
-    ]
+    ],
+    "area": "Geometría de la programación lineal"
   },
   {
-    "unit": "Unidad IV — Método Simplex",
     "path": "lecciones/05-fundamentos-simplex.qmd",
-    "title": "Lección 5: Fundamentos algebraicos del Simplex",
+    "title": "Fundamentos algebraicos del Simplex",
     "subsections": [
       "Forma estándar.",
       "Variables de holgura y exceso.",
@@ -62,12 +61,11 @@
       "Diccionario.",
       "Método Simplex."
     ],
-    "page_title": "Simplex: Fundamentos"
+    "area": "Algoritmo Simplex"
   },
   {
-    "unit": "Unidad IV — Método Simplex",
     "path": "lecciones/06-simplex-fase-i.qmd",
-    "title": "Lección 6: Simplex — Fase I",
+    "title": "Simplex — Fase I",
     "subsections": [
       "Necesidad de una base inicial factible.",
       "Variables artificiales.",
@@ -76,12 +74,12 @@
       "Criterio de infactibilidad.",
       "Eliminación de variables artificiales.",
       "Transición a Fase II."
-    ]
+    ],
+    "area": "Algoritmo Simplex"
   },
   {
-    "unit": "Unidad IV — Método Simplex",
     "path": "lecciones/07-simplex-fase-ii.qmd",
-    "title": "Lección 7: Simplex — Fase II",
+    "title": "Simplex — Fase II",
     "subsections": [
       "Recuperación del problema original.",
       "Costos reducidos y optimalidad.",
@@ -90,12 +88,12 @@
       "Actualización de la base.",
       "Terminación y detección de no acotamiento.",
       "Ejecución completa del algoritmo."
-    ]
+    ],
+    "area": "Algoritmo Simplex"
   },
   {
-    "unit": "Unidad V — Casos especiales del Simplex",
     "path": "lecciones/08-casos-especiales.qmd",
-    "title": "Lección 8: Soluciones múltiples, degeneración y ciclos",
+    "title": "Soluciones múltiples, degeneración y ciclos",
     "subsections": [
       "Soluciones óptimas múltiples.",
       "Costos reducidos nulos.",
@@ -104,6 +102,7 @@
       "Posibilidad de ciclos.",
       "Reglas anticiclaje y regla de Bland.",
       "Diagnóstico de casos especiales."
-    ]
+    ],
+    "area": "Algoritmo Simplex"
   }
 ]

@@ -48,32 +48,30 @@ website:
     contents:
     - text: Inicio
       href: index.qmd
-    - section: Unidad I — Fundamentos de optimización
+    - section: Fundamentos de optimización
       contents:
       - href: lecciones/01-problemas-optimizacion.qmd
-        text: "Lección 1: Problemas de optimización y existencia de soluciones"
+        text: "Problemas de optimización y existencia de soluciones"
       - href: lecciones/02-convexidad.qmd
-        text: "Lección 2: Convexidad, optimalidad global y unicidad"
-    - section: Unidad II — Reformulación de modelos
+        text: "Convexidad, optimalidad global y unicidad"
+    - section: Modelación y reformulación
       contents:
       - href: lecciones/03-modelos-equivalentes.qmd
-        text: "Lección 3: Modelos equivalentes y variables auxiliares"
-    - section: Unidad III — Geometría de la programación lineal
+        text: "Modelos equivalentes y variables auxiliares"
+    - section: Geometría de la programación lineal
       contents:
       - href: lecciones/04-poliedros.qmd
-        text: "Lección 4: Poliedros, vértices y soluciones óptimas"
-    - section: Unidad IV — Método Simplex
+        text: "Poliedros, vértices y soluciones óptimas"
+    - section: Algoritmo Simplex
       contents:
       - href: lecciones/05-fundamentos-simplex.qmd
-        text: "Lección 5: Fundamentos algebraicos del Simplex"
+        text: "Fundamentos algebraicos del Simplex"
       - href: lecciones/06-simplex-fase-i.qmd
-        text: "Lección 6: Simplex — Fase I"
+        text: "Simplex — Fase I"
       - href: lecciones/07-simplex-fase-ii.qmd
-        text: "Lección 7: Simplex — Fase II"
-    - section: Unidad V — Casos especiales del Simplex
-      contents:
+        text: "Simplex — Fase II"
       - href: lecciones/08-casos-especiales.qmd
-        text: "Lección 8: Soluciones múltiples, degeneración y ciclos"
+        text: "Soluciones múltiples, degeneración y ciclos"
   page-navigation: true
   back-to-top-navigation: true
   page-footer:

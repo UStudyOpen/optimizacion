@@ -1,4 +1,9 @@
 {
-  "origin": "Nueva asignatura: solo estructura editorial; no existe contenido académico ni referencia revisada.",
-  "files": {}
+  "origin": "Referencia técnica del cuerpo original en 4f5254d (2026-10-28); no acredita revisión académica. No recalcular para silenciar diferencias.",
+  "files": {
+    "lecciones/05-fundamentos-simplex.qmd": {
+      "kind": "lesson-body",
+      "sha256": "bc90733a19dcd84add7721cdadac2daf112bf966c06d7a250a8888f41554b168"
+    }
+  }
 }
