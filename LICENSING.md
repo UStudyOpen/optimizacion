@@ -45,3 +45,12 @@ intacto y su actualización pública requiere una operación posterior autorizad
 Optimización: contenido académico original nuevo en `lecciones/` por ngulloa, bajo CC-BY-NC-4.0.
 Los ejemplos heredados conservan MIT de ngulloa. Las importaciones se registran separadamente.
 En este curso, el texto MIT citado por la plantilla se conserva en `LICENSES/MIT.txt`; el `LICENSE` raíz documenta CC-BY-NC-4.0 para las lecciones nuevas autorizadas.
+
+## Interacciones y auditoría ICS1113
+
+Los tres recursos originales de `assets/optimizacion/` y las pruebas matemáticas
+incorporadas con ICS1113 son software MIT de ngulloa, con avisos SPDX y clasificación
+explícita en `licensing.json`. No incorporan código de los libros citados. Los QMD y
+la documentación académica de `review/ics1113/` conservan CC BY-NC 4.0; los PDF de
+referencia no se redistribuyen. Las anotaciones REUSE y su dependencia en el registro
+administrado se generan desde la herramienta central, sin sincronizar otros componentes.

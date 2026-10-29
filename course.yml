@@ -76,28 +76,28 @@
         "path": "lecciones/01-problemas-optimizacion.qmd",
         "title": "Problemas de optimización y existencia de soluciones",
         "required": true,
-        "status": "proximamente",
+        "status": "en-desarrollo",
         "reviewed": false
       },
       {
         "path": "lecciones/02-convexidad.qmd",
         "title": "Convexidad, optimalidad global y unicidad",
         "required": true,
-        "status": "proximamente",
+        "status": "en-desarrollo",
         "reviewed": false
       },
       {
         "path": "lecciones/03-modelos-equivalentes.qmd",
         "title": "Modelos equivalentes y variables auxiliares",
         "required": true,
-        "status": "proximamente",
+        "status": "en-desarrollo",
         "reviewed": false
       },
       {
         "path": "lecciones/04-poliedros.qmd",
         "title": "Poliedros, vértices y soluciones óptimas",
         "required": true,
-        "status": "proximamente",
+        "status": "en-desarrollo",
         "reviewed": false
       },
       {
@@ -111,21 +111,21 @@
         "path": "lecciones/06-simplex-fase-i.qmd",
         "title": "Simplex — Fase I",
         "required": true,
-        "status": "proximamente",
+        "status": "en-desarrollo",
         "reviewed": false
       },
       {
         "path": "lecciones/07-simplex-fase-ii.qmd",
         "title": "Simplex — Fase II",
         "required": true,
-        "status": "proximamente",
+        "status": "en-desarrollo",
         "reviewed": false
       },
       {
         "path": "lecciones/08-casos-especiales.qmd",
         "title": "Soluciones múltiples, degeneración y ciclos",
         "required": true,
-        "status": "proximamente",
+        "status": "en-desarrollo",
         "reviewed": false
       }
     ],
@@ -184,7 +184,8 @@
       "collection-number": "285",
       "DOI": "10.1007/978-3-030-39415-8",
       "ISBN": "978-3-030-39415-8",
-      "language": "en"
+      "language": "en",
+      "URL": "https://vanderbei.princeton.edu/LPbook/index.html"
     },
     {
       "id": "nemirovski2012",
@@ -205,6 +206,33 @@
       },
       "publisher": "Georgia Institute of Technology",
       "note": "ISyE 6661. Apuntes de curso, otoño de 2012",
+      "language": "en",
+      "URL": "https://www2.isye.gatech.edu/~nemirovs/OPTI_LectureNotes.pdf"
+    },
+    {
+      "id": "boyd2004",
+      "type": "book",
+      "author": [
+        {
+          "family": "Boyd",
+          "given": "Stephen"
+        },
+        {
+          "family": "Vandenberghe",
+          "given": "Lieven"
+        }
+      ],
+      "title": "Convex Optimization",
+      "issued": {
+        "date-parts": [
+          [
+            2004
+          ]
+        ]
+      },
+      "publisher": "Cambridge University Press",
+      "ISBN": "9780521833783",
+      "URL": "https://web.stanford.edu/~boyd/cvxbook/",
       "language": "en"
     }
   ]

@@ -23,40 +23,40 @@ Referencia académica: **ICS1113**. Consulta los ocho temas por su relación con
 
 ## Áreas temáticas {#areas}
 
-**Fundamentos algebraicos del Simplex** contiene exposición, fórmulas y ejemplos, con estado **en desarrollo**. Los otros siete temas están **próximamente**: sus páginas conservan el índice previsto y el aviso de contenido pendiente. Puedes consultarlos desde el menú o desde este mapa.
+Los ocho capítulos contienen explicaciones, ejemplos resueltos y actividades de estudio, todos **en desarrollo** y pendientes de revisión académica humana. Convexidad, geometría y Fase II incluyen exploradores interactivos con desarrollos algebraicos equivalentes. Consulta los prerrequisitos de cada página y utiliza este mapa para conectar las cuatro áreas.
 
 :::: {.topic-grid}
 ::: {.topic-card}
-[Próximamente · contenido pendiente]{.uso-status .uso-status--proximamente}
+[En desarrollo · pendiente de revisión académica]{.uso-status .uso-status--en-desarrollo}
 
 []{#unidad-i-fundamentos-de-optimización}
 
 ### Fundamentos de optimización {#fundamentos}
 
-[Problemas de optimización y existencia de soluciones](lecciones/01-problemas-optimizacion.qmd) — Próximamente
+[Problemas de optimización y existencia de soluciones](lecciones/01-problemas-optimizacion.qmd) — En desarrollo
 
-[Convexidad, optimalidad global y unicidad](lecciones/02-convexidad.qmd) — Próximamente
+[Convexidad, optimalidad global y unicidad](lecciones/02-convexidad.qmd) — En desarrollo
 :::
 ::: {.topic-card}
-[Próximamente · contenido pendiente]{.uso-status .uso-status--proximamente}
+[En desarrollo · pendiente de revisión académica]{.uso-status .uso-status--en-desarrollo}
 
 []{#unidad-ii-reformulación-de-modelos}
 
 ### Modelación y reformulación {#modelacion}
 
-[Modelos equivalentes y variables auxiliares](lecciones/03-modelos-equivalentes.qmd) — Próximamente
+[Modelos equivalentes y variables auxiliares](lecciones/03-modelos-equivalentes.qmd) — En desarrollo
 :::
 ::: {.topic-card}
-[Próximamente · contenido pendiente]{.uso-status .uso-status--proximamente}
+[En desarrollo · pendiente de revisión académica]{.uso-status .uso-status--en-desarrollo}
 
 []{#unidad-iii-geometría-de-la-programación-lineal}
 
 ### Geometría de la programación lineal {#geometria}
 
-[Poliedros, vértices y soluciones óptimas](lecciones/04-poliedros.qmd) — Próximamente
+[Poliedros, vértices y soluciones óptimas](lecciones/04-poliedros.qmd) — En desarrollo
 :::
 ::: {.topic-card}
-[En desarrollo · un tema; tres próximamente]{.uso-status .uso-status--en-desarrollo}
+[En desarrollo · pendiente de revisión académica]{.uso-status .uso-status--en-desarrollo}
 
 []{#unidad-iv-método-simplex}
 []{#unidad-v-casos-especiales-del-simplex}
@@ -65,11 +65,11 @@ Referencia académica: **ICS1113**. Consulta los ocho temas por su relación con
 
 [Fundamentos algebraicos del Simplex](lecciones/05-fundamentos-simplex.qmd) — En desarrollo
 
-[Simplex — Fase I](lecciones/06-simplex-fase-i.qmd) — Próximamente
+[Simplex — Fase I](lecciones/06-simplex-fase-i.qmd) — En desarrollo
 
-[Simplex — Fase II](lecciones/07-simplex-fase-ii.qmd) — Próximamente
+[Simplex — Fase II](lecciones/07-simplex-fase-ii.qmd) — En desarrollo
 
-[Soluciones múltiples, degeneración y ciclos](lecciones/08-casos-especiales.qmd) — Próximamente
+[Soluciones múltiples, degeneración y ciclos](lecciones/08-casos-especiales.qmd) — En desarrollo
 :::
 ::::
 

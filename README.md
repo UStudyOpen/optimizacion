@@ -3,23 +3,24 @@
 Fundamentos de optimización matemática y programación lineal. Referencia académica:
 **ICS1113**. Proyecto educativo independiente, sin afiliación ni respaldo universitario.
 
-Ocho temas en cuatro áreas: **fundamentos de optimización**, **modelación y reformulación**,
-**geometría de la programación lineal** y **algoritmo Simplex**. Fundamentos algebraicos del
-Simplex tiene exposición, fórmulas y ejemplos **en desarrollo**. Los otros siete temas
-están **próximamente** y conservan sus índices. Ninguna página declara revisión académica.
-El checkout actual no contiene actividades interactivas; las descripciones antiguas de
-un explorador de bases no correspondían a sus archivos.
+Ocho capítulos desarrollados en cuatro áreas: **fundamentos de optimización**,
+**modelación y reformulación**, **geometría de la programación lineal** y **algoritmo
+Simplex**. Todos permanecen **en desarrollo**, con `ustudy-reviewed: false`.
+Incluyen explicaciones, ejemplos resueltos y ejercicios con soluciones. Convexidad,
+poliedros y Fase II incorporan actividades originales; simplex usa fracciones exactas.
+Las comprobaciones automatizadas y esta auditoría asistida no acreditan revisión humana.
 
 Repositorio: https://github.com/UStudyOpen/optimizacion.
 Sitio: https://ustudyopen.github.io/optimizacion/.
 
 ## Comenzar a escribir
 
-Para desarrollar convexidad, editar `lecciones/02-convexidad.qmd` bajo sus encabezados.
-Cambiar su estado a `en-desarrollo` tanto en el QMD como en `course.yml`, sustituir el
-aviso pendiente y actualizar los indicadores y el resumen de `index.qmd`. Mantener la
-revisión en `false`. No hace falta cambiar rutas, crear páginas auxiliares ni tocar CI.
-Actualizar `tests/outline.json` únicamente si cambia la estructura de subtítulos.
+Editar cada capítulo bajo sus encabezados existentes y conservar los estados
+`en-desarrollo` y `reviewed: false` hasta una revisión académica humana documentada.
+Sincronizar QMD, `course.yml` e indicadores de `index.qmd` cuando cambie un estado.
+Las ocho rutas, las anclas históricas y los 50 H2 son contratos públicos; no se requiere
+cambiar rutas ni CI para ampliar contenido. Los recursos propios viven en
+`assets/optimizacion/`, se declaran en `project.resources` y en `licensing.json`.
 
 `AGENTS.md` define las convenciones de páginas, fuentes, figuras, actividades y licencias.
 `MIGRATION.md` explica el inventario y la conservación de URL. La clave `course.units`
@@ -55,12 +56,13 @@ oscuro: tema, teclado, búsqueda, menú temático, página activa y anterior/sig
 WCAG A/AA y buenas prácticas con axe-core 4.14.0 fijado por SHA-256, solo para pruebas,
 sin incorporar su código MPL-2.0 al sitio. Sus resultados `incomplete` requieren revisión;
 cero infracciones automáticas no acredita accesibilidad completa. Capturas y resultados:
-`artifacts/platform/`. El workflow existente conserva evidencias durante siete días.
+`artifacts/platform/`, con capturas de las nueve páginas y de las tres actividades. El workflow
+existente conserva evidencias durante siete días.
 
 ## Preparar un pull request
 
 1. Revisar `git status --short` e identificar cambios previos. Crear una rama de trabajo:
-   `git switch -c contenido/convexidad` (si no se está ya en la rama de la tarea).
+   `git switch -c contenido/ics1113-integracion-completa` (si no se está ya en la rama de la tarea).
 2. Editar el contenido y sincronizar los registros indicados arriba.
 3. Ejecutar las cuatro validaciones; revisar el diff y las capturas en ambos temas.
 4. Preparar el texto con la plantilla siguiente en `artifacts/pr.md`.
@@ -103,14 +105,14 @@ gh pr create --repo UStudyOpen/optimizacion --base main \
 El propietario debe autenticar `gh` y disponer de acceso de escritura al repositorio para
 subir la rama y abrir el PR. Si GitHub deniega el acceso, debe resolver ese permiso; no
 crear tokens nuevos, cambiar protecciones ni omitir checks como solución alternativa.
-La autenticación remota no se ha comprobado en esta refactorización local.
+Comprobar la autenticación y los permisos con `gh auth status` antes de operar.
 
 ## Diseño, licencias y publicación
 
 No editar `_extensions/`, `REUSE.toml` ni archivos de `platform-vendor.json`. El diseño y
 los workflows se distribuyen mediante la herramienta de sincronización de UStudyOpen
 Design desde una versión revisada, fuera de los cambios editoriales rutinarios.
-`tests/accessibility_output.py` completa nombres de regiones del HTML generado sin
+`tests/accessibility_output.py` completa nombres de regiones y subraya las citas del HTML generado sin
 modificar el diseño. `styles/README.md` documenta la reserva para actividades futuras.
 
 Autoría pública **ngulloa**. Contenido académico en `lecciones/`: **CC BY-NC 4.0**;
@@ -123,3 +125,12 @@ Actions tras integrar cambios autorizados en `main`, condicionada por
 `github-pages`; conserva ejecución manual con `PUBLICAR`. No se modifican esas reglas.
 Una preparación local o una autorización histórica no autoriza nuevos commits, push, PR,
 merges ni despliegues. Véase `PREPARACION.md` para resultados y límites de esta ejecución.
+
+## Auditoría ICS1113
+
+El informe y la matriz de 41 subtemas están en `review/ics1113/` (documentación de
+revisión, excluida del sitio). Las pruebas del paquete se conservaron como
+`tests/paquete_matematica.py` y `tests/exploradores.test.cjs`; la comparación independiente
+con Cramer se ejecuta con `tests/auditoria_matematica.py`. Todas forman parte de
+`tests/run_course.py`, junto con las 703 comprobaciones previas de convexidad.
+Las evidencias visuales y los resultados se guardan en `artifacts/platform/`.

@@ -1,21 +1,139 @@
 ---
 title: "Problemas de optimización y existencia de soluciones"
-ustudy-status: proximamente
+ustudy-status: en-desarrollo
 ustudy-reviewed: false
 toc: true
 ---
 
-::: {.callout-note title="Contenido pendiente"}
+Optimizar significa comparar decisiones admisibles según un criterio. Antes de buscar una fórmula para la respuesta hay tres preguntas distintas: ¿hay decisiones posibles?, ¿sus valores tienen una cota?, ¿alguna decisión alcanza la mejor cota? Separarlas evita aplicar un algoritmo a un problema que no tiene solución.
 
-Esta página está pendiente de redacción por el propietario y de revisión académica.
+::: {.callout-tip title="Objetivos y prerrequisitos"}
+Al terminar podrás formular un problema, distinguir mínimo de ínfimo y justificar existencia mediante hipótesis precisas. Se utilizan conjuntos, sucesiones y continuidad en $\mathbb R^n$; la convexidad se desarrolla en la [página siguiente](02-convexidad.qmd).
 :::
+
+Los ejemplos sin atribución particular son originales. La convención principal del sitio es **minimizar**; una maximización se convierte minimizando el negativo del objetivo.
 
 ## Formulación general: variables, función objetivo y restricciones.
 
+Sean $x=(x_1,\ldots,x_n)\in\mathbb R^n$ las **variables de decisión**, $f:D\to\mathbb R$ la función objetivo y $D$ su dominio. Un problema general es
+
+$$\inf\{f(x):x\in F\},\qquad F=\{x\in D:g_i(x)\le0\ (i=1,\ldots,m),\ h_j(x)=0\ (j=1,\ldots,p)\}.$$
+
+$F$ es el **conjunto factible**. La notación $\min$ anuncia la intención de encontrar un punto que alcance el ínfimo; no constituye una prueba de que ese punto exista. Los datos, como una capacidad o un precio, son parámetros conocidos; las variables son las cantidades que elegimos. Las restricciones de signo pertenecen al modelo, aunque a veces se escriban separadas de las restricciones técnicas.
+
+::: {.uso-academic .uso-example}
+### Ejemplo: asignar producción con unidades {#produccion}
+Una empresa decide $x$ toneladas por día. Producir cuesta $f(x)=(x-3)^2+2$ unidades monetarias por día; debe entregar al menos una tonelada y su capacidad es cuatro. El modelo es $\min\{(x-3)^2+2:1\le x\le4\}$. El dominio de la expresión es $\mathbb R$, pero el conjunto factible es $[1,4]$.
+
+Como $(x-3)^2\ge0$ para todo $x$, se tiene $f(x)\ge2$. El punto $x=3$ satisface ambas restricciones y alcanza esa cota: es óptimo y el valor óptimo es $2$. La prueba contiene **cota y consecución**, no solo la ecuación $f'(x)=0$.
+:::
+
+Modelar también exige justificar que las decisiones sean continuas. Si $x$ contara máquinas indivisibles, $x\in\mathbb Z$ sería una restricción adicional. Aquí nos concentraremos en modelos continuos, con una breve excepción lógica en [reformulaciones](03-modelos-equivalentes.qmd#disyunciones).
+
 ## Factibilidad, valor óptimo y conjunto de soluciones.
+
+Definimos el **valor óptimo** de minimización como $v=\inf f(F)$ en los reales extendidos. Adoptamos $\inf\varnothing=+\infty$. Si $F\ne\varnothing$ y $f$ es real en $F$, no puede ocurrir $v=+\infty$: cualquier punto factible proporciona una cota superior finita para $v$.
+
+Si $v\in\mathbb R$, una **solución óptima** es un $x^\star\in F$ con $f(x^\star)=v$. El conjunto de soluciones es
+
+$$\operatorname{argmin}_{x\in F}f(x)=\{x\in F:f(x)=v\}.$$
+
+Un valor no es un punto: en el ejemplo anterior $v=2$, mientras que $\operatorname{argmin}f=\{3\}$. Dos puntos distintos pueden dar el mismo valor; incluso un valor óptimo finito puede no alcanzarse.
+
+### Ínfimo y sucesiones minimizantes {#infimo}
+
+Cuando $v$ es finito, para cada entero $k\ge1$ existe $x^k\in F$ tal que $v\le f(x^k)<v+1/k$. En caso contrario, $v+1/k$ sería una cota inferior mayor que el ínfimo. La sucesión $(x^k)$ se llama **minimizante**. Que sus valores se aproximen a $v$ no implica que sus puntos converjan ni que su eventual límite pertenezca a $F$.
+
+Para maximizar usamos $w=\sup f(F)$ y $\sup\varnothing=-\infty$. Se cumple $\sup f(F)=-\inf(-f)(F)$, y los maximizadores de $f$ son los minimizadores de $-f$. Un supremo es la menor cota superior, no una cota inferior.
+
+::: {.callout-note collapse="true" title="Ejercicio 1: valor y soluciones"}
+
+Determina valor y conjunto de minimizadores de $f(x)=0$ en $F=[-1,1]$ y de $f(x)=x$ en $F=(0,1]$.
+
+**Solución.** En el primero $v=0$ y todo $F$ es óptimo. En el segundo $v=0$, pues $x>0$ y la sucesión $1/k$ se aproxima a cero; ningún factible alcanza cero, de modo que el argmínimo es vacío.
+:::
 
 ## Óptimos locales y globales.
 
+Un factible $x^\star$ es **mínimo local relativo a $F$** si existe $\varepsilon>0$ tal que $f(x^\star)\le f(x)$ para todo $x\in F$ con $\|x-x^\star\|<\varepsilon$. Es **global** si la desigualdad vale para todo $x\in F$. El mínimo es estricto si la desigualdad es estricta para puntos distintos dentro del ámbito correspondiente.
+
+Todo mínimo global es local. La recíproca falla sin estructura adicional. La palabra «relativo» importa en la frontera: minimizar $x$ en $[0,1]$ da el mínimo global $0$, aunque la derivada de la función sea $1$. El criterio $\nabla f=0$ solo es necesario en puntos interiores con diferenciabilidad.
+
+::: {.uso-academic .uso-example}
+### Un mínimo local que no es global {#local-no-global}
+En $F=\mathbb R$ considera $f(x)=x^3-3x$. Se tiene $f'(x)=3x^2-3$ y $f''(x)=6x$. En $x=1$, $f'=0$ y $f''=6>0$, de modo que hay un mínimo local estricto, con valor $-2$. Sin embargo, al tomar $x\to-\infty$, $f(x)\to-\infty$. El problema no tiene mínimo global. En $x=-1$ la segunda derivada es negativa: ese punto es un máximo local.
+:::
+
+La [convexidad](02-convexidad.qmd#local-global) permitirá convertir un argumento local en uno global. No garantizará por sí sola que haya un mínimo que encontrar.
+
 ## Existencia: continuidad, compacidad y coercividad.
 
+### Teorema de extremos y sus hipótesis {#weierstrass}
+
+Si $F\subset\mathbb R^n$ es **no vacío y compacto**, y $f:F\to\mathbb R$ es continua, entonces $f$ alcanza mínimo y máximo en $F$. En dimensión finita, compacto equivale a cerrado y acotado.
+
+**Demostración.** La imagen continua $f(F)$ es un compacto no vacío de $\mathbb R$, por lo que es acotada y cerrada. Su ínfimo finito es límite de una sucesión de valores de $f(F)$; al ser cerrado, ese límite pertenece a $f(F)$. Por tanto hay $x^\star\in F$ con $f(x^\star)=\inf f(F)$. El mismo argumento aplicado a $-f$ da el máximo. Esta es la conexión entre compacidad y consecución, no una propiedad de la derivada. [@nemirovski2012, apéndice B.2]
+
+Las hipótesis son suficientes, no necesarias. $x^2$ alcanza su mínimo en $\mathbb R$, que no es compacto. Para ver por qué no pueden simplemente eliminarse del teorema, compara:
+
+| Hipótesis omitida | Problema | Qué falla |
+|---|---|---|
+| Cerradura | $\inf\{x:0<x\le1\}$ | El límite $0$ queda fuera |
+| Acotación | $\inf\{e^x:x\in\mathbb R\}$ | Los puntos escapan a $-\infty$ |
+| Continuidad | $f(0)=1$, $f(x)=x$ si $0<x\le1$, en $[0,1]$ | El valor salta en el límite |
+| No vaciedad | $F=\varnothing$ | No hay punto candidato |
+
+### Coercividad relativa y reducción a un compacto {#coercividad}
+
+$f$ es **coerciva sobre $F$** si para toda sucesión $x^k\in F$ con $\|x^k\|\to\infty$ se cumple $f(x^k)\to+\infty$. Equivale a que, para cada $M\in\mathbb R$, exista $R$ tal que $x\in F$, $\|x\|>R$ implique $f(x)>M$. No se exige controlar direcciones que no pertenecen al dominio factible.
+
+**Teorema.** Si $F\subset\mathbb R^n$ es cerrado y no vacío, y $f:F\to\mathbb R$ es continua y coerciva sobre $F$, entonces alcanza un mínimo.
+
+**Demostración original para este sitio.** Elige $x^0\in F$. Por coercividad hay $R>\|x^0\|$ tal que fuera de la bola de radio $R$ todo factible satisface $f(x)>f(x^0)$. El conjunto $K=F\cap\{x:\|x\|\le R\}$ es cerrado, acotado y no vacío. Por el teorema de extremos existe $x^\star$ que minimiza $f$ en $K$, y $f(x^\star)\le f(x^0)$. Fuera de $K$ los valores son mayores que $f(x^0)$, de modo que $x^\star$ minimiza en todo $F$. La coercividad hace que ninguna mejora requiera escapar al infinito.
+
+El compendio de clases enuncia y aplica la coercividad (Clases, PDF 15–17, D080, páginas físicas originales 35–37), pero no contiene una prueba general completa identificada. La demostración anterior es una elaboración propia basada en el teorema compacto, no una transcripción ni una prueba atribuida a esas diapositivas.
+
+::: {.uso-academic .uso-example}
+### Coercividad sin acotar el dominio {#ejemplo-coercivo}
+Minimiza $f(x,y)=x^2+(y-1)^2$ sobre $F=\{(x,y):x+y\ge3\}$. $F$ es cerrado, no vacío y no acotado. Si $\|(x,y)\|\to\infty$, la distancia a $(0,1)$ también tiende a infinito; luego $f$ es coerciva. El mínimo existe.
+
+Para calcularlo, escribe $u=x$, $v=y-1$. La restricción es $u+v\ge2$. Por $(u-v)^2\ge0$, $u^2+v^2\ge(u+v)^2/2\ge2$. La igualdad exige $u=v=1$, por lo que $(x,y)=(1,2)$ es el único óptimo y el valor óptimo es $2$.
+:::
+
+Coercividad no es necesaria: $f(x,y)=x^2$ en $\mathbb R^2$ tiene mínimo cero para todo $(0,y)$, aunque no es coerciva. Tampoco se utiliza para garantizar máximos; para ellos puede aplicarse el resultado a $-f$.
+
 ## Infactibilidad, no acotamiento e ínfimos no alcanzados.
+
+Estos diagnósticos responden a preguntas distintas y deben acompañarse de un certificado o una sucesión explícita.
+
+| Situación de minimización | Ejemplo original | Certificado |
+|---|---|---|
+| Infactible | $x\ge1$, $x\le0$ | Las restricciones se contradicen |
+| Factible y no acotado inferiormente | $\min\{-x:x\ge0\}$ | $x=t$, $f=-t\to-\infty$ |
+| Ínfimo finito no alcanzado | $\inf\{e^x:x\in\mathbb R\}$ | $e^x>0$, $x^k=-k$, $e^{-k}\to0$ |
+| Mínimo alcanzado | $\min\{x^2:x\in\mathbb R\}$ | $x^2\ge0=f(0)$ |
+
+«El dominio no está acotado» no implica «el objetivo no está acotado». Por ejemplo, $\min\{x:x\ge1\}$ tiene mínimo $1$ aunque el dominio sea una semirrecta.
+
+En programación lineal ocurre algo más fuerte: si un poliedro no vacío da un ínfimo lineal finito, este se alcanza, incluso sin compacidad. La propiedad depende de que el conjunto sea un **poliedro**, y se demuestra mediante su representación finita en la [geometría del conjunto óptimo](04-poliedros.qmd#optimo-lineal). El epígrafe de $e^x$ es cerrado y convexo, pero no es un poliedro: no contradice ese teorema.
+
+### Práctica de diagnóstico {#practica}
+
+Antes de desplegar, clasifica cada problema, indica su valor y justifica si hay consecución: (a) $\inf_{x>0}(x+1/x)$; (b) $\inf_{x\in\mathbb R}(-x^2)$; (c) $\inf_{x\ge0}1/(1+x)$; (d) $\inf_{x\in[0,1]}x$.
+
+::: {.callout-note collapse="true" title="Soluciones razonadas"}
+
+(a) $x+1/x-2=(x-1)^2/x\ge0$; mínimo $2$ en $x=1$. El dominio abierto no impide existencia. (b) $-\infty$, pues $x=k$ da $-k^2$. (c) Ínfimo $0$ no alcanzado: todos los valores son positivos y $x=k$ da valores que tienden a cero. (d) Mínimo $0$ en $x=0$, por cota y consecución o por continuidad y compacidad.
+:::
+
+::: {.uso-summary}
+La factibilidad precede a la comparación de valores. Una cota inferior solo prueba una parte de la optimalidad: hace falta alcanzarla. Continuidad y compacidad garantizan consecución; coercividad permite encerrar los candidatos útiles en un compacto. La convexidad, que estudiaremos a continuación, responde a globalidad y unicidad bajo hipótesis adicionales.
+:::
+
+
+### Fuentes y continuidad {#fuentes}
+
+Base teórica: [@ferrer2006, cap. 1]; [@nemirovski2012, apéndice B, §§B.1–B.2]. Lectura del curso: Compendio de clases, PDF 7–18 (D080, físicas originales 27–38). Las posiciones de PDF son las del archivo curado, no páginas impresas del libro. Para practicar con material externo al sitio: Evaluaciones de existencia, PDF 8–10 y 22–27; sus fuentes exactas se conservan en la matriz de cobertura del paquete.
+
+::: {#refs}
+:::

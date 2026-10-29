@@ -1,25 +1,195 @@
 ---
 title: "Simplex — Fase II"
-ustudy-status: proximamente
+ustudy-status: en-desarrollo
 ustudy-reviewed: false
 toc: true
 ---
 
-::: {.callout-note title="Contenido pendiente"}
+La Fase II transforma una dirección de mejora en un cambio de base que conserva factibilidad. El costo reducido decide si conviene avanzar; la razón mínima determina hasta dónde es posible hacerlo. El pivote es el cálculo que expresa el mismo sistema desde la base siguiente.
 
-Esta página está pendiente de redacción por el propietario y de revisión académica.
+::: {.callout-tip title="Objetivos y prerrequisitos"}
+Deducirás las fórmulas matriciales, interpretarás los signos y resolverás un problema completo con diccionarios y tableau. Se requiere una [SBF inicial](05-fundamentos-simplex.qmd#soluciones-básicas-factibles.); si no es evidente, usa antes [Fase I](06-simplex-fase-i.qmd).
 :::
 
 ## Recuperación del problema original.
 
+Fijamos el problema $\min c^\top x$, $Ax=b$, $x\ge0$, con rango fila $m$. Una base ordenada $B$ selecciona $m$ columnas independientes; $N$ contiene las restantes. Escribimos $A_B$ para la matriz base y distinguimos el conjunto de índices $B$ de esa matriz. Definimos
+
+$$\bar b=A_B^{-1}b,\qquad D=A_B^{-1}A_N,\qquad x_B=\bar b-Dx_N.$$
+
+Esta igualdad procede de $A_Bx_B+A_Nx_N=b$, multiplicando por $A_B^{-1}$. Las componentes de $\bar b$ corresponden al **orden de los básicos**, no a sus índices globales. Si $\bar b\ge0$, la base es factible. Si no lo es, estos pasos de simplex primal no se pueden aplicar, aunque las fórmulas sigan siendo identidades algebraicas.
+
+Tras Fase I, se utilizan las columnas originales de la base final y se retira el objetivo auxiliar. La solución básica fija $x_N=0$, pero el diccionario entero describe todas las soluciones de las igualdades para cualquier $x_N$; la no negatividad decide cuáles son factibles.
+
 ## Costos reducidos y optimalidad.
+
+Al sustituir $x_B$ en el objetivo,
+
+$$z=c_B^\top(\bar b-Dx_N)+c_N^\top x_N=z_0+r_N^\top x_N,$$
+
+con
+
+$$z_0=c_B^\top\bar b,\qquad r_N^\top=c_N^\top-c_B^\top A_B^{-1}A_N.$$
+
+Los **costos reducidos** miden el cambio neto en $z$ después de reajustar básicos para mantener las igualdades. El costo directo $c_j$ no basta: al aumentar $x_j$ se liberan o consumen cantidades de variables básicas que también tenían costo. Para los básicos el costo reducido es cero, pues $A_B^{-1}A_B=I$.
+
+### Certificado de optimalidad {#optimalidad}
+
+Si la base es factible y todos los $r_j\ge0$, cualquier factible satisface $z=z_0+\sum_{j\in N}r_jx_j\ge z_0$, y la SBF actual alcanza $z_0$. Es un certificado global, no una comparación exclusiva con bases vecinas.
+
+La suficiencia no se convierte sin más en necesidad para **cada base** que representa un punto degenerado óptimo. Una SBF óptima puede tener una representación con algún costo reducido negativo y paso máximo cero; otro diccionario del mismo punto puede certificarla. Lo que existe en un problema con óptimo es alguna base óptima que satisface el criterio, con una regla de terminación apropiada. En una base no degenerada, un costo reducido negativo sí permite algún paso positivo y refuta optimalidad del punto. Véase el [contraejemplo degenerado](08-casos-especiales.qmd#negativo-degenerado).
+
+Si todos los costos reducidos no básicos son **estrictamente** positivos, la solución es única: conservar $z=z_0$ obliga a $x_N=0$, y las igualdades fijan $x_B$. La recíproca falla en degeneración.
 
 ## Selección de variable entrante.
 
+Si existe $j\in N$ con $r_j<0$, elegimos $x_j$ para entrar. Manteniendo las otras no básicas en cero y tomando $x_j=\theta\ge0$,
+
+$$x_B(\theta)=\bar b-\theta u,\qquad u=A_B^{-1}A_j.$$
+
+La dirección completa es $d_j=1$, $d_k=0$ para las otras no básicas y $d_B=-u$. Se verifica
+
+$$Ad=A_B(-A_B^{-1}A_j)+A_j=0,\qquad c^\top d=r_j.$$
+
+Así, el movimiento conserva igualdades y su pendiente objetiva es exactamente el costo reducido. Puede ser una dirección de mejora algebraica sin ser una dirección factible para un paso positivo: eso sucede al estar bloqueada por un básico cero.
+
+La regla del costo más negativo suele buscar una mejora rápida por unidad de variable entrante, aunque las unidades y el paso permitido también influyen. La regla de Bland toma el **menor índice global** entre los no básicos con $r_j<0$; combinada con su desempate de salida, garantiza terminación en aritmética exacta. No se necesita que el costo directo $c_j$ sea negativo.
+
 ## Variable saliente y prueba de razón mínima.
+
+Para conservar $x_B\ge0$, cada fila debe satisfacer $\bar b_i-\theta u_i\ge0$. Si $u_i>0$, impone $\theta\le\bar b_i/u_i$. Si $u_i=0$, no cambia. Si $u_i<0$, el básico aumenta y no impone una cota superior. Por tanto,
+
+$$\theta^\star=\min_{i:u_i>0}\frac{\bar b_i}{u_i}.$$
+
+Solo se incluyen **denominadores estrictamente positivos**. Incluir los negativos podría elegir una razón negativa y destruir la interpretación de aumento de una variable no negativa. Dividir por cero tampoco produce una fila candidata.
+
+Una fila que alcanza la razón mínima identifica una variable básica que llega a cero y puede salir. Si varias empatan, todas llegan a cero; se elige una para el intercambio y las otras pueden permanecer básicas en cero. Con Bland sale la de menor índice **de variable**, no la fila que aparece primero si la base está ordenada de otra forma.
+
+Si $\theta^\star=0$, hay un pivote degenerado: cambia la base, pero no el punto ni el objetivo. Si no hay ninguna fila con $u_i>0$, no hay variable saliente y el paso puede crecer indefinidamente; esto requiere el costo reducido negativo para certificar no acotamiento del objetivo.
 
 ## Actualización de la base.
 
+Si sale el básico de la fila $\ell$, el elemento pivote es $u_\ell>0$ en un paso ordinario. En el diccionario,
+
+$$x_{B_\ell}=\bar b_\ell-u_\ell x_j-\sum_{k\in N\setminus\{j\}}D_{\ell k}x_k.$$
+
+Despejar $x_j$ da
+
+$$x_j=\frac{\bar b_\ell}{u_\ell}-\frac{x_{B_\ell}}{u_\ell}-\sum_{k\in N\setminus\{j\}}\frac{D_{\ell k}}{u_\ell}x_k.$$
+
+Se sustituye esta expresión en las demás filas y en el objetivo. Esa sustitución es la eliminación de Gauss–Jordan: normalizar la fila pivote y anular la columna entrante en las otras filas. El nuevo básico es $x_j$; el saliente se convierte en no básico.
+
+La matriz base siguiente es invertible porque $u_\ell\ne0$: reemplazar la columna $\ell$ de la identidad por $u$ tiene determinante $u_\ell$; multiplicarla por $A_B$ produce la nueva matriz base. No es una decisión basada únicamente en que una variable llegó a cero.
+
+### Cómo leer un tableau sin invertir signos {#tableau}
+
+Adoptamos filas de restricciones $x_B+Dx_N=\bar b$ y una fila objetivo **$z-r_N^\top x_N=z_0$**, donde el coeficiente de $z$ es uno. Por tanto, los coeficientes impresos en esa fila son **$-r_j$**, no $r_j$. En minimización se detiene cuando dichos coeficientes son no positivos y la base es factible. Un texto que imprime $r_j$ directamente tendrá la desigualdad contraria; ambos son correctos si se declara la convención.
+
+En implementación numérica se resuelven sistemas con $A_B$ y se actualizan factorizaciones; no se forma necesariamente una inversa explícita en cada iteración. La inversa es útil aquí para deducir y verificar las identidades.
+
 ## Terminación y detección de no acotamiento.
 
+### Certificado de no acotamiento {#no-acotamiento}
+
+Si $r_j<0$ y $u=A_B^{-1}A_j\le0$, la dirección anterior tiene $d_B=-u\ge0$ y todas sus otras componentes son no negativas. Por tanto $x+\theta d\ge0$ para todo $\theta\ge0$, $Ad=0$ y
+
+$$c^\top(x+\theta d)=z_0+\theta r_j\longrightarrow-\infty.$$
+
+El certificado consiste en un punto factible $x$ y una dirección factible ilimitada $d$ con costo negativo. Que la región sea ilimitada no basta. Tampoco basta no encontrar saliente para una variable de costo reducido cero: en ese caso se obtiene un rayo de **óptimos** si la base era óptima.
+
+Ejemplo original: $\min(-x_1)$ sujeto a $x_1-x_2=1$, $x_1,x_2\ge0$. La base $x_1$ da $x_1=1+x_2$ y $z=-1-x_2$. Entra $x_2$, $u=-1$; no hay razón admisible. Desde $(1,0)$, $d=(1,1)$ satisface $Ad=0$, $d\ge0$ y $c^\top d=-1$.
+
+### Terminación {#terminacion}
+
+Con pasos no degenerados y costos entrantes negativos, el valor disminuye estrictamente y ninguna base puede repetirse. Hay finitas bases, así que se termina. Con pasos cero esa prueba deja de servir: una sucesión de bases puede ciclar. Bland o la regla lexicográfica impiden repetición, garantizando terminación también en degeneración. El número finito de bases por sí solo no garantiza que una regla arbitraria deje de revisitar las mismas.
+
 ## Ejecución completa del algoritmo.
+
+### Dos pivotes completos sobre el problema transversal {#ejecucion}
+
+Tomamos $a=2$ en el [poliedro anterior](04-poliedros.qmd#problema-transversal). Con holguras $x_3,x_4$:
+
+$$\min z=-2x_1-2x_2,\qquad x_1+2x_2+x_3=6,\quad2x_1+x_2+x_4=6,\quad x\ge0.$$
+
+**Inicio.** Base ordenada $(x_3,x_4)$, $A_B=I$, no básicas $(x_1,x_2)$:
+
+$$x_3=6-x_1-2x_2,\qquad x_4=6-2x_1-x_2,\qquad z=-2x_1-2x_2.$$
+
+La SBF es $(0,0,6,6)$, valor cero. Bland elige $x_1$ entre los dos costos $-2$. Su columna transformada es $(1,2)^\top$; razones $6/1=6$, $6/2=3$. Sale $x_4$ con $\theta=3$.
+
+**Primer pivote.** Despejamos $x_1=3-\tfrac12x_2-\tfrac12x_4$. Entonces
+
+$$x_3=6-\left(3-\tfrac12x_2-\tfrac12x_4\right)-2x_2=3-\tfrac32x_2+\tfrac12x_4,$$
+
+$$z=-2\left(3-\tfrac12x_2-\tfrac12x_4\right)-2x_2=-6-x_2+x_4.$$
+
+La base ordenada $(x_1,x_3)$ tiene SBF $(3,0,3,0)$ y costos reducidos $r_2=-1$, $r_4=1$. Entra $x_2$; sus coeficientes $u$ son $1/2,3/2$. Las razones son $3/(1/2)=6$ y $3/(3/2)=2$; sale $x_3$ y el objetivo cambia en $(-1)\cdot2=-2$.
+
+El tableau después del primer pivote, bajo nuestra convención, es:
+
+| Fila | $x_1$ | $x_2$ | $x_3$ | $x_4$ | Término independiente |
+|---|---:|---:|---:|---:|---:|
+| $x_1$ | $1$ | $1/2$ | $0$ | $1/2$ | $3$ |
+| $x_3$ | $0$ | $3/2$ | $1$ | $-1/2$ | $3$ |
+| $z$ | $0$ | $1$ | $0$ | $-1$ | $-6$ |
+
+La última fila significa $z+x_2-x_4=-6$; el costo reducido de $x_2$ es $-1$, aunque en la tabla se imprima $+1$.
+
+**Segundo pivote.** De la fila saliente,
+
+$$x_2=2-\tfrac23x_3+\tfrac13x_4.$$
+
+Sustituyendo en la fila de $x_1$ y en el objetivo,
+
+$$x_1=2+\tfrac13x_3-\tfrac23x_4,\qquad z=-8+\tfrac23x_3+\tfrac23x_4.$$
+
+La SBF es $(2,2,0,0)$, ambos costos reducidos son $2/3>0$ y el óptimo es único. Para verificar de forma matricial:
+
+$$A_B=\begin{pmatrix}1&2\\2&1\end{pmatrix},\quad A_B^{-1}=\begin{pmatrix}-1/3&2/3\\2/3&-1/3\end{pmatrix},\quad \bar b=\binom22.$$
+
+Como $A_N=I$ y $c_B=(-2,-2)$, resulta $r_N^\top=(0,0)-(-2,-2)A_B^{-1}=(2/3,2/3)$. Sustituir el punto en las restricciones y en el objetivo confirma el valor $-8$. La prueba geométrica sumando las restricciones produce la misma cota.
+
+### Explorar bases y pasos con Bland {#explorador-bases}
+
+<div class="uso-academic" data-opti="simplex"></div>
+
+<link rel="stylesheet" href="../assets/optimizacion/exploradores.css">
+<script defer src="../assets/optimizacion/matematica.js"></script>
+<script defer src="../assets/optimizacion/exploradores.js"></script>
+
+Se enumeran las seis bases del sistema de dos filas. Dos producen soluciones básicas negativas y se identifican como infactibles. Desde una base factible, el botón aplica la regla de Bland, muestra el costo entrante, las razones y la salida, o informa terminación. También puedes seleccionar casos separados de no acotamiento, empate, paso cero y costo nulo bloqueado; sus restricciones se muestran explícitamente para no confundirlos con el problema transversal. El texto anterior conserva todos los pasos si no se ejecuta JavaScript.
+
+### Reconstruir datos y leer parámetros {#parametros}
+
+Un tableau canónico determina $\bar A=A_B^{-1}A$ y $\bar b=A_B^{-1}b$, pero sin conocer $A_B$ no recupera un único sistema original: multiplicar todas las ecuaciones por una matriz invertible cambia $A,b$ sin cambiar las soluciones. Si las holguras originales formaban $I$, sus columnas transformadas son precisamente $A_B^{-1}$. Con esa información se puede recuperar $A_B$, y luego $A=A_B\bar A$, $b=A_B\bar b$. Las columnas básicas canónicas deben ser identidad y sus costos reducidos, cero. Estos son controles útiles para completar tablas con entradas faltantes; no se adivinan signos por apariencia.
+
+Para el objetivo parametrizado original $\max a x_1+2x_2$, seguimos minimizando $-a x_1-2x_2$. En la base $(x_1,x_2)$,
+
+$$r_3=\frac{4-a}{3},\qquad r_4=\frac{2a-2}{3}.$$
+
+Esta base no degenerada es óptima si y solo si $1\le a\le4$. En los extremos aparece una arista óptima: en $a=1$, $x_4$ puede aumentar con costo cero y paso positivo; en $a=4$, puede hacerlo $x_3$. Fuera del intervalo hay una dirección de mejora con paso positivo. Es un ejercicio de lectura de costos, sin desarrollar análisis de sensibilidad general.
+
+### Ejercicios {#ejercicios}
+
+1. Desde el diccionario inicial, elige primero $x_2$ y completa la ejecución. ¿Cambia el punto óptimo?
+2. En la última base, reconstruye el sistema original usando las columnas de holgura $A_B^{-1}$.
+3. ¿Qué certifica una columna $u\le0$ con $r_j=0$ en una base óptima?
+
+::: {.callout-note collapse="true" title="Respuestas verificables"}
+
+1. Entra $x_2$, sale $x_3$ con paso tres. Queda $x_2=3-\tfrac12x_1-\tfrac12x_3$, $x_4=3-\tfrac32x_1+\tfrac12x_3$, $z=-6-x_1+x_3$. Entra $x_1$, sale $x_4$ con paso dos. Se llega a $(2,2,0,0)$ y valor $-8$.
+2. Invierte la matriz de columnas de holgura para obtener $A_B=\left(\begin{smallmatrix}1&2\\2&1\end{smallmatrix}\right)$. Multiplica por el tableau canónico: se recupera $A=(\begin{smallmatrix}1&2&1&0\\2&1&0&1\end{smallmatrix})$ y $b=(6,6)^\top$.
+3. Un rayo factible de costo constante: infinitos puntos óptimos. No certifica no acotamiento inferior del objetivo.
+:::
+
+::: {.uso-summary}
+La identidad $x_B=\bar b-Dx_N$ controla factibilidad; $z=z_0+r_N^\top x_N$ controla mejora. La razón mínima se deduce de no negatividad, el pivote mantiene el sistema y el rayo de descenso certifica no acotamiento. Los casos degenerados exigen distinguir punto de base y una regla de terminación; ese es el tema siguiente.
+:::
+
+
+### Fuentes y continuidad {#fuentes}
+
+Derivación y procedimientos: [@ferrer2006, §3.2]; [@vanderbei2020, cap. 2 y cap. 6, §§1–2]; geometría y terminación: [@nemirovski2012, §§4.2.2 y 4.3.1]. Contraste del curso: Clases PDF 137–174; evaluación parametrizada D068 en PDF 38–41. Las operaciones expuestas se recalcularon en minimización, sin copiar la fila objetivo de pautas que usan otras convenciones.
+
+::: {#refs}
+:::

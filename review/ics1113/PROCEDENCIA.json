@@ -1,0 +1,12 @@
+{
+  "archive_found": "ICS1113_Optimizacion_Contenido_QMD.zip (sin sufijo (1))",
+  "archive_sha256": "6a472829873f8ec2de737a489d836894808e18af6dd4729ac490c51f111517fe",
+  "base": "bda80f59a5c5bcbf986b149fdaf667f7197dc247",
+  "protected05_identical": true,
+  "historical_h2": 50,
+  "historical_anchors": 67,
+  "routes": 9,
+  "subtopics": 41,
+  "human_review": false,
+  "local_branch_preserved": "contenido/convexidad"
+}

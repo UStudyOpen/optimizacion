@@ -1,7 +1,9 @@
 # Preparación editorial y verificación local
 
 Fecha: **28 de octubre de 2026**, America/Santiago. Base: `4f5254d`.
-Rama de trabajo: `refactor/arquitectura-tematica`. Cambios sin commit.
+Rama de la consolidación inicial: `refactor/arquitectura-tematica`. Las secciones
+siguientes registran esa etapa local, antes de la autorización posterior de commit,
+push y PR. La etapa posterior de convexidad y la integración completa se documentan en las secciones finales.
 
 ## Resultado arquitectónico
 
@@ -119,3 +121,85 @@ y las recomendaciones de cambiar protecciones heredadas de la plantilla.
 
 Para iniciar el desarrollo académico siguiente, aplicar el ejemplo de convexidad de
 `README.md`: editar su QMD, sincronizar estado/portada, validar y preparar el diff revisable.
+
+
+## Desarrollo de convexidad · etapa posterior autorizada
+
+El propietario autorizó tramitar la refactorización y desarrollar convexidad. Se creó
+el commit de refactorización `180e94b`, actualizado sobre `main` (`d77103d`) para conservar
+las correcciones de arranque de Chromium y clics en citas. La suite posterior pasó con
+324 comprobaciones de navegador y 72 auditorías; GitHub aprobó `Validate course` en el
+[PR #6](https://github.com/UStudyOpen/optimizacion/pull/6). No se integra ni se despliega.
+El cambio preexistente de `.gitignore` permanece fuera de los commits.
+
+Convexidad se desarrolla en `contenido/convexidad`, derivada de la rama del PR #6 para
+mantener un diff independiente de contenido. Su PR se prepara con esa base y depende
+de la integración de #6; después debe cambiarse la base a `main`, conservando la revisión
+y sin activar auto-merge. La autorización no modifica las protecciones del repositorio.
+
+`lecciones/02-convexidad.qmd` conserva sus cinco H2 y sus anclas. Añade definiciones,
+demostraciones breves, ejemplos originales, criterios diferenciales con sus hipótesis,
+contraejemplos y cuatro ejercicios con orientaciones desplegables. La bibliografía añade
+Boyd y Vandenberghe (2004), *Convex Optimization*, con enlace a la página oficial de los
+autores y localizaciones en las secciones 2.1, 3.1 y 4.2. No se incorporan figuras,
+ejercicios ni archivos del libro. El contenido y las licencias de las demás páginas se
+preservan; el cuerpo del Simplex conserva su referencia de integridad.
+
+QMD, registro, portada y README reflejan dos temas `en-desarrollo` y seis `proximamente`.
+Todas las páginas mantienen `reviewed: false`. Los encabezados principales no cambian,
+por lo que el contrato de `tests/outline.json` y las anclas históricas no se regeneran.
+Los nuevos encabezados secundarios tienen identificadores explícitos.
+
+Las identidades cuadráticas, Hessianos, combinaciones convexas, criterios de frontera y
+resultados de los ejercicios pasan 703 comprobaciones con fracciones exactas. La revisión
+se reproduce con `python3 tests/convexidad_examples.py`, integrado en la suite
+existente del curso. La evidencia se guarda en
+`artifacts/platform/convexidad/revision_matematica.json`. Su alcance son los
+ejemplos y sus cálculos; no constituye revisión académica humana ni demostración
+computacional de los teoremas generales. Las hipótesis y demostraciones se revisaron
+matemáticamente durante la redacción; la página sigue pendiente de revisión humana.
+
+Se amplían las pruebas existentes para verificar todas las fórmulas de convexidad
+con MathJax, bibliografía, anclas, búsqueda del ejemplo nuevo, orientaciones por teclado
+y capturas en 1440, 768, 390 y 320 px con ambos temas. Se conserva la infraestructura
+existente, sin CSS, JavaScript de producto, dependencias ni workflows nuevos.
+Las evidencias de esta etapa están en `artifacts/platform/convexidad/` y las capturas
+`convexidad-{light,dark}-{1440,768,390,320}.png` en `artifacts/platform/`.
+
+
+La primera auditoría de esta página detectó citas que se distinguían solo por color
+(`link-in-text-block`). El posprocesado local `tests/accessibility_output.py` aplica
+ahora la clase compartida `text-decoration-underline` a los enlaces bibliográficos.
+Se reutiliza Bootstrap sin añadir hojas de estilo ni editar el diseño vendorizado.
+La suite comprueba también el subrayado y el destino de las citas en ambos temas.
+La evidencia del primer intento se conserva como `browser-attempt-1.json` y
+`course-attempt-1.log` dentro de `artifacts/platform/convexidad/`.
+
+
+## Integración completa ICS1113 · 29 de octubre de 2026
+
+Rama `contenido/ics1113-integracion-completa`, worktree separado de `contenido/convexidad`,
+base `bda80f5` de `main` tras integrar #6. El checkout original y su diff permanecen
+intactos. Se conserva cada línea no vacía del QMD local de convexidad y el cuerpo
+completo protegido de 05. Los ocho capítulos están `en-desarrollo`, sin revisión humana.
+
+El informe de segunda auditoría, cambios respecto del paquete y límites está en
+`review/ics1113/INFORME.md`; la matriz original y la evaluación individual de los
+41 subtemas se conservan a su lado. No se modifican los manifiestos académico, rutas
+y outline. Se registran tres recursos originales MIT y se generan REUSE y su entrada
+dependiente del lock con la herramienta central, sin sincronización global de vendor.
+
+Licencias, render aislado, suite del curso, release y diff pasan. La suite suma
+3.722 controles matemáticos (276 bases ordenadas en la comprobación independiente),
+diez pruebas de arranque, 699 comprobaciones de navegador y 72 auditorías axe sin
+infracciones. Se conservan 72 incompletos de contraste de glifos; no son una revisión
+humana aprobada. Las 96 capturas cubren las nueve páginas y las tres actividades en
+1440, 768, 390 y 320 px, claro y oscuro. Se corrigieron contraste de desplegables y
+selectores, y foco de tablas desplazables, utilizando componentes existentes.
+
+Evidencias y los tres intentos de auditoría que motivaron correcciones:
+`artifacts/platform/ics1113/`, más `artifacts/platform/browser.json` y las capturas.
+La prueba bajo `/optimizacion/` obtiene HTTP 200 para las nueve páginas y sus URL locales.
+Se repiten render, contratos, licencias y release tras el cierre de prosa. El PR único
+se tramita con la autorización de este encargo; fusión y publicación requieren la
+aprobación final del propietario. No se declara una comprobación de producción nueva.

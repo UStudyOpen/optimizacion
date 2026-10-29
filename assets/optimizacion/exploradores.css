@@ -1,0 +1,20 @@
+/* SPDX-FileCopyrightText: 2026 ngulloa
+ * SPDX-License-Identifier: MIT
+ * Solo geometría de actividades; hereda tipografía y temas UStudyOpen. */
+.opti-widget{margin-block:1.25rem;padding:1rem;border:1px solid currentColor;border-radius:.35rem;min-width:0}
+.opti-control{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin-block:.75rem}
+.opti-control label{flex:1 1 15rem}
+.opti-control select,.opti-control input{flex:1 1 12rem;min-width:0;max-width:100%;font:inherit}
+.opti-widget button{margin:.35rem .5rem .35rem 0}
+.opti-plot{display:block;width:100%;max-width:42rem;height:auto;margin-inline:auto;overflow:visible}
+.opti-label{fill:currentColor;font-size:14px;font-family:inherit}
+.opti-axis{stroke:currentColor;stroke-width:1;opacity:.65}
+.opti-region{fill:currentColor;fill-opacity:.09;stroke:currentColor;stroke-width:2}
+.opti-curve{fill:none;stroke:currentColor;stroke-width:2.5}
+.opti-secant{stroke:currentColor;stroke-width:2;stroke-dasharray:7 4}
+.opti-gap{stroke:currentColor;stroke-width:3;stroke-dasharray:2 3}
+.opti-optimal{stroke:currentColor;stroke-width:6}
+.opti-dot{fill:currentColor}
+.opti-table{max-width:100%;overflow-x:auto}
+.opti-table table{width:100%;font-variant-numeric:tabular-nums}
+.opti-table caption{caption-side:bottom}

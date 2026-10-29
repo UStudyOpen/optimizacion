@@ -1,21 +1,298 @@
 ---
 title: "Convexidad, optimalidad global y unicidad"
-ustudy-status: proximamente
+description: "Conjuntos y funciones convexas, criterios de primer y segundo orden, optimalidad y límites de la unicidad."
+ustudy-status: en-desarrollo
 ustudy-reviewed: false
 toc: true
+link-external-newwindow: false
 ---
 
-::: {.callout-note title="Contenido pendiente"}
+La convexidad permite pasar de una comparación entre puntos cercanos a una afirmación sobre todo el conjunto factible. Su utilidad depende de dos piezas: la geometría del conjunto permitido y el comportamiento de la función objetivo sobre él.
 
-Esta página está pendiente de redacción por el propietario y de revisión académica.
+Estudiaremos problemas de **minimización** de una función real $f$ sobre un conjunto no vacío $C\subseteq\mathbb{R}^n$. Un punto $x\in C$ es factible; $\|x\|_2$ denota la norma euclidiana. Conviene distinguir desde el comienzo tres preguntas: si existe un minimizador, si uno encontrado es global y si es único.
+
+::: {.callout-tip title="Objetivos de aprendizaje"}
+
+- Verificar convexidad mediante segmentos, desigualdades y derivadas, indicando sus hipótesis.
+- Justificar por qué un mínimo local de un problema convexo es global.
+- Distinguir unicidad, existencia y convexidad estricta mediante ejemplos y contraejemplos.
 :::
+
+Prerrequisitos: [mínimo e ínfimo](01-problemas-optimizacion.qmd#infimo), álgebra matricial y derivadas parciales.
 
 ## Conjuntos convexos y combinaciones convexas.
 
+Un conjunto $C$ es **convexo** cuando contiene el segmento entre cualesquiera dos de sus puntos. Es decir, si $x,y\in C$ y $0\le t\le1$, entonces
+
+$$
+(1-t)x+ty\in C.
+$$
+
+Los extremos $t=0$ y $t=1$ recuperan $x$ e $y$; los valores intermedios recorren el segmento. El conjunto puede tener frontera, ser no acotado o estar contenido en una recta: ninguna de esas características impide por sí sola la convexidad. Para refutarla basta encontrar **un par de puntos** y **un valor de $t$** cuyo punto intermedio quede fuera.
+
+Una **combinación convexa** de $k$ puntos es una suma $\sum_{i=1}^k\lambda_i x^{(i)}$, con pesos $\lambda_i\ge0$ cuya suma es uno. En un conjunto convexo toda combinación convexa finita de sus puntos permanece en el conjunto; se obtiene aplicando repetidamente la propiedad del segmento. La definición y su versión con varios puntos se encuentran en [@boyd2004, sec. 2.1].
+
+::: {.uso-academic .uso-example}
+### Ejemplo: mezclar dos decisiones factibles {#ejemplo-conjunto-convexo}
+
+Sea $C=\{(u,v):u\ge0,\ v\ge0,\ u+v\le5\}$. Si dos puntos satisfacen esas tres restricciones, una combinación convexa también tiene coordenadas no negativas y suma de coordenadas a lo sumo cinco. Así se verifica la convexidad sin depender del dibujo.
+
+Por ejemplo, $x=(1,1)$ e $y=(3,0)$ pertenecen a $C$. Con peso $1/4$ para $x$ y $3/4$ para $y$ se obtiene $(5/2,1/4)$, cuya suma de coordenadas es $11/4\le5$.
+
+En cambio, el anillo $A=\{x\in\mathbb{R}^2:1\le\|x\|_2\le2\}$ no es convexo: $(1,0)$ y $(-1,0)$ son admisibles, pero su punto medio es el origen, que no pertenece a $A$.
+:::
+
+Las intersecciones de conjuntos convexos conservan la convexidad: un segmento que permanece en cada conjunto también permanece en todos a la vez. Esto explica por qué un sistema de igualdades y desigualdades lineales define un conjunto convexo; su geometría se desarrolla en [poliedros, vértices y soluciones óptimas](04-poliedros.qmd).
+
+### Operaciones que conservan convexidad {#operaciones-conjuntos}
+
+Una intersección arbitraria de convexos es convexa: si dos puntos están en todos los conjuntos, su segmento también está en todos. Si $T(x)=Ax+b$ es afín, entonces $T((1-\theta)x+\theta y)=(1-\theta)T(x)+\theta T(y)$; esta identidad prueba que tanto la imagen afín de un convexo como la preimagen afín de un convexo son convexas. No hace falta que $A$ sea invertible.
+
+Por ejemplo, $C=\{x:x_1+x_2=2,\ x_1\ge0,\ x_2\ge0\}$ es la intersección de un hiperplano y dos semiespacios. Se parametriza por $(t,2-t)$, $0\le t\le2$: la imagen afín de un intervalo. Su proyección en la primera coordenada es $[0,2]$, también convexa.
+
+La **envoltura convexa** $\operatorname{conv}(S)$ reúne todas las combinaciones convexas finitas de puntos de $S$. Es el menor convexo que contiene $S$. Esa definición permitirá representar un [polítopo mediante vértices](04-poliedros.qmd#representacion).
+
 ## Funciones convexas y estrictamente convexas.
+
+Sea $D\subseteq\mathbb{R}^n$ convexo y $f:D\to\mathbb{R}$. La función es **convexa** si, para todo $x,y\in D$ y $t\in[0,1]$,
+
+$$
+f((1-t)x+ty)\le(1-t)f(x)+tf(y).
+$$
+
+El valor en el punto intermedio no supera la interpolación de los valores de los extremos. La función es **estrictamente convexa** cuando la desigualdad es estricta para $x\ne y$ y $0<t<1$. El dominio convexo forma parte de ambas definiciones; no basta con que una gráfica parezca curvarse hacia arriba.
+
+::: {.uso-academic .uso-example}
+### Ejemplo: una identidad que certifica convexidad estricta {#ejemplo-cuadrado}
+
+Para $f(s)=s^2$, la diferencia entre la interpolación y el valor intermedio es
+
+$$
+(1-t)a^2+tb^2-((1-t)a+tb)^2
+=t(1-t)(a-b)^2.
+$$
+
+La expresión es positiva cuando $a\ne b$ y $0<t<1$. Por tanto, $s^2$ es estrictamente convexa sobre $\mathbb{R}$.
+
+La función $|s|$ es convexa por la desigualdad triangular, pero no estrictamente convexa: entre $a=1$ y $b=3$, su valor en el punto medio coincide con la interpolación, pues $|2|=(|1|+|3|)/2$.
+:::
+
+Una función afín $f(x)=c^Tx+d$ satisface siempre la igualdad. Es convexa, pero no estrictamente convexa sobre un dominio con al menos dos puntos. La función objetivo de programación lineal tiene precisamente esta forma; la falta de convexidad estricta no impide que un problema concreto tenga una única solución.
+
+::: {.uso-academic .uso-example}
+### Una identidad que demuestra convexidad {#identidad-cuadratica}
+Para $f(x)=\|x\|^2$,
+
+$$(1-\theta)\|x\|^2+\theta\|y\|^2-\|(1-\theta)x+\theta y\|^2=\theta(1-\theta)\|x-y\|^2.$$
+
+Se obtiene expandiendo los productos internos: los términos en $\|x\|^2$ y $\|y\|^2$ quedan con coeficiente $\theta(1-\theta)$ y el término cruzado con $-2\theta(1-\theta)$. El resultado es no negativo, y es positivo para puntos distintos y pesos interiores. Esto prueba convexidad estricta sin eliminar indebidamente términos cruzados de un cuadrado.
+:::
+
+Una función es **cóncava** si su negativo es convexo. Las funciones afines son simultáneamente convexas y cóncavas.
+
+### Epígrafes y subniveles {#epigrafo-subnivel}
+
+El **epígrafe** es $\operatorname{epi}f=\{(x,t):x\in C,\ t\ge f(x)\}$. Es convexo si y solo si $f$ es convexa. Para una dirección, combina $(x,f(x))$ y $(y,f(y))$ en el epígrafe y lee la desigualdad. Para la otra, si $t\ge f(x)$ y $s\ge f(y)$, la convexidad da $f((1-\theta)x+\theta y)\le(1-\theta)t+\theta s$.
+
+Los subniveles $C_\alpha=\{x\in C:f(x)\le\alpha\}$ de una función convexa son convexos: en la desigualdad de definición ambos valores de los extremos son a lo sumo $\alpha$. La recíproca es falsa. $f(x)=x^3$ tiene subniveles $(-\infty,\sqrt[3]{\alpha}]$ convexos, pero $f''(x)=6x$ cambia de signo. Tener todos los subniveles convexos es una propiedad más débil, llamada cuasiconvexidad.
+
+### Explorar una secante {#secantes}
+
+El control siguiente mantiene extremos $-1$ y $2$ y mueve el peso. Compara una cuadrática convexa y una cóncava; la diferencia mostrada es «secante menos función». Un valor positivo ilustra un caso, pero no reemplaza la prueba universal.
+
+<div class="uso-academic" data-opti="secante"></div>
+
+<link rel="stylesheet" href="../assets/optimizacion/exploradores.css">
+<script defer src="../assets/optimizacion/exploradores.js"></script>
+
+Sin JavaScript: con $\theta=1/2$, para $x^2$ la altura de secante es $5/2$ y el valor en el punto medio $1/2$ es $1/4$; la diferencia es $9/4$. Para $-x^2$ la diferencia cambia de signo.
 
 ## Criterios de convexidad: definición, gradiente y Hessiano.
 
+La desigualdad de la definición sirve incluso cuando $f$ no tiene derivadas. Los criterios diferenciales requieren hipótesis adicionales y deben verificarse **en todo el dominio indicado**, no solo en un punto candidato.
+
+[]{#gradiente}
+
+### Criterio de primer orden {#criterio-primer-orden}
+
+Si $D$ es abierto y convexo y $f$ es diferenciable en $D$, entonces $f$ es convexa si y solo si
+
+$$
+f(y)\ge f(x)+\nabla f(x)^T(y-x),
+\qquad x,y\in D.
+$$
+
+La aproximación afín en $x$ queda por debajo de toda la función. Para entender la implicación desde convexidad, aplíquese su definición a $x+t(y-x)$, divídase por $t>0$ y tómese el límite $t\to0^+$. En sentido inverso, aplíquese la desigualdad de primer orden desde el punto $z=(1-t)x+ty$ hacia ambos extremos y súmense las dos desigualdades con pesos $1-t$ y $t$; los términos de gradiente se cancelan.
+
+### Criterio de segundo orden {#criterio-segundo-orden}
+
+Si además $f$ es dos veces continuamente diferenciable en $D$, su Hessiano $\nabla^2f(x)$ es simétrico. La convexidad equivale a que sea **semidefinido positivo** en todo $D$:
+
+$$
+v^T\nabla^2f(x)v\ge0
+\quad\text{para todo }x\in D\text{ y }v\in\mathbb{R}^n.
+$$
+
+Si el valor es positivo para todo $v\ne0$ y todo $x\in D$, el Hessiano es definido positivo y $f$ es estrictamente convexa. Esta última condición es suficiente, pero no necesaria. Las caracterizaciones diferenciales corresponden a [@boyd2004, sec. 3.1].
+
+::: {.uso-academic .uso-example}
+### Ejemplo: comprobar todas las direcciones {#ejemplo-hessiano}
+
+Para $q(u,v)=u^2+uv+v^2$, el Hessiano es constante:
+
+$$
+\nabla^2q=\begin{pmatrix}2&1\\1&2\end{pmatrix},
+\qquad
+w^T\nabla^2q\,w=(w_1+w_2)^2+w_1^2+w_2^2.
+$$
+
+La última expresión es positiva para cualquier $w\ne0$; $q$ es estrictamente convexa. Además, $q(u,v)=\tfrac12((u+v)^2+u^2+v^2)$ muestra que su mínimo global es cero y se alcanza únicamente en $(0,0)$.
+
+Por contraste, $r(u,v)=u^2+4uv+v^2$ tiene derivadas segundas diagonales iguales a $2$, pero su Hessiano no es semidefinido positivo. En la dirección $w=(1,-1)$, el producto $w^T\nabla^2r\,w$ vale $-4$. Tener entradas diagonales positivas no basta.
+:::
+
+::: {.callout-warning title="Hessiano nulo en un punto no descarta convexidad estricta"}
+
+La función $s^4$ es estrictamente convexa en $\mathbb{R}$, aunque su segunda derivada vale cero en el origen. Su derivada $4s^3$ es estrictamente creciente: las pendientes promedio de dos intervalos consecutivos son estrictamente ordenadas, lo que sitúa cada punto interior de una cuerda por debajo de ella. Por tanto, exigir $f''>0$ en cada punto descartaría incorrectamente este ejemplo.
+:::
+
+Si el conjunto factible es cerrado o tiene frontera, puede estudiarse una función diferenciable definida en un abierto que lo contenga y después restringirla al conjunto factible. No se debe aplicar sin justificación un criterio formulado para dominios abiertos directamente sobre una frontera.
+
+### Semidefinitud y menores principales {#hessiano}
+
+Para una matriz **simétrica** $H$:
+
+| Propiedad | Forma cuadrática | Valores propios | Menores principales |
+|---|---|---|---|
+| $H\succ0$ | $d^\top Hd>0$ si $d\ne0$ | Todos positivos | Los principales **líderes** son positivos |
+| $H\succeq0$ | $d^\top Hd\ge0$ para todo $d$ | Todos no negativos | **Todos** los principales son no negativos |
+
+Un menor principal usa el mismo conjunto de índices para filas y columnas; el líder de orden $k$ usa los primeros $k$. Para semidefinitud no basta revisar solo los líderes. Por ejemplo, $H=\operatorname{diag}(0,-1)$ tiene líderes $0,0$, pero $e_2^\top He_2=-1$. Un determinante cero solo dice singularidad: $\operatorname{diag}(1,-1,0)$ es singular e indefinida.
+
+::: {.uso-academic .uso-example}
+### Una familia cuadrática {#familia-cuadratica}
+Sea $f_\alpha(x,y)=x^2+2\alpha xy+y^2$. Entonces
+
+$$\nabla f_\alpha=(2x+2\alpha y,2y+2\alpha x),\qquad H=2\begin{pmatrix}1&\alpha\\\alpha&1\end{pmatrix}.$$
+
+Los vectores $(1,1)$ y $(1,-1)$ tienen valores propios $2(1+\alpha)$ y $2(1-\alpha)$. Por tanto hay convexidad si y solo si $|\alpha|\le1$, y convexidad estricta si y solo si $|\alpha|<1$. En $\alpha=1$ queda $(x+y)^2$, constante a lo largo de $x+y=0$. Si $\alpha>1$, la dirección $(1,-1)$ da $f_\alpha(t,-t)=2(1-\alpha)t^2<0$: refuta convexidad mediante curvatura negativa.
+:::
+
+### Construir funciones convexas {#operaciones-funciones}
+
+Una suma $\sum_i\lambda_i f_i$ con $\lambda_i\ge0$ es convexa en un dominio convexo común: multiplica y suma sus desigualdades. La composición $f(Ax+b)$ es convexa en un dominio convexo donde esté definida, por la identidad afín. El máximo finito $h(x)=\max_i f_i(x)$ también es convexo, porque para cada $i$,
+
+$$f_i((1-\theta)x+\theta y)\le(1-\theta)f_i(x)+\theta f_i(y)\le(1-\theta)h(x)+\theta h(y).$$
+
+Tomar máximo a la izquierda concluye. Un mínimo de convexas no comparte esta propiedad: $\min\{(x-1)^2,(x+1)^2\}$ vale cero en $\pm1$ y uno en cero. Tampoco se puede componer con cualquier función monótona: el recíproco es decreciente en $(0,\infty)$; $1/x$ es convexo allí porque $f''(x)=2/x^3>0$, no porque sea creciente.
+
 ## Óptimos locales y globales.
 
+Un punto $x^\star\in C$ es **mínimo global** si $f(x^\star)\le f(y)$ para todo $y\in C$. Es **mínimo local** si la misma comparación vale para los puntos factibles suficientemente cercanos: existe $\varepsilon>0$ tal que se cumple cuando $y\in C$ y $\|y-x^\star\|_2<\varepsilon$. La cercanía se mide dentro de $C$, incluso en su frontera.
+
+[]{#local-global}
+
+### De mínimo local a global {#minimo-local-global}
+
+**Si $C$ es convexo y $f$ es convexa sobre $C$, todo mínimo local es global.** No se requiere diferenciabilidad.
+
+Supóngase que un mínimo local $x^\star$ no es global. Habría un $y\in C$ con $f(y)<f(x^\star)$. Para $0<t<1$, el punto $z_t=(1-t)x^\star+ty$ es factible y satisface
+
+$$
+f(z_t)\le(1-t)f(x^\star)+tf(y)<f(x^\star).
+$$
+
+Además, $\|z_t-x^\star\|_2=t\|y-x^\star\|_2$ puede hacerse arbitrariamente pequeño. Aparecerían puntos factibles mejores tan cerca como se quiera, contradiciendo la optimalidad local. El resultado forma parte de [@boyd2004, sec. 4.2].
+
+La convexidad del objetivo por sí sola no basta. Sobre $C=\{-2,1\}$, la función $f(s)=s^2$ tiene un mínimo local en $-2$, porque ese punto está aislado dentro de $C$; sin embargo, $f(-2)=4>1=f(1)$. Aquí falla la convexidad del conjunto factible.
+
+### El gradiente con y sin restricciones {#gradiente-y-restricciones}
+
+Para una función convexa diferenciable en un abierto convexo $D$, un punto factible $x^\star\in C\subseteq D$, con $C$ convexo, es óptimo si y solo si
+
+$$
+\nabla f(x^\star)^T(y-x^\star)\ge0
+\quad\text{para todo }y\in C.
+$$
+
+La suficiencia se sigue del criterio de primer orden. Para la necesidad, recórrase el segmento factible desde $x^\star$ hacia cada $y$: su derivada lateral inicial no puede ser negativa en un mínimo.
+
+Si $C=D$ es abierto, pueden tomarse direcciones opuestas pequeñas y la condición equivale a $\nabla f(x^\star)=0$. Con restricciones, el gradiente puede ser distinto de cero. Por ejemplo, minimizar $(s-3)^2$ sobre $[0,2]$ da $s^\star=2$, con derivada $-2$. Para cualquier $y\in[0,2]$ se verifica $-2(y-2)\ge0$, de modo que ningún desplazamiento factible mejora el objetivo.
+
+::: {.callout-note title="Optimalidad no asegura existencia"}
+
+Decir que todo mínimo local es global no asegura que exista alguno. La función $e^s$ es estrictamente convexa en $\mathbb{R}$, tiene ínfimo cero cuando $s\to-\infty$ y nunca lo alcanza. Las condiciones que aseguran existencia pertenecen a [problemas de optimización y existencia de soluciones](01-problemas-optimizacion.qmd).
+:::
+
 ## Condiciones de unicidad y contraejemplos.
+
+### Unicidad cuando el mínimo existe {#unicidad}
+
+Si $C$ es convexo y $f$ es estrictamente convexa sobre $C$, hay **a lo sumo un minimizador**. Para verlo, supóngase que dos puntos distintos $x^\star,y^\star$ alcanzan el mismo valor mínimo $m$. Su punto medio sería factible y la convexidad estricta daría
+
+$$
+f\!\left(\frac{x^\star+y^\star}{2}\right)
+<\frac{f(x^\star)+f(y^\star)}{2}=m,
+$$
+
+lo que contradice la definición de $m$. Si además se ha establecido existencia, el minimizador es único. Sin esa hipótesis, «a lo sumo uno» también admite que no haya ninguno.
+
+Con convexidad sin estrictitud, el **conjunto de minimizadores es convexo**. Si dos puntos alcanzan $m$, la convexidad da un valor a lo sumo $m$ en cada combinación convexa, mientras que la definición de mínimo exige un valor al menos $m$; por tanto, todo el segmento es óptimo. Esto anticipa las [soluciones múltiples y otros casos especiales del Simplex](08-casos-especiales.qmd).
+
+| Situación | Ejemplo | Conclusión |
+|---|---|---|
+| Convexidad sin unicidad | $f(s)=5$ en $[0,1]$ | Todos los puntos son minimizadores. |
+| Unicidad sin convexidad estricta | $f(s)=s$ en $[0,1]$ | El único minimizador es $0$, aunque $f$ es afín. |
+| Convexidad estricta sin existencia | $f(s)=e^s$ en $\mathbb{R}$ | No se alcanza el ínfimo. |
+| Objetivo estrictamente convexo, conjunto no convexo | $f(s)=s^2$ en $\{-1,1\}$ | Hay dos minimizadores; falta una hipótesis del teorema. |
+
+::: {.uso-summary}
+### Síntesis {#sintesis-convexidad}
+
+- Un conjunto convexo conserva los segmentos entre sus puntos; una función convexa no supera la interpolación de sus valores.
+- La convexidad del problema depende del objetivo y del conjunto factible.
+- Gradiente y Hessiano proporcionan certificados cuando se cumplen sus hipótesis en todo el dominio.
+- En un problema convexo, cualquier mínimo local es global. La existencia se comprueba por separado.
+- La convexidad estricta sobre un conjunto factible convexo implica a lo sumo un minimizador; no es necesaria para que un problema tenga solución única.
+:::
+
+### Ejercicios de comprobación {#ejercicios-convexidad}
+
+1. Demuestra que $\{(u,v):u\ge0,\ v\ge0,\ u+v\le4\}$ es convexo usando una combinación de dos puntos cualesquiera.
+2. Para $h(u,v)=(u-v)^2$, determina si hay convexidad estricta e identifica todos los minimizadores sobre $\mathbb{R}^2$.
+3. Clasifica $q_\alpha(u,v)=u^2+2\alpha uv+v^2$ según el parámetro real $\alpha$: convexidad, convexidad estricta y minimizadores.
+4. Minimiza $(s-4)^2$ sobre $[0,1]$. Comprueba el criterio con restricciones y explica por qué no debe exigirse derivada cero.
+
+::: {.callout-note collapse="true" title="Orientaciones y resultados para contrastar"}
+
+1. Las coordenadas de una combinación convexa son no negativas y su suma es a lo sumo $(1-t)4+t4=4$.
+2. El Hessiano es semidefinido positivo, con dirección nula $(1,1)$. La función es convexa, no estrictamente convexa; todos los puntos de la recta $u=v$ alcanzan el mínimo cero.
+3. Los autovalores del Hessiano son $2(1+\alpha)$ y $2(1-\alpha)$. Hay convexidad si y solo si $|\alpha|\le1$, y convexidad estricta si y solo si $|\alpha|<1$. En el caso estricto, el único minimizador es $(0,0)$. Para $\alpha=1$ minimiza la recta $u=-v$; para $\alpha=-1$, la recta $u=v$. Si $|\alpha|>1$, al tomar $(u,v)=t(1,-\operatorname{sign}(\alpha))$ el valor es $2(1-|\alpha|)t^2$, sin cota inferior.
+4. El mínimo es $9$ en $s=1$. La derivada es $-6$ y cumple $-6(y-1)\ge0$ para cada $y\in[0,1]$.
+:::
+
+### Ejercicios para elegir el criterio {#ejercicios}
+
+1. Prueba convexidad de $g(x,y)=|x-y|+\max\{x+2y,0\}$.
+2. Clasifica convexidad, existencia y unicidad de $\min\{x^4+y^2:(x,y)\in\mathbb R^2\}$.
+3. ¿Convexidad de $f$ garantiza que $\{x:f(x)\ge1\}$ sea convexo? Da una prueba o un contraejemplo.
+
+::: {.callout-note collapse="true" title="Soluciones y errores que detectan"}
+
+1. $|x-y|=\max\{x-y,y-x\}$ es máximo de afines, luego convexo. El segundo sumando también es máximo de afines; su suma es convexa. No se necesita derivar en los puntos angulosos.
+2. Es estrictamente convexa: la suma de las desigualdades estrictas en las coordenadas que difieren da desigualdad estricta para puntos distintos. Es coerciva y continua en un cerrado no vacío, luego hay mínimo único $(0,0)$, con valor cero. El Hessiano $\operatorname{diag}(12x^2,2)$ es singular en $x=0$ y no invalida la conclusión.
+3. No. Para $f(x)=x^2$, el supernivel de altura uno es $(-\infty,-1]\cup[1,\infty)$; el punto medio de $-1$ y $1$ no pertenece.
+:::
+
+### Referencias y continuidad del estudio {#referencias-convexidad}
+
+Las definiciones y criterios se contrastan con Boyd y Vandenberghe, *Convex Optimization*, secciones 2.1, 3.1 y 4.2. La explicación, los ejemplos, las demostraciones presentadas y los ejercicios de esta página son de redacción original; no se incorporan figuras, ejercicios ni archivos del libro. El material permanece en desarrollo y requiere revisión académica humana.
+
+Continúa con [modelos equivalentes y variables auxiliares](03-modelos-equivalentes.qmd) para estudiar cómo una formulación cambia sin perder sus soluciones relevantes.
+
+### Fuentes y continuidad {#fuentes}
+
+Fundamentos y operaciones: [@nemirovski2012, §2.1]; optimalidad y ejemplos: [@ferrer2006, cap. 1]. Contraste adicional: Sioshansi y Conejo, *Optimization in Engineering* (2017), apéndices A–B y §§4.3–4.4; en el extracto de convexidad, PDF 2–20 y 21–38. Las posiciones del extracto no son su paginación impresa. Los criterios anteriores distinguen los menores líderes de todos los principales y conservan los términos cruzados de la identidad cuadrática.
+
+::: {#refs}
+:::

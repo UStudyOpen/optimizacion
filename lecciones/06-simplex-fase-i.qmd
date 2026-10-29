@@ -1,25 +1,176 @@
 ---
 title: "Simplex — Fase I"
-ustudy-status: proximamente
+ustudy-status: en-desarrollo
 ustudy-reviewed: false
 toc: true
 ---
 
-::: {.callout-note title="Contenido pendiente"}
+La Fase II sabe mejorar una solución básica **factible**, pero no fabrica esa factibilidad a partir de una base cualquiera. La Fase I convierte la búsqueda de un punto factible en otro programa lineal cuyo valor óptimo proporciona una respuesta comprobable.
 
-Esta página está pendiente de redacción por el propietario y de revisión académica.
+::: {.callout-tip title="Objetivos y convención"}
+Construirás el auxiliar, seguirás una ejecución completa y retirarás artificiales incluso cuando sigan básicas en cero. Usamos $\min c^\top x$, $Ax=b$, $x\ge0$; una variable básica se expresa como término independiente menos columnas transformadas por las no básicas. Revisa [bases y diccionarios](05-fundamentos-simplex.qmd).
 :::
 
 ## Necesidad de una base inicial factible.
 
+La base formada por holguras es factible en un sistema $Dx+s=b$ solo si $b\ge0$. En una restricción $2x_1+3x_2\ge6$, restar el exceso da $2x_1+3x_2-x_3=6$. Poner las decisiones en cero obligaría a $x_3=-6$; esa solución básica no puede iniciar el simplex primal.
+
+Esto **no prueba infactibilidad del problema**. Por ejemplo, $(x_1,x_2)=(3,0)$ satisface la restricción. Solo prueba que elegimos mal la base inicial. Una artificial proporciona una base factible de un problema ampliado, que después obligaremos a retornar al problema real.
+
+El procedimiento previo también incluye revisar ecuaciones incompatibles o redundantes. Si se detecta directamente $0=1$, no hace falta resolver un auxiliar para saber que el sistema es infactible. Si hay una base factible evidente sin artificiales, puede iniciarse la Fase II de inmediato.
+
 ## Variables artificiales.
+
+Una **artificial** $a_i\ge0$ se incorpora a una igualdad para suministrar una columna identidad. No representa capacidad libre ni exceso de producción; su único propósito es computacional. Por ello debe valer cero al recuperar una solución original.
+
+Primero podemos multiplicar por $-1$ cada fila cuyo término independiente sea negativo, cambiando **todos** sus coeficientes. Con $b\ge0$, el sistema
+
+$$Ax+a=b,\qquad x\ge0,\quad a\ge0$$
+
+tiene la base artificial $a=b$, $x=0$. Se puede añadir una artificial por fila; si ya existe una columna identidad utilizable como holgura, se puede aprovechar y añadir menos artificiales. No hay que poner una artificial negativa para compensar un $b_i<0$: la base perdería factibilidad.
+
+En forma de desigualdad, al multiplicar por $-1$ se invierte además el signo: $-x_1+x_2\le-2$ se convierte en $x_1-x_2\ge2$, y luego en $x_1-x_2-s+a=2$. El exceso se resta; la artificial se suma. Mantener esa distinción evita confundir la transformación física con la inicialización.
 
 ## Construcción del problema auxiliar.
 
+La Fase I resuelve
+
+$$\min\ w=\sum_{i=1}^m a_i,\qquad Ax+a=b,\quad x,a\ge0.$$
+
+Si solo se agregaron artificiales a algunas filas, la suma incluye únicamente esas variables. El auxiliar es factible por construcción y $w\ge0$, por lo que no puede ser no acotado inferiormente. Al ser lineal sobre un poliedro no vacío y con valor finito, alcanza un óptimo. La degeneración sigue siendo posible: para terminar se emplea una regla anticiclaje.
+
+El objetivo debe expresarse en las no básicas antes de iterar. Si todas las artificiales son básicas, $a=b-Ax$ y
+
+$$w=\boldsymbol1^\top b-\boldsymbol1^\top Ax.$$
+
+La fila objetivo original «$w=\sum a_i$» no es todavía un diccionario en las no básicas. Ignorar la sustitución dejaría sin identificar las direcciones que reducen la suma de artificiales.
+
+### Qué se está midiendo {#significado-auxiliar}
+
+Con $a\ge0$ y las igualdades ampliadas, $w=0$ equivale a $a_i=0$ para todo $i$. Así, el cero es una señal exacta de que se recuperó el sistema original. La suma no representa el valor de su objetivo ni una distancia geométrica universal al conjunto factible. Normalizar o escalar filas puede cambiar su valor positivo sin cambiar el diagnóstico final de factibilidad.
+
 ## Iteraciones de Fase I.
+
+### Ejecución adaptada y comprobada {#ejemplo-dos-fases}
+
+Adaptación de I2 2024-1 P2(a), Evaluaciones de simplex PDF 28–29 y Ayudantías PDF 77–78 (D050, físicas originales 6–7; D073, físicas 3–4). Queremos
+
+$$\min\ 8x_1+3x_2,\qquad2x_1+3x_2\ge6,\quad x_1+5x_2\le15,\quad x_1,x_2\ge0.$$
+
+Añadimos exceso $x_3$, holgura $x_4$ y artificial $a$:
+
+$$2x_1+3x_2-x_3+a=6,\qquad x_1+5x_2+x_4=15.$$
+
+La base inicial ordenada es $(a,x_4)$; no básicas $(x_1,x_2,x_3)$. El diccionario es
+
+$$a=6-2x_1-3x_2+x_3,\qquad x_4=15-x_1-5x_2,\qquad w=6-2x_1-3x_2+x_3.$$
+
+La SBF ampliada es $(x_1,x_2,x_3,x_4,a)=(0,0,0,15,6)$, con $w=6$. Elige $x_2$ como entrante por su costo reducido $-3$. Aumentarlo en $\theta$ da $a=6-3\theta$, $x_4=15-5\theta$. Las cotas son $\theta\le2$ y $\theta\le3$; la razón mínima es dos, por lo que sale $a$.
+
+Despejamos de la primera igualdad:
+
+$$x_2=2-\tfrac23x_1+\tfrac13x_3-\tfrac13a.$$
+
+Sustituyendo en la segunda,
+
+$$x_4=15-x_1-5\left(2-\tfrac23x_1+\tfrac13x_3-\tfrac13a\right)=5+\tfrac73x_1-\tfrac53x_3+\tfrac53a.$$
+
+La nueva base es $(x_2,x_4)$; al fijar $x_1=x_3=a=0$, da $x_2=2$, $x_4=5$ y $w=a=0$. Ningún auxiliar puede tener valor negativo, así que cero certifica optimalidad de Fase I. Hemos obtenido factibilidad original, no todavía una conclusión basada en $8x_1+3x_2$.
+
+| Momento | Base | Decisiones $(x_1,x_2)$ | Artificial | Valor auxiliar |
+|---|---|---|---|---|
+| Inicio | $(a,x_4)$ | $(0,0)$ | $6$ | $6$ |
+| Tras pivotear | $(x_2,x_4)$ | $(0,2)$ | $0$ | $0$ |
+
+Un criterio de entrada distinto, como Bland, podría elegir primero $x_1$ y producir más pasos. La ruta anterior usa el costo más negativo para facilitar el cálculo; no se presenta como una ejecución de Bland.
 
 ## Criterio de infactibilidad.
 
+### Equivalencia exacta del diagnóstico {#infactibilidad}
+
+**Teorema.** Con el auxiliar construido como arriba, el problema original es factible si y solo si $w^\star=0$.
+
+Si existe $\hat x\ge0$ con $A\hat x=b$, el par $(\hat x,0)$ es factible en Fase I y da $w=0$, el menor valor posible. Recíprocamente, si $w^\star=0$, todas las artificiales no negativas se anulan y la solución satisface $Ax=b$, $x\ge0$. Por tanto, **un óptimo auxiliar positivo** demuestra que el original es infactible.
+
+Una solución auxiliar factible con $w>0$ no basta: hay que haber demostrado que es óptima. Una solución básica con alguna componente negativa no puede justificar ninguna de las dos conclusiones. Por ello se debe verificar tanto la factibilidad del iterado como la optimalidad del auxiliar.
+
+::: {.uso-academic .uso-example}
+### Un auxiliar con óptimo positivo {#auxiliar-positivo}
+El sistema $x\ge2$, $x\le1$, $x\ge0$ se escribe $x-s+a=2$, $x+t=1$. Inicialmente $a=2-x+s$, $t=1-x$, $w=a$. Entra $x$, con razones dos y uno, y sale $t$. Se obtiene
+
+$$x=1-t,\qquad a=1+t+s,\qquad w=1+t+s.$$
+
+Todos los costos reducidos son no negativos, la base es factible y el valor mínimo es uno. Eso certifica infactibilidad original. Directamente, sumar $x\ge2$ y $-x\ge-1$ daría $0\ge1$; ambos certificados concuerdan.
+:::
+
+En aritmética exacta se compara con cero. En implementaciones flotantes hay que escalar y usar tolerancias para decidir si un residuo es numérico; no se convierten residuos grandes en cero para «hacer pasar» la transición. Los ejemplos de este paquete se verifican con números racionales.
+
 ## Eliminación de variables artificiales.
 
+### Artificial no básica o básica en cero {#artificiales-residuales}
+
+Al terminar con $w^\star=0$, todas las artificiales valen cero, pero algunas pueden seguir **básicas**. Borrar su columna sin más puede dejar una base incompleta. Hay dos tratamientos:
+
+- Si la artificial es no básica, se elimina su columna fijando su valor en cero.
+- Si es básica en cero, se inspecciona su fila canónica. Si existe un coeficiente no nulo de una variable original no básica, se pivotea sobre él para sacar la artificial. El coeficiente puede tener cualquiera de los dos signos: es un cambio de representación del **mismo punto cero**, no un paso positivo de mejora.
+
+En el segundo caso, intercambiar columnas mantiene la invertibilidad y el nuevo básico vale cero; el resto de básicos conserva sus valores. Por tanto no se pierde factibilidad. Ejemplo original: el sistema $-x=0$, $x\ge0$, con artificial da $a=x$ y objetivo $w=a=x$. Fase I ya es óptima en cero con base $a$, aunque el coeficiente de $x$ en la igualdad $a-x=0$ sea negativo. Se despeja $x=a$, se retira $a$ y queda la base original $x=0$.
+
+### Cuándo retirar una fila {#filas-redundantes}
+
+Si en la fila de una artificial básica en cero todos los coeficientes de variables originales son cero después de fijar las otras artificiales en cero, queda una igualdad $0=0$. Esa fila transformada es redundante para el sistema original y puede eliminarse junto con su artificial. No se debe eliminar una fila con un coeficiente original no nulo. Si $A$ tenía rango fila completo y no se omitió información, una fila original transformada completamente nula no puede aparecer; su aparición revela dependencia o un error de cálculo.
+
+Ejemplo original: $x_1+x_2=1$, $2x_1+2x_2=2$. Con dos artificiales,
+
+$$a_1=1-x_1-x_2,\qquad a_2=2-2x_1-2x_2,\qquad w=3-3x_1-3x_2.$$
+
+Entra $x_1$ y se elige que salga $a_1$ en el empate. Sustituir da $x_1=1-x_2-a_1$, $a_2=2a_1$ y $w=3a_1$. En el óptimo, $a_1=a_2=0$. La fila de $a_2$ pasa a $0=0$ al retirar $a_1$; se elimina. La ecuación restante $x_1+x_2=1$ conserva exactamente el conjunto factible.
+
 ## Transición a Fase II.
+
+Retiradas las artificiales y las filas redundantes justificadas, se conserva la base original factible y se reconstruye **desde cero** el objetivo original en ese diccionario. Los costos reducidos de $w$ no se reutilizan para juzgar $c^\top x$.
+
+En el ejemplo adaptado, fijamos $a=0$ y sustituimos $x_2$ en $z=8x_1+3x_2$:
+
+$$z=8x_1+3\left(2-\tfrac23x_1+\tfrac13x_3\right)=6+6x_1+x_3.$$
+
+La SBF $(x_1,x_2,x_3,x_4)=(0,2,0,5)$ tiene costos reducidos $6$ y $1$, ambos positivos. Por ello ya es óptima del problema original, valor seis, y es la única: toda solución con ese valor obliga a $x_1=x_3=0$ y las igualdades fijan las restantes. Las restricciones activas originales son $2x_1+3x_2=6$ y $x_1=0$; la segunda restricción tiene holgura cinco.
+
+### Gran M: penalizar no equivale a elegir cualquier constante {#gran-m}
+
+Una alternativa minimiza $c^\top x+M\sum a_i$. La intención es dar prioridad a eliminar artificiales. La interpretación rigurosa más sencilla es **lexicográfica**: primero minimizar $\sum a_i$ y, entre esos mínimos, minimizar el costo original. Dos fases ejecuta exactamente esa prioridad.
+
+Un número grande pero finito puede ser insuficiente. Ejemplo original: el problema $\min -Kx$ sujeto a $-x=0$, $0\le x\le1$, $K>0$, solo admite $x=0$. Si se reemplaza la igualdad por $-x+a=0$, penalizar da $(M-K)x$. Cuando $M<K$ escoge $x=a=1$, que es infactible para el original; si $M=K$, también admite esos óptimos espurios. No hay un $M$ universal que sirva para cualquier escala de costos. Este $M$ de penalización no debe confundirse con las cotas de una disyunción lógica.
+
+### Inicialización con una sola artificial {#una-artificial}
+
+En un diccionario de desigualdades $s_i=b_i-D_i x$, $x,s\ge0$, con algún $b_i<0$, se puede introducir una misma $y\ge0$ en todas las filas: $s_i=b_i-D_i x+y$. Elige $k$ con $b_k=\min_i b_i<0$ y pivotea $y$ por $s_k$. Queda
+
+$$y=-b_k+D_kx+s_k,\qquad s_i=b_i-b_k+(D_k-D_i)x+s_k\quad(i\ne k).$$
+
+Con $x=s_k=0$, $y=-b_k>0$ y los otros básicos son $b_i-b_k\ge0$: ya hay SBF del auxiliar $\min y$. Si alcanza cero, se recupera el sistema original. Si su óptimo es positivo, no hay factible original. Después se retira $y$ con el mismo cuidado de las artificiales residuales. Esta construcción corresponde a un diccionario de holguras, no a insertar una única columna arbitraria en cualquier sistema de igualdades. [@vanderbei2020, cap. 2, sección de inicialización]
+
+### Ejercicios de cierre {#ejercicios}
+
+1. Completa Fase I para $x\ge3$, $x\le5$, $x\ge0$ con una artificial en la primera restricción. Usa $\min -x$ como objetivo original y termina Fase II.
+2. ¿Se puede concluir factibilidad original al obtener $w=0$ aunque no se haya comprobado optimalidad auxiliar?
+3. Explica qué hacer si una artificial es básica, vale cero y su fila contiene un coeficiente original no nulo.
+
+::: {.callout-note collapse="true" title="Soluciones"}
+
+1. $a=3-x+s$, $t=5-x$, $w=3-x+s$. Entra $x$ y sale $a$ con paso tres. Queda $x=3+s-a$, $t=2-s+a$. Retira $a$, recupera $z=-3-s$; entra $s$, sale $t$ con paso dos. El óptimo es $x=5$, $s=2$, $t=0$, valor $-5$.
+2. Sí, si el punto ampliado es factible: $w\ge0$ en todo el auxiliar, así que alcanzar cero ya prueba su optimalidad y obliga a todas las artificiales a anularse.
+3. Hacer un pivote de limpieza por ese coeficiente. No se borra la columna básica sin reemplazarla ni se declara redundante la fila.
+:::
+
+::: {.uso-summary}
+La Fase I mide artificiales, no el costo real. Un óptimo auxiliar positivo certifica infactibilidad; cero proporciona una solución original. La transición exige una base sin artificiales, tratamiento explícito de redundancias y reconstrucción del objetivo original. Con esos requisitos satisfechos comienza la [Fase II](07-simplex-fase-ii.qmd).
+:::
+
+
+### Fuentes y continuidad {#fuentes}
+
+Procedimiento: [@ferrer2006, §3.2] y [@vanderbei2020, cap. 2, inicialización]. Contraste de artificiales residuales: Bertsimas y Tsitsiklis, §3.5, extracto Simplex PDF 33–37 (PDF 33 muestra p. impresa 112). Clases, PDF 175–198 (D082); las posiciones corresponden al extracto consultado, no a su paginación impresa. La transición y los certificados se verifican mediante los cálculos desarrollados en esta página.
+
+::: {#refs}
+:::

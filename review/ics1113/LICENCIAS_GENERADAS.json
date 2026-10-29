@@ -1,0 +1,16 @@
+{
+  "generator": "review/optimizacion-2026-10-26/design-source/tooling/sync_course.py",
+  "generator_sha256": "dc6f1c8bb3d8a7c7c7354bdbb4e6cc0c82dfbbdbfcf7aada0780b8298af8d0d2",
+  "inspected_plan": [
+    "tests/browser_course.py",
+    "tests/browser_client.mjs",
+    ".github/workflows/deploy.yml",
+    "REUSE.toml"
+  ],
+  "applied": [
+    "REUSE.toml",
+    "platform-vendor.json:files.REUSE.toml"
+  ],
+  "reuse_sha256": "b6a8e9202581828e0899e4aaf1197cca343139b9a760adcd69c499f6c8cea970",
+  "all_other_vendor_hashes_unchanged": true
+}
