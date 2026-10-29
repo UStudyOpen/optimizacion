@@ -45,6 +45,25 @@
         "LICENSE"
       ],
       "category": "academic"
+    },
+    {
+      "paths": [
+        "assets/optimizacion/matematica.js",
+        "assets/optimizacion/exploradores.js",
+        "assets/optimizacion/exploradores.css",
+        "tests/convexidad_examples.py",
+        "tests/paquete_matematica.py",
+        "tests/auditoria_matematica.py",
+        "tests/exploradores.test.cjs"
+      ],
+      "license": "MIT",
+      "copyright": "2026 ngulloa"
+    },
+    {
+      "paths": [
+        "review/ics1113/**"
+      ],
+      "category": "academic"
     }
   ],
   "third_party": [],

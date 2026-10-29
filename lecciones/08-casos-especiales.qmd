@@ -1,25 +1,186 @@
 ---
 title: "Soluciones múltiples, degeneración y ciclos"
-ustudy-status: proximamente
+ustudy-status: en-desarrollo
 ustudy-reviewed: false
 toc: true
 ---
 
-::: {.callout-note title="Contenido pendiente"}
+Las excepciones del simplex no se entienden mirando solo una fila de números. Hay que distinguir el **punto factible**, la **base que lo representa** y las **direcciones que admiten un paso positivo**. Una misma base degenerada puede ocultar mejoras detrás de pasos cero o mostrar costos nulos sin otro punto óptimo.
 
-Esta página está pendiente de redacción por el propietario y de revisión académica.
+::: {.callout-tip title="Objetivos"}
+Diagnosticarás multiplicidad, degeneración, empates y ciclos; explicarás por qué funcionan las reglas anticiclaje. Usamos la convención de [Fase II](07-simplex-fase-ii.qmd): minimización, $x_B=\bar b-Dx_N$, costos reducidos $r_N$ y razones solo con $D_{ij}>0$.
 :::
 
 ## Soluciones óptimas múltiples.
 
+Hay **óptimos múltiples** si existen factibles distintos $x^\star,y^\star$ con el mismo valor óptimo. Por linealidad y convexidad del dominio, todo $(1-\theta)x^\star+\theta y^\star$, $0\le\theta\le1$, también es óptimo. Son infinitos puntos, aunque solo algunos sean básicos.
+
+En el problema transversal, maximizar $x_1+2x_2$ corresponde a $a=1$. La restricción $x_1+2x_2\le6$ proporciona la cota seis. Todos los puntos del segmento de $(0,3)$ a $(2,2)$ la alcanzan; son factibles porque las otras restricciones se conservan por convexidad. Una recta de nivel del objetivo queda paralela a una arista del poliedro.
+
+La multiplicidad también puede ser ilimitada: $\min\{x_1:x_1,x_2\ge0\}$ tiene valor cero para toda la semirrecta $(0,t)$, $t\ge0$. El objetivo está acotado aunque el conjunto óptimo no lo esté. Una región ilimitada no significa automáticamente un objetivo no acotado.
+
 ## Costos reducidos nulos.
+
+### Costo cero con desplazamiento efectivo {#cero-con-paso}
+
+Sea una base factible con $r_N\ge0$. Si una variable no básica $x_j$ tiene $r_j=0$, el movimiento $d_j=1$, $d_B=-A_B^{-1}A_j$ mantiene el valor objetivo. Para producir otro punto óptimo se necesita algún $\theta>0$ con $x+\theta d\ge0$.
+
+Si la razón mínima es positiva, el segmento recorrido contiene puntos óptimos distintos. Si no hay razón admisible porque $A_B^{-1}A_j\le0$, aparece un rayo de óptimos. Si la razón mínima es cero, el pivote puede cambiar de base sin moverse: **el costo nulo no basta para afirmar multiplicidad**.
+
+Ejemplo original: $\min0$ sujeto a $x_1+x_2=0$, $x_1,x_2\ge0$. La base $x_1$ da $x_1=-x_2$, $r_2=0$ y razón mínima $0/1=0$. La única solución factible es $(0,0)$ y por tanto es el único óptimo. Pivotear intercambia dos bases que describen ese mismo punto. El paso cero explica por qué el costo nulo por sí solo no demuestra multiplicidad.
+
+### Un criterio completo desde un diccionario óptimo {#criterio-multiplicidad}
+
+Si conocemos una base factible con $r_N\ge0$, hay otro óptimo distinto si y solo si existe $h_N\ge0$, $h_N\ne0$, tal que
+
+$$\bar b-Dh_N\ge0,\qquad r_N^\top h_N=0.$$
+
+En efecto, ese $h_N$ define directamente otra solución factible del mismo costo; es distinta porque alguna no básica es positiva. Recíprocamente, las no básicas de otro óptimo cumplen esas condiciones. Como $r_N,h_N\ge0$, solo pueden activarse componentes con costo reducido cero. Si todos los costos son positivos, la unicidad queda probada. Para decidir el caso degenerado puede ser necesario explorar combinaciones de variables de costo cero y más bases, no únicamente un pivote aislado.
 
 ## Degeneración geométrica y algebraica.
 
+Una SBF de $Ax=b$, $x\ge0$, rango fila $m$, es **degenerada** si algún básico vale cero. Equivalentemente, tiene menos de $m$ componentes positivas. El punto puede admitir varias bases, pero su número debe calcularse verificando independencia, no mediante una regla basada solo en contar restricciones activas.
+
+En una descripción por desigualdades de un poliedro de dimensión completa en $\mathbb R^n$, un vértice no degenerado tiene exactamente $n$ restricciones activas con normales independientes; más restricciones activas indican degeneración de esa representación. La terminología geométrica depende de cómo se presenta el conjunto y requiere cuidado en dimensión menor. Duplicar una desigualdad no cambia el conjunto, pero sí cambia el conteo de activas.
+
+### Degeneración sin multiplicidad {#degeneracion-unicidad}
+
+Agrega $x_1+x_2\le4$ al problema transversal y maximiza $2x_1+2x_2$. Su holgura $x_5$ también vale cero en $(2,2)$. Las igualdades son
+
+$$x_1+2x_2+x_3=6,\quad2x_1+x_2+x_4=6,\quad x_1+x_2+x_5=4.$$
+
+El punto $(2,2,0,0,0)$ tiene tres ecuaciones independientes y solo dos variables positivas. Las bases que lo representan son $\{1,2,3\}$, $\{1,2,4\}$ y $\{1,2,5\}$: todas son invertibles y la tercera básica vale cero. No hay más, pues toda base representante debe incluir las dos variables positivas.
+
+El óptimo en las decisiones sigue siendo único. Si $2x_1+2x_2=8$, entonces $x_1+x_2=4$; las dos restricciones oblicuas implican respectivamente $x_2\le2$ y $x_1\le2$, por lo que ambas valen dos. Tres bases óptimas en términos de puntos no son tres soluciones distintas. Tampoco todas las representaciones tienen necesariamente costos que certifiquen optimalidad.
+
+### Degeneración no equivale a redundancia {#dimension-menor}
+
+El conjunto $x\ge0$, $y\ge0$, $x+y\le0$ en $\mathbb R^2$ es el único punto $(0,0)$. Las tres desigualdades están activas y ninguna es redundante: eliminar cualquiera amplía el conjunto. Por ello no se puede afirmar sin hipótesis que degeneración en dos dimensiones implique una restricción redundante. El ejemplo tiene dimensión cero; muestra por qué se debe explicitar la hipótesis de dimensión completa.
+
 ## Pivotes degenerados.
+
+Un empate positivo de razones hace que varias variables lleguen simultáneamente a cero. Una sale; otra puede quedar básica en cero, de modo que el **nuevo** punto será degenerado. Un paso cero, en cambio, exige que ya hubiera al menos un básico cero bloqueando a la entrante. Una base degenerada no obliga a que todos sus pivotes tengan paso cero.
+
+### Un pivote que prepara una mejora {#paso-cero}
+
+Ejemplo original: minimiza $-x_2$ sobre
+
+$$x_1-x_2+s_1=0,\qquad x_1+s_2=1,\qquad x_1,x_2,s_1,s_2\ge0.$$
+
+Con base $(s_1,s_2)$, $s_1=-x_1+x_2$, $s_2=1-x_1$, $z=-x_2$. Aquí entrar directamente $x_2$ no tiene saliente: de hecho, $x_2$ puede crecer con $x_1=0$, $s_1=x_2$, y el problema es no acotado. Este control muestra por qué no debemos inventar un bloqueo por un básico cero si el coeficiente de la dirección tiene el signo contrario.
+
+Para un caso acotado con paso cero, usa $\min(-x_1-x_2)$ sujeto a
+
+$$x_1-x_2+s_1=0,\qquad x_2+s_2=1,\qquad x,s\ge0.$$
+
+Inicio: $s_1=-x_1+x_2$, $s_2=1-x_2$, $z=-x_1-x_2$. Bland elige $x_1$, que hace decrecer $s_1=0$; sale $s_1$ con paso cero. Tras despejar,
+
+$$x_1=x_2-s_1,\qquad s_2=1-x_2,\qquad z=-2x_2+s_1.$$
+
+El punto sigue siendo $(x_1,x_2,s_1,s_2)=(0,0,0,1)$. Ahora entra $x_2$, sale $s_2$ con paso uno y se alcanza $(1,1,0,0)$, valor $-2$. El primer pivote no mejoró; hizo accesible una representación desde la que el segundo sí mejora.
+
+### Costo negativo en un punto óptimo degenerado {#negativo-degenerado}
+
+Minimiza $-x_2$ sobre $x_1+x_2=0$, $x\ge0$. Solo existe $(0,0)$, que es óptimo. Con base $x_1$, $z=-x_2$ y $r_2=-1$, pero el paso es cero. Después del pivote, $x_2=-x_1$ y $z=x_1$, con costo reducido positivo. El punto era óptimo en ambas bases; solo la segunda proporciona el certificado de signos. El algoritmo no debe confundir «hay un costo negativo» con «el valor necesariamente bajará en el próximo pivote».
 
 ## Posibilidad de ciclos.
 
+Un **ciclo** es una secuencia de pivotes que retorna a una base anterior. Con costos entrantes negativos y pasos positivos, el objetivo disminuye estrictamente; por eso un ciclo exige pasos degenerados. Que haya degeneración hace posible el ciclaje, pero no implica que ocurra.
+
+### Un ciclo racional de seis pivotes {#ciclo}
+
+Adaptación a minimización del ejemplo de *Cycling in the Simplex Method: Example from Chvátal’s Text*, material docente alojado en [Cornell, OR630](https://people.orie.cornell.edu/miketodd/or630/SimplexCyclingExample.pdf), pp. 1–3. Las operaciones se reconstruyen y verifican con fracciones. Vanderbei, capítulo 3, contiene otro ejemplo de la misma dificultad; no se atribuyen a él estos coeficientes:
+
+$$\min\ -10x_1+57x_2+9x_3+24x_4,$$
+
+$$\tfrac12x_1-\tfrac{11}{2}x_2-\tfrac52x_3+9x_4+x_5=0,$$
+
+$$\tfrac12x_1-\tfrac32x_2-\tfrac12x_3+x_4+x_6=0,\qquad x_1+x_7=1,\qquad x\ge0.$$
+
+Usa el costo reducido más negativo para entrar y, al empatar la razón mínima, el menor índice de variable para salir. Desde $B=\{5,6,7\}$:
+
+| Paso | Entra | Sale | Base resultante | Paso $\theta$ |
+|---|---|---|---|---:|
+| 1 | $x_1$ | $x_5$ | $\{1,6,7\}$ | $0$ |
+| 2 | $x_2$ | $x_6$ | $\{1,2,7\}$ | $0$ |
+| 3 | $x_3$ | $x_1$ | $\{2,3,7\}$ | $0$ |
+| 4 | $x_4$ | $x_2$ | $\{3,4,7\}$ | $0$ |
+| 5 | $x_5$ | $x_3$ | $\{4,5,7\}$ | $0$ |
+| 6 | $x_6$ | $x_4$ | $\{5,6,7\}$ | $0$ |
+
+Todos los puntos son $(0,0,0,0,0,0,1)$, de costo cero. En el primer pivote los costos iniciales son $(-10,57,9,24)$; las razones para $x_1$ son $0,0,1$, de modo que sale $x_5$. Tras ese pivote, el costo de $x_2$ es $-53$ y el de $x_3$ es $-41$; entra $x_2$. La secuencia devuelve exactamente la base inicial, y una regla determinista volvería a repetirla.
+
+Este ejemplo tampoco es un problema sin mejora: $(x_1,x_2,x_3,x_4)=(1,0,1,0)$, con holguras $(2,0,0)$, es factible y tiene costo $-1$. El ciclo es una dificultad de selección de bases, no la inexistencia de soluciones mejores.
+
 ## Reglas anticiclaje y regla de Bland.
 
+### Bland: dos elecciones, una garantía {#bland}
+
+Fija un orden global de variables que no cambia durante el proceso. Para minimización:
+
+1. Entra el menor índice $j$ entre los no básicos con $r_j<0$.
+2. Entre todas las filas que alcanzan la razón mínima, sale la variable básica de menor índice global.
+
+**Teorema de Bland.** Con ambas elecciones, simplex primal no repite bases y termina en aritmética exacta, con óptimo o certificado de no acotamiento. Se aplica después de conseguir factibilidad; también puede usarse en Fase I. Cambiar solo el desempate de salida no basta, como muestra el ciclo anterior.
+
+La prueba estándar supone un ciclo y toma la variable de mayor índice que cambia de papel. Comparando los diccionarios en los que esa variable entra y sale se obtiene una variable de menor índice que debía haberse elegido según Bland, contradicción. La demostración completa, que requiere controlar los signos de varias filas, está en [@vanderbei2020, cap. 3, §4, teorema 3.3]. Aquí se distingue ese resultado citado del argumento elemental de disminución estricta, que por sí solo no cubre degeneración.
+
+### Regla lexicográfica: representar infinitésimos {#lexicografica}
+
+Otra garantía consiste en perturbar simbólicamente el lado derecho. Sea $B_0$ una base inicial factible y considera
+
+$$b(\varepsilon)=b+A_{B_0}(\varepsilon,\varepsilon^2,\ldots,\varepsilon^m)^\top,$$
+
+con $\varepsilon$ positivo formalmente menor que cualquier constante positiva. La base inicial da $\bar b+(\varepsilon,\ldots,\varepsilon^m)$, con componentes estrictamente positivas en orden lexicográfico. Para una base posterior, el vector transformado es
+
+$$A_B^{-1}b+T(\varepsilon,\ldots,\varepsilon^m)^\top,\qquad T=A_B^{-1}A_{B_0}.$$
+
+Si varias razones ordinarias empatan, se comparan lexicográficamente los vectores
+
+$$\frac{1}{u_i}(\bar b_i,T_{i1},\ldots,T_{im}),\qquad u_i>0.$$
+
+La primera coordenada distinta decide. Dos filas candidatas no pueden empatar en todas las coordenadas: sus filas de $T$ serían proporcionales, contradiciendo invertibilidad. Además, ninguna fila básica es el polinomio cero porque $T$ no tiene filas nulas. El problema simbólicamente perturbado permanece factible y no degenerado; cada pivote de costo negativo mejora estrictamente su objetivo en ese orden. Por finitud de bases no hay ciclos. Al descartar los infinitésimos se obtiene una ejecución válida, posiblemente con pasos cero, del problema original.
+
+Esto explica la garantía sin elegir un $\varepsilon$ flotante arbitrario: un valor pequeño real puede ser demasiado grande para una escala de datos o perderse por redondeo. La implementación lexicográfica usa comparaciones de coeficientes, no resta números casi iguales.
+
 ## Diagnóstico de casos especiales.
+
+### Diagnosticar antes de concluir {#diagnostico}
+
+| Evidencia | Conclusión válida | Comprobación adicional |
+|---|---|---|
+| Algún básico negativo | La base no es factible | No usar el simplex primal desde ella |
+| $r_N\ge0$ y base factible | Punto óptimo | Unicidad requiere más información |
+| $r_j=0$ y paso positivo | Otro punto óptimo | La base actual debe ser óptima |
+| $r_j=0$ y paso cero | Cambio de base sin desplazamiento | No concluir multiplicidad |
+| $r_j<0$ y $u\le0$ | Objetivo no acotado inferiormente | Exhibir punto y dirección |
+| Óptimo de Fase I positivo | Original infactible | Debe ser óptimo auxiliar, no solo un iterado |
+| Empate de razones | Varios básicos llegan a cero | Desempatar con una regla declarada |
+| Repetición de base | Ciclo de la ejecución | Cambiar la regla, no el problema |
+
+### Actividades integradoras {#ejercicios}
+
+1. En el problema transversal, describe todos los óptimos para $a<1$, $a=1$, $1<a<4$, $a=4$ y $a>4$.
+2. Refuta «si el valor no cambia en un pivote, ya estamos en un óptimo».
+3. Refuta «si hay dos bases óptimas, hay dos puntos óptimos».
+4. En el ejemplo de ciclaje, verifica el punto factible de costo $-1$ sustituyéndolo en las tres ecuaciones.
+
+::: {.callout-note collapse="true" title="Soluciones"}
+
+1. Para $a<1$, único $(0,3)$; en $a=1$, todo el segmento entre $(0,3)$ y $(2,2)$; para $1<a<4$, único $(2,2)$; en $a=4$, segmento entre $(2,2)$ y $(3,0)$; para $a>4$, único $(3,0)$. Se compara $0,6,2a+4,3a$, o se usan los costos reducidos y factibilidad.
+2. El ejemplo acotado de paso cero mantiene valor cero en el primer pivote y después baja a $-2$.
+3. $x_1+x_2=0$, $x\ge0$, tiene dos bases, pero un solo punto. Ambas son óptimas para objetivo cero.
+4. Primera fila: $1/2-5/2+2=0$. Segunda: $1/2-1/2=0$. Tercera: $1+0=1$. Objetivo: $-10+9=-1$.
+:::
+
+::: {.uso-summary}
+La degeneración describe una representación con básicos cero; la multiplicidad describe puntos óptimos distintos. Un costo reducido indica una pendiente, pero la factibilidad decide si admite desplazamiento. Los pasos cero permiten ciclos; Bland y el orden lexicográfico recuperan una garantía finita. Siempre acompaña cada diagnóstico de las hipótesis y del certificado que realmente lo justifican.
+:::
+
+
+### Fuentes y continuidad {#fuentes}
+
+Degeneración, ciclo y anticiclaje: [@vanderbei2020, cap. 3, §§1–4]; contraste matricial: Bertsimas y Tsitsiklis, §3.4, extracto Simplex PDF 29–32. Casos parametrizados: Evaluaciones de simplex, PDF 38–41; salvedad de costo nulo: evaluación D030 y contraejemplo desarrollado en esta página. La tabla del ciclo y los contraejemplos se verifican de manera independiente, y no se atribuye revisión académica humana a esta comprobación.
+
+::: {#refs}
+:::

@@ -1,23 +1,154 @@
 ---
 title: "Poliedros, vértices y soluciones óptimas"
-ustudy-status: proximamente
+ustudy-status: en-desarrollo
 ustudy-reviewed: false
 toc: true
 ---
 
-::: {.callout-note title="Contenido pendiente"}
+En un programa lineal el objetivo se mueve a velocidad constante en cada dirección. La dificultad se concentra en la frontera factible: dónde se puede avanzar y qué restricciones detienen el movimiento. Esta página conecta esa geometría con las bases que utiliza simplex.
 
-Esta página está pendiente de redacción por el propietario y de revisión académica.
+::: {.callout-tip title="Objetivos y recorrido"}
+Identificarás vértices, caras y direcciones de recesión; justificarás cuándo existe un óptimo extremo y demostrarás la equivalencia entre vértices y soluciones básicas factibles. Revisa [convexidad](02-convexidad.qmd) y consulta después los [fundamentos algebraicos](05-fundamentos-simplex.qmd).
 :::
 
 ## Programación lineal y representación geométrica.
 
+Un **programa lineal** minimiza $c^\top x$ sobre un conjunto dado por un número finito de igualdades y desigualdades afines. Los conjuntos de nivel son hiperplanos $c^\top x=\alpha$. Para minimizar, los trasladamos hacia valores menores de $\alpha$ hasta encontrar el último contacto factible, si existe.
+
+### Un problema que recorrerá el sitio {#problema-transversal}
+
+Usaremos
+
+$$P=\{(x_1,x_2):x_1+2x_2\le6,\ 2x_1+x_2\le6,\ x_1,x_2\ge0\},\qquad \min_{x\in P}(-a x_1-2x_2).$$
+
+Es la minimización equivalente a maximizar $a x_1+2x_2$. Se adapta el problema parametrizado de Evaluaciones de simplex, PDF 38–41 (D068, físicas originales 7–10); la exposición y los cálculos siguientes se reconstruyen de forma independiente. Sus vértices son $(0,0),(3,0),(2,2),(0,3)$.
+
+Para $a=2$, maximizar equivale a buscar el mayor $x_1+x_2$. Sumando las dos restricciones principales, $3x_1+3x_2\le12$, luego el valor de maximización es a lo sumo ocho. $(2,2)$ lo alcanza. En minimización, el valor es $-8$.
+
+<div class="uso-academic" data-opti="poliedro"></div>
+
+<link rel="stylesheet" href="../assets/optimizacion/exploradores.css">
+<script defer src="../assets/optimizacion/exploradores.js"></script>
+
+El explorador muestra la región y compara exactamente los cuatro valores de maximización para parámetros representables por el control. Sin JavaScript, la tabla de valores es $0,3a,2a+4,6$, respectivamente. Para $a=1$ empatan $(0,3)$ y $(2,2)$; para $a=4$ empatan $(2,2)$ y $(3,0)$.
+
 ## Semiespacios y poliedros.
+
+Un **semiespacio cerrado** es $\{x:a^\top x\le b\}$, con normal $a\ne0$. Un **poliedro** es una intersección de finitos semiespacios cerrados, y puede escribirse $P=\{x:Ax\le b\}$. Una igualdad se expresa mediante dos desigualdades. Todo poliedro es cerrado y convexo, pero puede ser vacío o no acotado. Un **polítopo** es un poliedro acotado; cuando es no vacío, también es la envoltura convexa de un conjunto finito.
+
+Un **cono convexo** $K$ cumple $\lambda u+\mu v\in K$ para $u,v\in K$ y $\lambda,\mu\ge0$. Es poliedral si puede describirse con finitas desigualdades homogéneas $Ad\le0$. No todo cono es poliedral: un cono circular en dimensión tres tiene frontera curva.
+
+La **dimensión** de $P\ne\varnothing$ es la dimensión de su envoltura afín, no necesariamente la del ambiente. El segmento $\{(t,1-t):0\le t\le1\}\subset\mathbb R^2$ tiene dimensión uno. Sus extremos siguen siendo vértices; los criterios no deben suponer inadvertidamente que existe interior en $\mathbb R^2$.
+
+### Caras, cubos y ortantes {#caras}
+
+Una **cara expuesta no vacía** de $P$ es $F=\{x\in P:d^\top x=\beta\}$, donde $d^\top x\le\beta$ es válido en todo $P$. Las caras propias de un poliedro pueden obtenerse haciendo activas ciertas restricciones; las de dimensión cero son vértices. Incluimos también $P$ y, por convención, la cara vacía.
+
+En el cubo $[0,1]^n$, sus $2^n$ vértices son los vectores de ceros y unos. Fijar $k$ coordenadas a cero o uno produce una cara de dimensión $n-k$; las otras coordenadas varían en $[0,1]$. Hay $\binom nk2^k$ caras de esa dimensión y $3^n$ caras no vacías en total. En el ortante $\mathbb R_+^n$, el origen es el único vértice, sus rayos extremos son las direcciones coordenadas y sus caras se obtienen fijando un subconjunto de coordenadas a cero. Una arista ilimitada no necesita tener dos vértices.
 
 ## Vértices y restricciones activas.
 
+Un punto $v\in P$ es **extremo** si $v=(1-\theta)u+\theta w$, $u,w\in P$, $0<\theta<1$, implica $u=w=v$. Para poliedros, punto extremo y vértice son equivalentes. La definición excluye tanto puntos interiores como puntos intermedios de una arista, aunque estos últimos estén en la frontera.
+
+Una restricción $a_i^\top x\le b_i$ es **activa** en $v$ si $a_i^\top v=b_i$. El conjunto de sus índices es $I(v)$. Para $P\subset\mathbb R^n$,
+
+$$v\text{ es vértice}\quad\Longleftrightarrow\quad\operatorname{rango}A_{I(v)}=n.$$
+
+**Prueba de suficiencia.** Si $v=(u+w)/2$ con $u,w\in P$, toda restricción activa debe ser igualdad en ambos: sus dos valores son a lo sumo $b_i$ y su promedio es $b_i$. Por tanto $A_{I(v)}(u-w)=0$. Rango $n$ obliga a $u=w=v$.
+
+**Prueba de necesidad.** Si el rango es menor que $n$, existe $d\ne0$ con $A_{I(v)}d=0$. Las activas siguen en igualdad en $v\pm\varepsilon d$. Cada restricción inactiva tiene holgura positiva; como hay finitas, podemos elegir $\varepsilon>0$ suficientemente pequeño para conservarlas todas. Entonces $v$ es el punto medio de dos factibles distintos: no es extremo. No se ha supuesto que $v$ sea interior.
+
+### Enumerar y filtrar {#enumeracion}
+
+En dimensión dos, se intersectan pares de rectas con normales independientes y se comprueba cada candidato contra **todas** las restricciones. En el problema transversal, las dos restricciones oblicuas activas dan $x_1+2x_2=6$, $2x_1+x_2=6$; restando, $x_1=x_2$, y por tanto $x_1=x_2=2$. La intersección $x_2=0$, $x_1+2x_2=6$ da $(6,0)$, pero viola $2x_1+x_2\le6$; no es vértice factible. Enumerar intersecciones sin filtrar es un error.
+
 ## Independencia lineal y puntos extremos.
+
+### Rango y forma estándar {#rango}
+
+Considera $S=\{x\in\mathbb R^n:Ax=b,\ x\ge0\}$, con $A\in\mathbb R^{m\times n}$ de rango fila $m\le n$. Significa que las **filas** son independientes y que existe alguna selección de $m$ columnas independientes. No significa que las $n$ columnas sean todas independientes si $n>m$.
+
+Antes de suponer rango fila completo, se reduce el sistema aumentado $[A\mid b]$. Una fila $0=\beta\ne0$ certifica infactibilidad; una fila $0=0$ puede retirarse. El rango de $A$ y el del aumentado deben coincidir para compatibilidad. Por ejemplo, $x_1+x_2=1$, $2x_1+2x_2=3$ es incompatible; reemplazar tres por dos vuelve redundante la segunda ecuación.
+
+### Teorema: solución básica factible si y solo si vértice {#bases-vertices}
+
+Una base es un conjunto $B$ de $m$ índices con $A_B$ invertible. Su solución básica es $x_N=0$, $x_B=A_B^{-1}b$; es factible si $x_B\ge0$.
+
+Si $x$ es básica factible y $x=(u+w)/2$ con $u,w\in S$, la no negatividad y $x_N=0$ fuerzan $u_N=w_N=0$. Entonces $A_Bu_B=A_Bw_B=b$, y la invertibilidad da $u=w=x$: es extremo.
+
+Recíprocamente, sea $x$ extremo y $J=\{j:x_j>0\}$. Si las columnas $A_J$ fueran dependientes, habría $d_J\ne0$ con $A_Jd_J=0$; extendiendo por ceros y tomando $\varepsilon$ pequeño, $x\pm\varepsilon d$ serían factibles distintos. Luego $A_J$ es independiente. Puede completarse a una base de $m$ columnas porque $A$ tiene rango fila $m$. Fuera de esa base todas las variables son cero, así que $x$ es la solución básica factible asociada. La condición $x\ge0$ fue esencial en ambos sentidos.
+
+Hay a lo sumo $\binom nm$ bases candidatas. Algunas son singulares; otras producen soluciones negativas; distintas bases pueden dar el mismo punto degenerado. No existe una regla general que cuente bases de un vértice únicamente a partir de cuántas restricciones activas sobran.
 
 ## Direcciones y conos de recesión.
 
+Para $P\ne\varnothing$, su **cono de recesión** es
+
+$$\operatorname{rec}(P)=\{d:x+td\in P\text{ para todo }x\in P,\ t\ge0\}.$$
+
+Si $P=\{x:Ax\le b\}$, entonces $\operatorname{rec}(P)=\{d:Ad\le0\}$. La suficiencia se comprueba sustituyendo $A(x+td)\le b$; para la necesidad, si algún $a_i^\top d>0$, el término $a_i^\top x+t a_i^\top d$ acaba superando $b_i$. Para forma estándar, el cono es $\{d:Ad=0,d\ge0\}$.
+
+Un **rayo extremo** de un cono convexo apuntado $K$ es $\{td:t\ge0\}$, $d\ne0$, tal que si $d=u+v$ con $u,v\in K$, ambos sumandos pertenecen a ese mismo rayo. Un vector de recesión puede ser combinación de varios rayos extremos: en $\mathbb R_+^2$, $(1,1)$ es de recesión pero no extremo.
+
+### Rectas y linealidad {#rectas}
+
+$P$ contiene una recta si hay $x\in P$, $d\ne0$, con $x+td\in P$ para todo $t\in\mathbb R$. Esto equivale a que $d$ y $-d$ pertenezcan al cono de recesión. El espacio de linealidad es $L=\{d:Ad=0\}$ en una descripción completa por desigualdades. Un poliedro no vacío tiene algún vértice si y solo si no contiene rectas. Por ejemplo, la franja $0\le x_1\le1$ con $x_2$ libre no tiene vértices: cualquier punto es punto medio de sus desplazamientos verticales.
+
+### Representación H y V con hipótesis {#representacion}
+
+La descripción $Ax\le b$ es una representación por semiespacios o **H**. El teorema de representación afirma que todo poliedro no vacío admite
+
+$$P=\operatorname{conv}\{v^1,\ldots,v^k\}+\operatorname{cone}\{r^1,\ldots,r^s\},\qquad k\ge1.$$
+
+En general los generadores $v^i$ **no tienen que ser vértices**. Si $P$ no contiene rectas, sí se pueden tomar todos sus vértices y los generadores de los rayos extremos de su cono de recesión. Para un polítopo el cono es $\{0\}$ y queda la envoltura convexa de sus vértices. Con rectas puede añadirse explícitamente $L$, usando representantes del poliedro reducido en $L^\perp$. [@nemirovski2012, §2.4, teorema 2.4.1 y corolario 2.4.3]
+
+La idea constructiva en el caso acotado es mover un punto no extremo en una dirección que conserve sus restricciones activas. La recta corta el poliedro en un segmento con dos extremos que tienen más restricciones independientes activas. El punto es combinación convexa de ellos; se repite hasta llegar a vértices, aumentando el rango en cada rama. En el caso apuntado no acotado, una intersección puede tener un extremo finito y una semirrecta: se separan una combinación de puntos de menor cara y una dirección de recesión; el cono apuntado se genera por sus rayos extremos. La demostración estructural completa de esta última descomposición se localiza en la referencia citada; no se presupone una envoltura de vértices cuando estos no existen.
+
+Ejemplo: $P=\{(x,y):x\ge0,\ 0\le y\le1\}$ es
+
+$$\operatorname{conv}\{(0,0),(0,1)\}+\operatorname{cone}\{(1,0)\}.$$
+
+En cambio, la franja $0\le y\le1$, $x$ libre, usa esos dos mismos generadores puntuales más $\operatorname{span}\{(1,0)\}$; esos generadores no son vértices de la franja. La presencia de rectas exige esta distinción entre generadores puntuales y vértices.
+
 ## Existencia y geometría del conjunto óptimo.
+
+### Por qué un valor lineal finito se alcanza {#optimo-lineal}
+
+Sea $P$ un poliedro no vacío con la representación finita anterior. Si $c^\top r^j<0$ para algún generador, $v^1+t r^j$ es factible y su costo tiende a $-\infty$. Si todos esos productos son no negativos, para cualquier
+
+$$x=\sum_i\lambda_i v^i+\sum_j\mu_j r^j,\qquad\lambda\ge0,\quad\sum_i\lambda_i=1,\quad\mu\ge0,$$
+
+se tiene $c^\top x\ge\sum_i\lambda_i c^\top v^i\ge\min_i c^\top v^i$. Algún generador puntual alcanza esta cota. Así, **factibilidad y valor finito implican consecución**. Si además no hay rectas, los generadores puntuales se toman como vértices y existe un óptimo extremo. Con rectas sigue habiendo óptimo finito, pero puede no haber vértices: minimizar $y$ en la franja anterior da toda la recta $y=0$.
+
+En forma estándar el conjunto no contiene rectas: una recta no nula violaría alguna coordenada no negativa en uno de los dos sentidos. Se obtiene el **teorema fundamental de la programación lineal**: si un problema en forma estándar es factible y tiene valor finito, tiene una SBF óptima. Junto con la posibilidad de infactibilidad y no acotamiento, esto fundamenta simplex.
+
+El conjunto de óptimos lineales es una cara: $P^\star=P\cap\{x:c^\top x=v\}$. Si dos puntos son óptimos, el segmento completo lo es. Si existe un único óptimo, debe ser extremo: descomponerlo como combinación interior de dos factibles distintos obligaría a que ambos también fueran óptimos.
+
+### Cambiar convexidad y sentido del objetivo {#extremos-no-lineales}
+
+Sobre un polítopo no vacío, una función convexa continua tiene al menos un **maximizador** en un vértice. Si $x=\sum_i\lambda_i v^i$, entonces $f(x)\le\sum_i\lambda_i f(v^i)\le\max_i f(v^i)$. Si es estrictamente convexa, todo maximizador es extremo: una descomposición no trivial daría un valor estrictamente inferior al promedio de dos valores que no exceden el máximo. Análogamente, una función cóncava continua tiene algún minimizador extremo, y con concavidad estricta todos sus minimizadores son extremos. Minimizar una convexa no obliga a ir a vértices: $x^2$ en $[-1,1]$ se minimiza en cero.
+
+### Práctica geométrica {#ejercicios}
+
+1. Enumera vértices y rayos de $Q=\{(x,y):x\ge1,0\le y\le2\}$ y minimiza $a x+y$ según $a$.
+2. En $S=\{x\ge0:x_1+x_2=1\}$, prueba que $(1/2,1/2)$ no es básico factible y encuentra todas las bases.
+3. ¿Puede un poliedro no vacío, cerrado y no acotado tener un mínimo único?
+
+::: {.callout-note collapse="true" title="Soluciones"}
+
+1. Vértices $(1,0),(1,2)$; rayo $(1,0)$. Si $a<0$ no hay cota inferior. Si $a=0$ todos $(x,0)$ con $x\ge1$ son óptimos, valor cero. Si $a>0$ el único óptimo es $(1,0)$, valor $a$.
+2. Las bases son $\{1\}$ y $\{2\}$, con soluciones $(1,0)$ y $(0,1)$. El punto intermedio es su promedio y no es extremo; tiene dos componentes positivas cuyas columnas de $A=(1\ 1)$ son dependientes.
+3. Sí: $\min\{x+y:x,y\ge0\}$ tiene único óptimo $(0,0)$. No acotar el conjunto no impide que el objetivo crezca en sus direcciones de escape.
+:::
+
+::: {.uso-summary}
+Un vértice bloquea todos los desplazamientos bilaterales factibles mediante restricciones activas independientes. En forma estándar, esa condición equivale a una SBF. La representación finita explica existencia y no acotamiento lineales; sus hipótesis también muestran cuándo es incorrecto buscar exclusivamente vértices. Las bases convierten esta geometría en operaciones de álgebra lineal.
+:::
+
+
+### Fuentes y continuidad {#fuentes}
+
+Convexidad y representación: [@nemirovski2012, §§2.1, 2.3–2.4]; forma estándar y simplex: [@ferrer2006, §§3.1–3.2]. Contraste escaneado: Bertsimas y Tsitsiklis, *Introduction to Linear Optimization* (1997), capítulo 2 y §§4.8–4.9; extractos de fundamentos PDF 37–70 y representación PDF 2–11. Se inspeccionaron visualmente los enunciados utilizados. Las posiciones físicas originales de los CSV no equivalen a las páginas impresas: en Fundamentos PDF 43 se observa p. impresa 47, por ejemplo.
+
+::: {#refs}
+:::

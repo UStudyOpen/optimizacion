@@ -13,6 +13,7 @@ project:
   - lecciones/08-casos-especiales.qmd
   resources:
   - .nojekyll
+  - assets/optimizacion/**
   post-render:
   - python3 tests/post_render.py
   - python3 tests/accessibility_output.py

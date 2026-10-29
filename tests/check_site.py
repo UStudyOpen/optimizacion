@@ -97,5 +97,40 @@ assert r'\textbf{no básicas}' not in lesson
 for route in ['06-simplex-fase-i.html', '07-simplex-fase-ii.html']:
     assert f'href="../lecciones/{route}"' in lesson
 assert 'uso-example' in lesson and 'uso-summary' in lesson
+
+# Convexity content: match source equations to output and resolve its bibliography.
+convex_source = (ROOT / 'lecciones/02-convexidad.qmd').read_text()
+convex_output = (ROOT / '_site/lecciones/02-convexidad.html').read_text()
+display_equations = len(re.findall(r'\$\$[\s\S]*?\$\$', convex_source))
+assert display_equations > 0
+assert convex_output.count('class="math display"') == display_equations
+convex_citations = set(re.findall(r'@([A-Za-z][A-Za-z0-9_-]*)', convex_source))
+assert 'boyd2004' in convex_citations
+assert convex_citations <= {ref['id'] for ref in data['references']}
+assert set(re.findall(r'id="ref-([^"]+)"', convex_output)) == convex_citations
+assert 'citation-not-found' not in convex_output and 'Contenido pendiente' not in convex_source
+for anchor in ['criterio-primer-orden', 'criterio-segundo-orden', 'minimo-local-global',
+               'unicidad', 'ejercicios-convexidad']:
+    assert f'id="{anchor}"' in convex_output, anchor
+# Eight developed chapters: rendered formulas, bibliography and package coverage destinations.
+import csv
+for page in course['pages'][1:]:
+    source=(ROOT/page['path']).read_text()
+    output=(ROOT/'_site'/Path(page['path']).with_suffix('.html')).read_text()
+    assert page['status']=='en-desarrollo' and page['reviewed'] is False
+    assert 'ustudy-reviewed: false' in source and 'Contenido pendiente' not in source
+    equations=len(re.findall(r'\$\$[\s\S]*?\$\$',source))
+    assert equations>0 and output.count('class="math display"')==equations,page['path']
+    citations=set(re.findall(r'@([A-Za-z][A-Za-z0-9_-]*)',source))
+    assert citations <= {ref['id'] for ref in data['references']}
+    assert set(re.findall(r'id="ref-([^"]+)"',output))==citations
+    assert 'citation-not-found' not in output
+rows=list(csv.DictReader((ROOT/'review/ics1113/COBERTURA_ACADEMICA.csv').open(encoding='utf-8-sig')))
+assert len(rows)==41 and len({r['id_matriz'] for r in rows})==41
+for row in rows:
+    output=(ROOT/'_site'/Path(row['pagina_qmd']).with_suffix('.html')).read_text()
+    assert 'id="'+row['ancla'].lstrip('#')+'"' in output,row['id_matriz']
+for resource in ['matematica.js','exploradores.js','exploradores.css']:
+    assert (ROOT/'_site/assets/optimizacion'/resource).read_bytes()==(ROOT/'assets/optimizacion'/resource).read_bytes()
 print(f"PASS: {len(areas)} thematic areas, {len(outline)} topics, "
       f"{sum(len(p['subsections']) for p in outline)} subsections, titles, states, navigation, equations and citations")

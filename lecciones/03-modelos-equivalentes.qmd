@@ -1,23 +1,164 @@
 ---
 title: "Modelos equivalentes y variables auxiliares"
-ustudy-status: proximamente
+ustudy-status: en-desarrollo
 ustudy-reviewed: false
 toc: true
 ---
 
-::: {.callout-note title="Contenido pendiente"}
+Un modelo equivalente expresa la misma decisión con otra representación. La utilidad no es meramente estética: un máximo, un valor absoluto o una variable de signo libre pueden impedir aplicar directamente un método lineal. La reformulación debe conservar aquello que interesa y ofrecer un procedimiento para recuperar la decisión original.
 
-Esta página está pendiente de redacción por el propietario y de revisión académica.
+::: {.callout-tip title="Objetivos"}
+Podrás demostrar equivalencias en ambos sentidos, formular epígrafes y construir modelos con unidades, balances e índices consistentes. Se usan las nociones de [factibilidad](01-problemas-optimizacion.qmd) y [epígrafe](02-convexidad.qmd#epigrafo-subnivel). Las pequeñas formulaciones binarias explican una disyunción; no introducen algoritmos de programación entera.
 :::
 
 ## Definición de equivalencia.
 
+Sean $P=\inf_{x\in F}f(x)$ y $Q=\inf_{y\in G}g(y)$. Decir que son equivalentes requiere declarar **qué se preserva**. No siempre existe una biyección entre sus variables.
+
+Una equivalencia fuerte se obtiene mediante una biyección $T:F\to G$ con $g(T(x))=f(x)$. Entonces cada factible tiene una única representación, se conservan todos los valores y $T$ lleva minimizadores a minimizadores. Pero las auxiliares suelen dar representaciones múltiples. Para ellas usamos una aplicación de recuperación $\pi:G\to F$ y un levantamiento que asigna a cada $x\in F$ al menos un $y\in G$.
+
+Hay que distinguir: (i) igualdad entre conjuntos factibles tras proyectar; (ii) igualdad del valor óptimo; (iii) correspondencia entre soluciones óptimas. Ninguna de estas frases debe reemplazar silenciosamente a las otras.
+
+### Un criterio práctico para demostrar equivalencia {#criterio-equivalencia}
+
+Basta probar:
+
+1. Para todo $x\in F$ existe $y\in G$ con $\pi(y)=x$ y $g(y)=f(x)$.
+2. Para todo $y\in G$, $\pi(y)\in F$ y $f(\pi(y))\le g(y)$.
+
+El primer punto da $Q\le P$; el segundo da la desigualdad contraria, pues $P$ y $Q$ denotan aquí los valores ínfimos. Si $y^\star$ es óptimo de $Q$, $f(\pi(y^\star))\le g(y^\star)=P$, luego su recuperación es óptima. Si $x^\star$ es óptimo de $P$, el levantamiento del primer punto es óptimo de $Q$. También se conserva la no consecución: un óptimo de un lado produciría uno del otro. Esta prueba mediante desigualdades es especialmente útil para epígrafes. [@ferrer2006, §1.7; @nemirovski2012, §1.2]
+
 ## Preservación de valores y soluciones óptimas.
+
+### Transformar el objetivo sin alterar su orden {#monotonia}
+
+Si $\phi$ es estrictamente creciente en un intervalo que contiene $f(F)$, entonces $f(x)\le f(y)$ si y solo si $\phi(f(x))\le\phi(f(y))$. Por tanto ambas minimizaciones tienen los mismos minimizadores. **Sus valores numéricos cambian**; cuando hay mínimo, el nuevo valor es $\phi(v)$. No se afirma sin hipótesis de continuidad una identidad análoga para un ínfimo no alcanzado o infinito.
+
+Si $\phi$ es solo no decreciente, puede añadir óptimos: una transformación constante convierte todos los factibles en minimizadores. Si es estrictamente decreciente, hay que invertir el sentido: maximizar $f$ equivale a minimizar $\phi\circ f$ en términos de soluciones.
+
+El recíproco $1/t$ es estrictamente decreciente en $(0,\infty)$. Así, **maximizar** una función positiva equivale a **minimizar** su recíproco. No se aplica cruzando cero: en $F=\{-1,1\}$, $f(x)=x$ y $1/f(x)=x$ mantienen el mismo orden en esos dos puntos; no lo invierten como se habría supuesto usando incorrectamente un único intervalo de monotonía. El logaritmo solo está definido para valores positivos y es creciente, por lo que minimizar $\log f$ mantiene los minimizadores de $f>0$.
+
+Multiplicar por una constante positiva conserva el sentido y escala el valor; multiplicar por una negativa invierte el sentido. Agregar una constante conserva soluciones y desplaza el valor. Son operaciones simples, pero explican por qué el signo de un tableau no puede leerse como valor económico sin conocer su convención.
 
 ## Reformulaciones mediante epígrafos.
 
+Para cualquier $f:F\to\mathbb R$, no necesariamente convexa,
+
+$$\inf_{x\in F}f(x)=\inf\{t:x\in F,\ t\ge f(x)\}.$$
+
+El levantamiento es $(x,t)=(x,f(x))$ y la proyección devuelve $x$. Todo factible ampliado cumple $f(x)\le t$; el criterio anterior demuestra la igualdad y la recuperación. Si existe un óptimo ampliado, necesariamente $t=f(x)$, pues de otro modo se podría reducir $t$ manteniendo $x$. La equivalencia es algebraica; que el nuevo problema sea convexo requiere además convexidad de $F$ y de $f$.
+
+### Min–max y max–min {#minmax}
+
+Para un máximo finito de funciones:
+
+$$\min_{x\in F}\max_{1\le i\le k}f_i(x)\ \equiv\ \min_{x,t}\{t:x\in F,\ f_i(x)\le t\ \forall i\}.$$
+
+Si todas las $f_i$ son afines y $F$ poliedral, el resultado es un programa lineal. Análogamente, maximizar $\min_i f_i(x)$ equivale a maximizar $t$ sujeto a $t\le f_i(x)$ para cada $i$. No se deben intercambiar esos signos ni sustituir «todas» por «alguna».
+
+::: {.uso-academic .uso-example}
+### Balancear el peor costo {#ejemplo-minmax}
+Minimiza $\max\{x+1,5-x\}$ en $\mathbb R$. Su epígrafe tiene restricciones $t\ge x+1$ y $t\ge5-x$. Sumarlas da $2t\ge6$, así que $t\ge3$. Para alcanzar la cota se necesita simultáneamente $x+1=3$ y $5-x=3$: $x=2$, $t=3$. El punto pertenece al epígrafe y certifica el óptimo.
+
+Geométricamente, el borde del epígrafe es una V con vértice $(2,3)$. Reducir la altura de una recta horizontal deja de ser factible al pasar por ese vértice. Igualar dos expresiones funciona aquí porque verificamos la cota y la factibilidad; con más funciones o restricciones no basta igualar un par elegido arbitrariamente.
+:::
+
 ## Valores absolutos y máximos de funciones.
+
+La igualdad $|u|=\max\{u,-u\}$ permite escribir $|a^\top x-b|\le t$ como dos desigualdades: $a^\top x-b\le t$ y $-a^\top x+b\le t$. Estas ya implican $t\ge0$. Para minimizar $\sum_i w_i|a_i^\top x-b_i|$ con $w_i>0$, minimizamos $\sum_iw_it_i$ con esas dos cotas para cada $i$. En un óptimo todos los $t_i$ se ajustan al valor absoluto; si un peso es cero, la igualdad del auxiliar no está forzada, aunque la proyección sigue siendo válida para ese sumando sin costo.
+
+::: {.uso-academic .uso-example}
+### Ubicación sobre una línea {#ubicacion}
+Minimiza $|x-1|+|x-5|$. La desigualdad triangular da $|x-1|+|x-5|\ge|(x-1)-(x-5)|=4$. Todo $x\in[1,5]$ alcanza cuatro. El modelo lineal usa $t_1\ge x-1$, $t_1\ge1-x$, $t_2\ge x-5$, $t_2\ge5-x$ y minimiza $t_1+t_2$.
+
+Si el criterio fuera minimizar la peor distancia, usaríamos un solo $t$ mayor que las cuatro expresiones. Las restricciones $t\ge5-x$ y $t\ge x-1$ dan $t\ge2$, alcanzado únicamente en $x=3$. Suma y máximo modelan preferencias diferentes.
+:::
+
+**Error frecuente.** Para imponer $t=|u|$ en cualquier contexto no basta $t\ge\pm u$: ese sistema permite valores demasiado grandes. Es exacto para minimizar un costo creciente en $t$ sin otras restricciones que impidan bajarlo. Maximizar $t$ con esas mismas cotas puede generar no acotamiento artificial. Tampoco $|u|\ge a$ se modela mediante $u\ge a$ y $-u\ge a$: eso impone una conjunción imposible si $a>0$.
+
+### Costos por tramos: pendientes que importan {#tramos}
+
+Un costo continuo convexo $C(q)=\max\{2q,5q-9\}$, $q\ge0$, cobra pendiente dos hasta $q=3$ y cinco después. Su epígrafe lineal usa $t\ge2q$, $t\ge5q-9$ y minimiza $t$. Otra forma es $q=u+v$, $0\le u\le3$, $v\ge0$, costo $2u+5v$: por intercambio, un óptimo llena el tramo barato antes del caro.
+
+Para un descuento con pendientes cinco y dos, esa asignación libre **no** es válida: escogería el tramo barato desde la primera unidad. Con una cota válida $0\le q\le U$, $U\ge3$, una formulación exacta del costo $5\min\{q,3\}+2\max\{q-3,0\}$ es
+
+$$q=u+v,\quad0\le u\le3,\quad0\le v\le(U-3)y,\quad u\ge3y,\quad y\in\{0,1\},$$
+
+con costo $5u+2v$. Si $y=0$, $v=0$ y solo se usa el primer tramo. Si $y=1$, $u=3$ y puede usarse el segundo. Esto explica la necesidad de lógica en los descuentos de la selección de modelación; no todo costo por tramos admite un epígrafe convexo.
 
 ## Variables auxiliares.
 
+### Holguras, variables libres y cambios de coordenadas {#auxiliares}
+
+$a^\top x\le b$ equivale a $a^\top x+s=b$, $s\ge0$: cada factible tiene una única holgura $s=b-a^\top x$. Para $a^\top x\ge b$, escribimos $a^\top x-s=b$. Una variable libre se representa por $x=x^+-x^-$, $x^+,x^-\ge0$; ahora no hay unicidad del levantamiento, ya que sumar la misma cantidad a ambas partes deja $x$ inalterada. Si el costo y todas las restricciones dependen de la diferencia, se recuperan correctamente valores y decisiones. Véase la [forma estándar](05-fundamentos-simplex.qmd#forma-estándar.).
+
+Un cambio biyectivo también exige transformar el dominio. Para $x>0$, $u=\log x$ da $u\in\mathbb R$ y $x=e^u$. Si $x\ge1$, hay que añadir $u\ge0$. Omitir esa restricción introduce decisiones inexistentes. Si un modelo distingue producción bruta $A,B,C$ de ventas netas $a=A-2B-3C$, $b=B-C$, $c=C$, la inversa es $C=c$, $B=b+c$, $A=a+2b+5c$. Las no negatividades de ventas se traducen en los balances originales. Esta idea procede del proceso productivo de Ferrer, Gazmuri y Muñoz, extracto PDF 4–7, físicas originales 40–43; aquí se muestra solo la transformación y se desarrollan operaciones propias.
+
+### Disyunciones con cotas verificadas {#disyunciones}
+
+Supón $L\le x\le U$, $L\le-a<0<a\le U$. La restricción $|x|\ge a$ es $(x\le-a)$ **o** $(x\ge a)$. Una formulación exacta es
+
+$$x\ge a-(a-L)(1-y),\qquad x\le-a+(U+a)y,\qquad y\in\{0,1\},$$
+
+junto con las cotas originales. Para $y=0$ queda $L\le x\le-a$; para $y=1$ queda $a\le x\le U$. Los coeficientes se deducen de las cotas, no de un número arbitrariamente «enorme». Con $L=-4,U=7,a=2$ son seis y nueve. Sin cotas finitas conocidas no hay un $M$ finito que represente así las dos semirrectas ilimitadas. Es precisamente la limitación examinada en Ayudantías, PDF 15–16 (D084, físicas originales 13–14).
+
 ## Demostración y verificación de equivalencias.
+
+La verificación de un modelo comienza por su interpretación física y termina comparando los dos sentidos de recuperación. Una solución numérica razonable no basta: un error de signo puede conservar ese punto y admitir muchos otros incorrectos.
+
+### Carga y recursos: ejemplo adaptado {#carga}
+
+Adaptación del problema «Movimiento de Petróleo», Ferrer, Gazmuri y Muñoz, extracto PDF 2–3, páginas físicas originales 7–8. Sean $x_1,x_2,x_3$ **miles de litros** de tres cargas. Los ingresos por unidad son $3,2,5$ miles de dólares y las densidades $4,8,5$ toneladas por mil litros. Con capacidad $25\,000$ toneladas y compromiso $x_1+x_2\ge2\,000$, el modelo es
+
+$$\max\ 3x_1+2x_2+5x_3,\quad4x_1+8x_2+5x_3\le25\,000,\quad x_1+x_2\ge2\,000,\quad x\ge0.$$
+
+La primera restricción mide toneladas y la segunda miles de litros; sumarlas directamente sin convertir unidades no tendría interpretación física. Para resolver, usamos multiplicadores con unidades: una unidad de ingreso (mil dólares) por tonelada de capacidad y una unidad de ingreso por mil litros del compromiso. Al expresar todas las cantidades en las unidades numéricas declaradas, el ingreso satisface
+
+$$(4x_1+8x_2+5x_3)-(x_1+x_2)-5x_2\le25\,000-2\,000=23\,000.$$
+
+$x=(2\,000,0,3\,400)$ satisface ambas restricciones y alcanza la cota. Es óptimo, con ingreso $23\,000$ miles de dólares. La forma estándar minimiza el negativo del ingreso, añade holgura $s$ en capacidad y resta exceso $e$ en el compromiso. Ambos tienen costo cero y se recuperan de las desigualdades.
+
+### Mezcla y calidad: ejemplo original {#mezclas}
+
+Se requieren diez kg de mezcla con calidad media al menos $0.5$. Los ingredientes tienen calidades $0.2$ y $0.8$ y costos $2$ y $5$ unidades monetarias/kg. Sean $x,y$ kg. El modelo es
+
+$$\min\ 2x+5y,\qquad x+y=10,\quad0.2x+0.8y\ge0.5(x+y),\quad x,y\ge0.$$
+
+La calidad promedio se transforma multiplicando por $x+y=10>0$, así que no se invierte la desigualdad ni se divide por una variable que pueda valer cero. Sustituir $x=10-y$ da $y\ge5$, $y\le10$ y costo $20+3y$; el óptimo es $x=y=5$, costo $35$.
+
+### Balances de inventario e índices {#inventario}
+
+Sean $i\in\mathcal I$ productos y $t=1,\ldots,T$ períodos. Define producción $p_{it}$, ventas $v_{it}$, inventario final $I_{it}$ y dato inicial $I_{i0}$. El balance correcto es
+
+$$I_{it}=I_{i,t-1}+p_{it}-v_{it}\quad(\forall i,t),\qquad I_{it},p_{it},v_{it}\ge0.$$
+
+Si la demanda debe satisfacerse, fija $v_{it}=d_{it}$; si es una venta máxima, impón $v_{it}\le d_{it}$. No son intercambiables. Las capacidades pueden escribirse $\sum_i a_{ki}p_{it}\le C_{kt}$ para cada recurso $k$ y período $t$. Cada sumando debe tener las mismas unidades que $C_{kt}$.
+
+Ejemplo original: un producto, dos períodos, demandas $3,5$, capacidad cuatro por período, inventario inicial y final cero. Entonces $p_1+p_2=8$, y las dos capacidades fuerzan $p_1=p_2=4$. El balance da $I_1=1$. Con costos productivos $2,3$ y mantenimiento $0.5I_1$, el costo es $8+12+0.5=20.5$.
+
+Para distribución usa conjuntos distintos: bodegas $i\in\mathcal B$, destinos $j\in\mathcal C$ y envíos $q_{ijt}$. Las salidas de bodega suman sobre $j$; las entradas a destino suman sobre $i$. Intercambiar esos índices o sus cardinalidades cambia el modelo. También se detectó al revisar la pauta de aleaciones (Tareas, PDF 129) un término $x_{mt}$ en un balance indexado por producto $j$: el balance debe usar la producción de ese mismo producto y período. Se evita reproducir esa inconsistencia.
+
+### Comprobar antes de resolver {#ejercicios}
+
+1. Reformula $\min_{x\in\mathbb R}\max\{|x|,2|x-3|\}$ y encuentra el óptimo.
+2. ¿$t\ge\pm x$, $t\le1$ representa $|x|\le1$ tras proyectar? ¿Representa $t=|x|$?
+3. Para el inventario anterior, ¿qué cambia si se prohíbe almacenar entre períodos?
+
+::: {.callout-note collapse="true" title="Soluciones"}
+
+1. Usa $t\ge x$, $t\ge-x$, $t\ge2x-6$, $t\ge6-2x$. De $t\ge x$ y $t\ge6-2x$ se obtiene $3t\ge6$, luego $t\ge2$. $x=2$ alcanza $t=2$ y es único, ya que para esa altura ambas cotas fuerzan $x=2$.
+2. La proyección es exactamente $[-1,1]$: existe $t\in[|x|,1]$ si y solo si $|x|\le1$. No impone igualdad: $(x,t)=(0,1)$ es factible.
+3. $I_1=0$ fuerza $p_2=5$, contradiciendo capacidad cuatro. El problema pasa a ser infactible, aunque la capacidad total del horizonte coincida con la demanda total.
+:::
+
+::: {.uso-summary}
+Una buena reformulación incluye un mapa de recuperación, una prueba de factibilidad y una comparación de objetivos. Los epígrafes representan cotas; la minimización puede hacerlas exactas. Las disyunciones requieren lógica y cotas justificadas. Los balances y las unidades son parte de la corrección matemática, no simples detalles de redacción.
+:::
+
+
+### Fuentes y continuidad {#fuentes}
+
+Equivalencias: [@ferrer2006, §1.7] y [@nemirovski2012, §1.2]. Modelación: Ferrer, Gazmuri y Muñoz, *Modelación de Problemas de Optimización* (agosto de 2017), selección PDF 2–11; ejemplos de producción, inventario y distribución. Compendio de clases, PDF 44–66 y 102–105. Se separan los ejemplos adaptados identificados de los originales del sitio. Los PDF fuente no se redistribuyen con este contenido.
+
+::: {#refs}
+:::
